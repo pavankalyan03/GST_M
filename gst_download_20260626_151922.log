@@ -1,0 +1,185 @@
+2026-06-26 15:19:22 [INFO] Log file: gst_download_20260626_151922.log
+2026-06-26 15:19:22 [INFO] ==================================================
+2026-06-26 15:19:22 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-26 15:19:22 [INFO] ==================================================
+2026-06-26 15:19:22 [INFO] Reading Excel file: Invoices_rate18.xlsx
+2026-06-26 15:19:22 [INFO] Sheet: 'Sheet1' | Rows: 20 | Cols: 24
+2026-06-26 15:19:22 [INFO] Loaded 19 valid IRN records
+2026-06-26 15:19:22 [INFO] Launching Chromium in headed mode...
+2026-06-26 15:19:24 [INFO] Browser ready
+2026-06-26 15:19:24 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-26 15:19:35 [INFO] Portal loaded
+2026-06-26 15:20:09 [INFO] User confirmed login -- automation starting
+2026-06-26 15:20:09 [INFO] Processing 19 IRNs (starting from #1)
+2026-06-26 15:20:09 [INFO] [1/19] ----------------------------------------------
+2026-06-26 15:20:09 [INFO]   Invoice: BOM7-125914  |  IRN: acbaab77ba78d758d1bca34c...513436b63b4f
+2026-06-26 15:20:10 [INFO]   Typed IRN: acbaab77ba78d758d1bca34c...513436b63b4f
+2026-06-26 15:20:10 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:20:11 [INFO]   Search results visible
+2026-06-26 15:20:12 [INFO]   Download triggered via row icon
+2026-06-26 15:20:13 [INFO]   [OK] Saved -> BOM7-125914.pdf
+2026-06-26 15:20:15 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:20:15 [INFO]   Form reset via Reset button
+2026-06-26 15:20:18 [INFO] [2/19] ----------------------------------------------
+2026-06-26 15:20:18 [INFO]   Invoice: BOM7-125915  |  IRN: f78ddde3f1dc6fd0204aa351...9262f0cd0d32
+2026-06-26 15:20:19 [INFO]   Typed IRN: f78ddde3f1dc6fd0204aa351...9262f0cd0d32
+2026-06-26 15:20:20 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:20:21 [INFO]   Search results visible
+2026-06-26 15:20:21 [INFO]   Download triggered via row icon
+2026-06-26 15:20:21 [INFO]   [OK] Saved -> BOM7-125915.pdf
+2026-06-26 15:20:23 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:20:23 [INFO]   Form reset via Reset button
+2026-06-26 15:20:27 [INFO] [3/19] ----------------------------------------------
+2026-06-26 15:20:27 [INFO]   Invoice: BOM7-125916  |  IRN: e88ce2c65759d8d5bef9f52d...b4240f1c7603
+2026-06-26 15:20:28 [INFO]   Typed IRN: e88ce2c65759d8d5bef9f52d...b4240f1c7603
+2026-06-26 15:20:28 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:20:29 [INFO]   Search results visible
+2026-06-26 15:20:29 [INFO]   Download triggered via row icon
+2026-06-26 15:20:30 [INFO]   [OK] Saved -> BOM7-125916.pdf
+2026-06-26 15:20:32 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:20:32 [INFO]   Form reset via Reset button
+2026-06-26 15:20:36 [INFO] [4/19] ----------------------------------------------
+2026-06-26 15:20:36 [INFO]   Invoice: CJB1-168046  |  IRN: 5852c73de6698c6b198e15c1...1e6d2a09a7db
+2026-06-26 15:20:37 [INFO]   Typed IRN: 5852c73de6698c6b198e15c1...1e6d2a09a7db
+2026-06-26 15:20:37 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:20:38 [INFO]   Search results visible
+2026-06-26 15:20:38 [INFO]   Download triggered via row icon
+2026-06-26 15:20:38 [INFO]   [OK] Saved -> CJB1-168046.pdf
+2026-06-26 15:20:41 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:20:41 [INFO]   Form reset via Reset button
+2026-06-26 15:20:45 [INFO] [5/19] ----------------------------------------------
+2026-06-26 15:20:45 [INFO]   Invoice: CJB1-169386  |  IRN: 91c8deb4579df4b3702f7e07...96a3c441d97b
+2026-06-26 15:20:46 [INFO]   Typed IRN: 91c8deb4579df4b3702f7e07...96a3c441d97b
+2026-06-26 15:20:46 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:20:48 [INFO]   Search results visible
+2026-06-26 15:20:48 [INFO]   Download triggered via row icon
+2026-06-26 15:20:48 [INFO]   [OK] Saved -> CJB1-169386.pdf
+2026-06-26 15:20:50 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:20:50 [INFO]   Form reset via Reset button
+2026-06-26 15:20:54 [INFO] [6/19] ----------------------------------------------
+2026-06-26 15:20:54 [INFO]   Invoice: CJB1-169387  |  IRN: de5014436b04d173d5ad9a10...6edc98f68b7e
+2026-06-26 15:20:55 [INFO]   Typed IRN: de5014436b04d173d5ad9a10...6edc98f68b7e
+2026-06-26 15:20:55 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:20:56 [INFO]   Search results visible
+2026-06-26 15:20:57 [INFO]   Download triggered via row icon
+2026-06-26 15:20:57 [INFO]   [OK] Saved -> CJB1-169387.pdf
+2026-06-26 15:20:59 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:20:59 [INFO]   Form reset via Reset button
+2026-06-26 15:21:03 [INFO] [7/19] ----------------------------------------------
+2026-06-26 15:21:03 [INFO]   Invoice: CCX1-329398  |  IRN: 6e2c61e2bcc2467a00ba9e9d...98a011b15be1
+2026-06-26 15:21:04 [INFO]   Typed IRN: 6e2c61e2bcc2467a00ba9e9d...98a011b15be1
+2026-06-26 15:21:04 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:21:05 [INFO]   Search results visible
+2026-06-26 15:21:06 [INFO]   Download triggered via row icon
+2026-06-26 15:21:06 [INFO]   [OK] Saved -> CCX1-329398.pdf
+2026-06-26 15:21:08 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:21:08 [INFO]   Form reset via Reset button
+2026-06-26 15:21:12 [INFO] [8/19] ----------------------------------------------
+2026-06-26 15:21:12 [INFO]   Invoice: BOM7-125909  |  IRN: 3866790af532233288e195db...83cdcb57fdd8
+2026-06-26 15:21:13 [INFO]   Typed IRN: 3866790af532233288e195db...83cdcb57fdd8
+2026-06-26 15:21:13 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:21:14 [INFO]   Search results visible
+2026-06-26 15:21:14 [INFO]   Download triggered via row icon
+2026-06-26 15:21:14 [INFO]   [OK] Saved -> BOM7-125909.pdf
+2026-06-26 15:21:17 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:21:17 [INFO]   Form reset via Reset button
+2026-06-26 15:21:21 [INFO] [9/19] ----------------------------------------------
+2026-06-26 15:21:21 [INFO]   Invoice: BOM7-125912  |  IRN: 19b0bbe349c79726030e564e...4334a02f65d4
+2026-06-26 15:21:22 [INFO]   Typed IRN: 19b0bbe349c79726030e564e...4334a02f65d4
+2026-06-26 15:21:22 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:21:23 [INFO]   Search results visible
+2026-06-26 15:21:24 [INFO]   Download triggered via row icon
+2026-06-26 15:21:24 [INFO]   [OK] Saved -> BOM7-125912.pdf
+2026-06-26 15:21:26 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:21:26 [INFO]   Form reset via Reset button
+2026-06-26 15:21:30 [INFO] [10/19] ----------------------------------------------
+2026-06-26 15:21:30 [INFO]   Invoice: BOM7-125913  |  IRN: ba0dd27850b57cb43e4d15f9...ff4ce8d4f1c4
+2026-06-26 15:21:31 [INFO]   Typed IRN: ba0dd27850b57cb43e4d15f9...ff4ce8d4f1c4
+2026-06-26 15:21:31 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:21:32 [INFO]   Search results visible
+2026-06-26 15:21:33 [INFO]   Download triggered via row icon
+2026-06-26 15:21:33 [INFO]   [OK] Saved -> BOM7-125913.pdf
+2026-06-26 15:21:35 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:21:35 [INFO]   Form reset via Reset button
+2026-06-26 15:21:38 [INFO] [11/19] ----------------------------------------------
+2026-06-26 15:21:38 [INFO]   Invoice: BOM7-125917  |  IRN: c8cea67ff42802f932ccdc33...020557f0e8d2
+2026-06-26 15:21:39 [INFO]   Typed IRN: c8cea67ff42802f932ccdc33...020557f0e8d2
+2026-06-26 15:21:39 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:21:40 [INFO]   Search results visible
+2026-06-26 15:21:41 [INFO]   Download triggered via row icon
+2026-06-26 15:21:41 [INFO]   [OK] Saved -> BOM7-125917.pdf
+2026-06-26 15:21:43 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:21:43 [INFO]   Form reset via Reset button
+2026-06-26 15:21:48 [INFO] [12/19] ----------------------------------------------
+2026-06-26 15:21:48 [INFO]   Invoice: BOM7-125923  |  IRN: dad41f2422641d6c4acd661f...3ece77b97b83
+2026-06-26 15:21:49 [INFO]   Typed IRN: dad41f2422641d6c4acd661f...3ece77b97b83
+2026-06-26 15:21:49 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:21:50 [INFO]   Search results visible
+2026-06-26 15:21:51 [INFO]   Download triggered via row icon
+2026-06-26 15:21:51 [INFO]   [OK] Saved -> BOM7-125923.pdf
+2026-06-26 15:21:53 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:21:53 [INFO]   Form reset via Reset button
+2026-06-26 15:21:57 [INFO] [13/19] ----------------------------------------------
+2026-06-26 15:21:57 [INFO]   Invoice: BOM7-125927  |  IRN: 372693c4ffd52f5998c86a60...70dd8d6d0603
+2026-06-26 15:21:58 [INFO]   Typed IRN: 372693c4ffd52f5998c86a60...70dd8d6d0603
+2026-06-26 15:21:58 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:22:00 [INFO]   Search results visible
+2026-06-26 15:22:00 [INFO]   Download triggered via row icon
+2026-06-26 15:22:00 [INFO]   [OK] Saved -> BOM7-125927.pdf
+2026-06-26 15:22:02 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:22:02 [INFO]   Form reset via Reset button
+2026-06-26 15:22:07 [INFO] [14/19] ----------------------------------------------
+2026-06-26 15:22:07 [INFO]   Invoice: CJB1-168045  |  IRN: b2502cbfc7807d029e4e863a...8b81dfd4296a
+2026-06-26 15:22:08 [INFO]   Typed IRN: b2502cbfc7807d029e4e863a...8b81dfd4296a
+2026-06-26 15:22:08 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:22:09 [INFO]   Search results visible
+2026-06-26 15:22:09 [INFO]   Download triggered via row icon
+2026-06-26 15:22:10 [INFO]   [OK] Saved -> CJB1-168045.pdf
+2026-06-26 15:22:12 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:22:12 [INFO]   Form reset via Reset button
+2026-06-26 15:22:17 [INFO] [15/19] ----------------------------------------------
+2026-06-26 15:22:17 [INFO]   Invoice: CJB1-169384  |  IRN: 7680d7ae10e7697924256bec...aeaff996089b
+2026-06-26 15:22:18 [INFO]   Typed IRN: 7680d7ae10e7697924256bec...aeaff996089b
+2026-06-26 15:22:18 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:22:19 [INFO]   Search results visible
+2026-06-26 15:22:20 [INFO]   Download triggered via row icon
+2026-06-26 15:22:20 [INFO]   [OK] Saved -> CJB1-169384.pdf
+2026-06-26 15:22:22 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:22:22 [INFO]   Form reset via Reset button
+2026-06-26 15:22:26 [INFO] [16/19] ----------------------------------------------
+2026-06-26 15:22:26 [INFO]   Invoice: HYD8-217417  |  IRN: f8740f8b5d0f040fff32a205...38a0d88449ea
+2026-06-26 15:22:27 [INFO]   Typed IRN: f8740f8b5d0f040fff32a205...38a0d88449ea
+2026-06-26 15:22:27 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:22:28 [INFO]   Search results visible
+2026-06-26 15:22:28 [INFO]   Download triggered via row icon
+2026-06-26 15:22:28 [INFO]   [OK] Saved -> HYD8-217417.pdf
+2026-06-26 15:22:31 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:22:31 [INFO]   Form reset via Reset button
+2026-06-26 15:22:34 [INFO] [17/19] ----------------------------------------------
+2026-06-26 15:22:34 [INFO]   Invoice: CJB1-167974  |  IRN: 8a23aab882307f2fa1f32e1a...d893d962eddd
+2026-06-26 15:22:35 [INFO]   Typed IRN: 8a23aab882307f2fa1f32e1a...d893d962eddd
+2026-06-26 15:22:35 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:22:36 [INFO]   Search results visible
+2026-06-26 15:22:36 [INFO]   Download triggered via row icon
+2026-06-26 15:22:36 [INFO]   [OK] Saved -> CJB1-167974.pdf
+2026-06-26 15:22:38 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:22:38 [INFO]   Form reset via Reset button
+2026-06-26 15:22:44 [INFO] [18/19] ----------------------------------------------
+2026-06-26 15:22:44 [INFO]   Invoice: BOM7-125925  |  IRN: 64cab0746f20a5dc89776e63...77c55bd1cf7d
+2026-06-26 15:22:44 [INFO]   Typed IRN: 64cab0746f20a5dc89776e63...77c55bd1cf7d
+2026-06-26 15:22:45 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:22:46 [INFO]   Search results visible
+2026-06-26 15:22:46 [INFO]   Download triggered via row icon
+2026-06-26 15:22:46 [INFO]   [OK] Saved -> BOM7-125925.pdf
+2026-06-26 15:22:48 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:22:48 [INFO]   Form reset via Reset button
+2026-06-26 15:22:54 [INFO] [19/19] ----------------------------------------------
+2026-06-26 15:22:54 [INFO]   Invoice: BOM7-125908  |  IRN: 206f43f1b8a054415dc21887...566517c6c95d
+2026-06-26 15:22:55 [INFO]   Typed IRN: 206f43f1b8a054415dc21887...566517c6c95d
+2026-06-26 15:22:55 [INFO]   Clicked Search -- waiting for results...
+2026-06-26 15:22:56 [INFO]   Search results visible
+2026-06-26 15:22:56 [INFO]   Download triggered via row icon
+2026-06-26 15:22:57 [INFO]   [OK] Saved -> BOM7-125908.pdf
+2026-06-26 15:22:59 [INFO]   Clicked 'Proceed' on confirmation popup
+2026-06-26 15:22:59 [INFO]   Form reset via Reset button
+2026-06-26 15:22:59 [INFO] Final result: 19/19 succeeded
