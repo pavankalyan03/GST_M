@@ -1,0 +1,76 @@
+# ╔════════════════════════════════════════════════════════════════╗
+# ║           GST INVOICE PDF — MODIFICATION CONFIG              ║
+# ╠════════════════════════════════════════════════════════════════╣
+# ║                                                              ║
+# ║   HOW TO USE:                                                ║
+# ║   1. Look at the 'original' values (from your PDF)           ║
+# ║   2. Type your new values in the 'new' fields                ║
+# ║   3. Leave 'new' as "" to keep the original (no change)      ║
+# ║   4. Run:  python modify_pdfs.py --apply                    ║
+# ║                                                              ║
+# ║   Generated from: BOM7-125914.pdf                           ║
+# ╚════════════════════════════════════════════════════════════════╝
+
+
+# Your GSTIN (used to locate your details in every PDF)
+gstin: "37DYVPK9951A1ZT"
+
+
+# ┌────────────────────────────────────────────────────────────────┐
+# │  HEADER  —  The large business name at the top of page 1      │
+# └────────────────────────────────────────────────────────────────┘
+
+header_name:
+  original: "SRI RAJLAXMI SILKS"
+  new: "TEST BUSINESS NAME"
+
+
+# ┌────────────────────────────────────────────────────────────────┐
+# │  RECIPIENT  —  Your details in the "Party Details" section     │
+# │                (right column, under "Recipient")               │
+# └────────────────────────────────────────────────────────────────┘
+
+recipient_name:
+  original: "SRI RAJLAXMI SILKS"
+  new: "TEST BUSINESS NAME"
+
+recipient_address:
+  original: |
+    guntur
+    guntur
+    522001
+  new: |
+    New City
+    New District
+    500001
+
+
+# ┌────────────────────────────────────────────────────────────────┐
+# │  SHIP TO  —  Your shipping address (right column)             │
+# │              under "Ship To" in Party Details                  │
+# └────────────────────────────────────────────────────────────────┘
+
+ship_to_name:
+  original: "SRI RAJLAXMI SILKS"
+  new: "TEST BUSINESS NAME"
+
+ship_to_address:
+  original: |
+    d.no old61-11-790 ali nagar 2nd line old Guntur
+    GUNTUR
+    522001
+  new: |
+    123 New Street, Main Road
+    NEW CITY
+    500001
+
+
+# ┌────────────────────────────────────────────────────────────────┐
+# │  SETTINGS                                                      │
+# └────────────────────────────────────────────────────────────────┘
+
+# Folder containing the original PDFs
+input_folder: "downloads"
+
+# Folder where modified PDFs will be saved (originals are NEVER touched)
+output_folder: "modified_invoices"

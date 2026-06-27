@@ -206,7 +206,7 @@ class GSTInvoiceDownloader:
 
     # ── Download ──────────────────────────────────────────────
 
-    def download_invoice(self, invoice_number: str) -> bool:
+    def download_invoice(self, invoice_number: str, invoice_date: str = "") -> bool:
         """
         Click the download control and save the resulting file.
 
@@ -274,6 +274,8 @@ class GSTInvoiceDownloader:
 
             # ── Save the file ─────────────────────────────────
             safe_name = sanitize_filename(invoice_number)
+            if invoice_date:
+                safe_name = f"{safe_name}_{invoice_date}"
             save_path = self.dl_path / f"{safe_name}.pdf"
 
             # Avoid overwriting an earlier download with the same name
@@ -371,13 +373,14 @@ class GSTInvoiceDownloader:
         """Search → Download for a single IRN (no Reset; the next IRN overwrites the field)."""
         irn = record["irn"]
         inv = record["invoice_number"]
+        inv_date = record.get("invoice_date", "")
 
-        self.log.info(f"  Invoice: {inv}  |  IRN: {irn[:24]}...{irn[-12:]}")
+        self.log.info(f"  Invoice: {inv}  |  Date: {inv_date}  |  IRN: {irn[:24]}...{irn[-12:]}")
 
         if not self.search_irn(irn):
             return False
 
-        ok = self.download_invoice(inv)
+        ok = self.download_invoice(inv, inv_date)
         time.sleep(0.5)
         return ok
 

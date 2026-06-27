@@ -3,13 +3,15 @@
 # ════════════════════════════════════════════════════════════════
 
 # File paths
-DEFAULT_EXCEL_FILE = "Invoices_rate18.xlsx"
+DEFAULT_EXCEL_FILE = "input/Invoices_rate18.xlsx"
+RAW_EXCEL_FILE = "input/invoices.xlsx"
 DOWNLOAD_DIR = "downloads"
 FAILED_LOG = "failed_irns.txt"
 
 # Excel structure (1-based column indices)
 IRN_COLUMN = 23          # Column W — 64-char IRN hash
 INVOICE_NUM_COLUMN = 3   # Column C — Invoice Number (used for file naming)
+INVOICE_DATE_COLUMN = 5  # Column E - Invoice Date
 HEADER_ROW = 1           # Row that contains the column headers
 
 # Portal

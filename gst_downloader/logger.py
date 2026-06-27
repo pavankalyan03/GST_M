@@ -1,10 +1,12 @@
+import os
 import logging
 import sys
 from datetime import datetime
 
 def setup_logging() -> logging.Logger:
     """Configure dual logging: console + timestamped log file."""
-    log_filename = f"gst_download_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    os.makedirs("logs", exist_ok=True)
+    log_filename = os.path.join("logs", f"gst_download_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log")
 
     logging.basicConfig(
         level=logging.INFO,

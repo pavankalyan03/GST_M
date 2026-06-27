@@ -33,7 +33,7 @@ from gst_downloader import config
 from gst_downloader.logger import setup_logging
 from gst_downloader.excel_reader import read_irns_from_excel
 from gst_downloader.core import GSTInvoiceDownloader
-
+from gst_downloader.excel_preprocessor import preprocess_excel
 
 def parse_args():
     ap = argparse.ArgumentParser(
@@ -69,6 +69,14 @@ def main():
     # Update global delay values if overridden via CLI
     config.MIN_DELAY_SEC = args.delay_min
     config.MAX_DELAY_SEC = args.delay_max
+
+    # ── 0. Preprocess Excel ───────────────────────────────────
+    if os.path.exists(config.RAW_EXCEL_FILE):
+        try:
+            preprocess_excel(config.RAW_EXCEL_FILE, args.excel, logger)
+        except Exception as e:
+            logger.error(f"Failed to preprocess {config.RAW_EXCEL_FILE}: {e}")
+            sys.exit(1)
 
     # ── 1. Read Excel ─────────────────────────────────────────
     records = read_irns_from_excel(args.excel, logger)
