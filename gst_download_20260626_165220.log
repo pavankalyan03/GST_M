@@ -1,0 +1,38 @@
+2026-06-26 16:52:20 [INFO] Log file: gst_download_20260626_165220.log
+2026-06-26 16:52:20 [INFO] ==================================================
+2026-06-26 16:52:20 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-26 16:52:20 [INFO] ==================================================
+2026-06-26 16:52:20 [INFO] Reading Excel file: Invoices_rate18.xlsx
+2026-06-26 16:52:20 [INFO] Sheet: 'Sheet1' | Rows: 20 | Cols: 24
+2026-06-26 16:52:20 [INFO] Loaded 19 valid IRN records
+2026-06-26 16:52:21 [INFO] Launching Chromium in headed mode...
+2026-06-26 16:52:22 [INFO] Browser ready
+2026-06-26 16:52:22 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-26 16:52:25 [ERROR] Fatal error: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://einvoice.gst.gov.in/jsonDownload", waiting until "networkidle"
+Traceback (most recent call last):
+  File "C:\Users\SASI KOTHA\Desktop\GST_M\main.py", line 97, in main
+    dl.navigate_to_portal()
+  File "C:\Users\SASI KOTHA\Desktop\GST_M\gst_downloader\core.py", line 54, in navigate_to_portal
+    self.page.goto(config.PORTAL_URL, wait_until="networkidle", timeout=60_000)
+  File "C:\Users\SASI KOTHA\AppData\Roaming\Python\Python312\site-packages\playwright\sync_api\_generated.py", line 9612, in goto
+    self._sync(
+  File "C:\Users\SASI KOTHA\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "C:\Users\SASI KOTHA\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_page.py", line 557, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\SASI KOTHA\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_frame.py", line 156, in goto
+    await self._channel.send(
+  File "C:\Users\SASI KOTHA\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\SASI KOTHA\AppData\Roaming\Python\Python312\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TargetClosedError: Page.goto: Target page, context or browser has been closed
+Call log:
+  - navigating to "https://einvoice.gst.gov.in/jsonDownload", waiting until "networkidle"
+
+2026-06-26 16:52:25 [INFO] Final result: 0/0 succeeded

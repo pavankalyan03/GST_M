@@ -368,19 +368,17 @@ class GSTInvoiceDownloader:
     # ── Single-IRN pipeline ───────────────────────────────────
 
     def process_one(self, record: dict) -> bool:
-        """Search → Download → Reset for a single IRN."""
+        """Search → Download for a single IRN (no Reset; the next IRN overwrites the field)."""
         irn = record["irn"]
         inv = record["invoice_number"]
 
         self.log.info(f"  Invoice: {inv}  |  IRN: {irn[:24]}...{irn[-12:]}")
 
         if not self.search_irn(irn):
-            self.reset_form()
             return False
 
         ok = self.download_invoice(inv)
         time.sleep(0.5)
-        self.reset_form()
         return ok
 
     # ── Main loop ─────────────────────────────────────────────

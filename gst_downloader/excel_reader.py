@@ -19,24 +19,34 @@ def read_irns_from_excel(filepath: str, logger: logging.Logger) -> list[dict]:
 
     wb = openpyxl.load_workbook(filepath, read_only=True, data_only=True)
     ws = wb.active
-    logger.info(f"Sheet: '{ws.title}' | Rows: {ws.max_row} | Cols: {ws.max_column}")
+    logger.info(f"Sheet: '{ws.title}' (Parsing rows...)")
 
     records = []
-    for row_num in range(config.HEADER_ROW + 1, ws.max_row + 1):
-        irn_val = ws.cell(row=row_num, column=config.IRN_COLUMN).value
-        inv_val = ws.cell(row=row_num, column=config.INVOICE_NUM_COLUMN).value
+    # Use iter_rows for blazing fast streaming of large files in read_only mode
+    for row_idx, row in enumerate(
+        ws.iter_rows(min_row=config.HEADER_ROW + 1, values_only=True),
+        start=config.HEADER_ROW + 1
+    ):
+        # OpenPyXL row is a tuple of values (0-indexed). Columns are 1-indexed.
+        if len(row) >= max(config.IRN_COLUMN, config.INVOICE_NUM_COLUMN):
+            irn_val = row[config.IRN_COLUMN - 1]
+            inv_val = row[config.INVOICE_NUM_COLUMN - 1]
+        else:
+            # Row doesn't have enough columns, try to extract what we can
+            irn_val = row[config.IRN_COLUMN - 1] if len(row) >= config.IRN_COLUMN else None
+            inv_val = row[config.INVOICE_NUM_COLUMN - 1] if len(row) >= config.INVOICE_NUM_COLUMN else None
 
         irn = str(irn_val).strip() if irn_val else None
-        invoice_number = str(inv_val).strip() if inv_val else f"invoice_row_{row_num}"
+        invoice_number = str(inv_val).strip() if inv_val else f"invoice_row_{row_idx}"
 
         if irn and irn.lower() not in ("none", ""):
             records.append({
                 "irn": irn,
                 "invoice_number": invoice_number,
-                "row": row_num,
+                "row": row_idx,
             })
         else:
-            logger.warning(f"Row {row_num}: Skipped - empty or missing IRN")
+            logger.warning(f"Row {row_idx}: Skipped - empty or missing IRN")
 
     wb.close()
     logger.info(f"Loaded {len(records)} valid IRN records")

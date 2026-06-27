@@ -16,8 +16,8 @@ HEADER_ROW = 1           # Row that contains the column headers
 PORTAL_URL = "https://einvoice.gst.gov.in/jsonDownload"
 
 # Timing — human-like behaviour
-MIN_DELAY_SEC = 3        # Shortest pause between consecutive IRN searches
-MAX_DELAY_SEC = 6        # Longest  pause between consecutive IRN searches
+MIN_DELAY_SEC = 1        # Shortest pause between consecutive IRN searches
+MAX_DELAY_SEC = 2        # Longest  pause between consecutive IRN searches
 BATCH_SIZE = 50          # Take a longer break after this many downloads
 BATCH_PAUSE_SEC = 20     # Duration of the longer break (seconds)
 SEARCH_TIMEOUT_MS = 30_000    # Max wait for search results to appear
