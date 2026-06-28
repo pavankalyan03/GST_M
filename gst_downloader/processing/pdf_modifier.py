@@ -386,11 +386,18 @@ def _load_config(config_path: str) -> dict:
     return cfg
 
 
-def _get_replacement(cfg_section: dict) -> str | None:
+def _get_replacement(cfg_section: dict | str) -> str | None:
     """Get the 'new' replacement value from a config section, or None if empty."""
-    if not cfg_section or not isinstance(cfg_section, dict):
+    if not cfg_section:
         return None
-    new_val = cfg_section.get("new", "")
+        
+    if isinstance(cfg_section, dict):
+        new_val = cfg_section.get("new", "")
+    elif isinstance(cfg_section, str):
+        new_val = cfg_section
+    else:
+        return None
+        
     if isinstance(new_val, str) and new_val.strip():
         return new_val.strip()
     return None

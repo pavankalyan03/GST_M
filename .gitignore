@@ -40,3 +40,5 @@ pipeline_state.json
 *.xlsx
 *.csv
 *.zip
+
+config/requirements.txt
