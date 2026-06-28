@@ -21,6 +21,7 @@ This will automatically install all the necessary libraries:
 - **pymupdf** — For modifying the PDFs
 - **ruamel.yaml** — For safely reading/saving the Settings file
 - **fastapi, uvicorn, python-multipart** — For running the Web UI
+- **psutil** — For monitoring system health in the dashboard
 
 ## 3. Install Playwright Browsers
 

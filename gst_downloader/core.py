@@ -5,7 +5,8 @@ from datetime import datetime
 from playwright.sync_api import TimeoutError as PlaywrightTimeout
 
 from gst_downloader import config
-from gst_downloader.utils import human_delay, sanitize_filename
+from gst_downloader.utils import human_delay, sanitize_filename, update_failed_irn_log
+from gst_downloader.state import StateEmitter
 
 import json
 
@@ -25,6 +26,7 @@ def write_ipc_state(state):
 
 def wait_for_ui_prompt():
     write_ipc_state("UI_PROMPT")
+    StateEmitter.emit("STATUS_UPDATE", {"status": "WAITING_FOR_LOGIN"})
     while True:
         state = read_ipc_state()
         if state in ["RUN", "RESUME", "PROMPT_CONTINUE", "CANCEL", "STOP"]:
@@ -37,6 +39,7 @@ def wait_for_ui_prompt():
     if state == "STOP":
         raise KeyboardInterrupt("Stopped by UI")
     write_ipc_state("RUN")
+    StateEmitter.emit("STATUS_UPDATE", {"status": "RUNNING"})
 
 def check_pause_cancel(log):
     state = read_ipc_state()
@@ -48,9 +51,19 @@ def check_pause_cancel(log):
         raise KeyboardInterrupt("Stopped by UI")
     if state == "PAUSE":
         log.info("[SYSTEM] Automation paused. Waiting for resume...")
+        StateEmitter.emit("STATUS_UPDATE", {"status": "PAUSED"})
         while read_ipc_state() == "PAUSE":
             time.sleep(1)
+        StateEmitter.emit("STATUS_UPDATE", {"status": "RUNNING"})
         log.info("[SYSTEM] Automation resumed.")
+    if state == "PAUSE_ERRORS":
+        log.error("[SYSTEM] Automation paused due to excessive errors. Waiting for manual intervention...")
+        StateEmitter.emit("STATUS_UPDATE", {"status": "PAUSED_ERRORS"})
+        while read_ipc_state() == "PAUSE_ERRORS":
+            time.sleep(1)
+        if read_ipc_state() == "RUN":
+            StateEmitter.emit("STATUS_UPDATE", {"status": "RUNNING"})
+            log.info("[SYSTEM] Automation resumed.")
 
 #  CORE AUTOMATION CLASS
 # ════════════════════════════════════════════════════════════════
@@ -61,23 +74,29 @@ class GSTInvoiceDownloader:
     on the GST e-Invoice portal and download the corresponding JSONs.
     """
 
-    def __init__(self, pw, logger: logging.Logger, on_download_success=None, dl_dir=None, out_dir=None):
+    def __init__(self, pw, logger: logging.Logger, on_download_success=None,
+        dl_dir=config.STAGING_DIR,
+        out_dir=None,
+        failed_log_path=None
+    ):
+        """
+        :param pw: playwright instance
+        :param logger: Configured logger instance
+        :param on_download_success: Callback function fired with (pdf_path) on success
+        :param dl_dir: Directory where the browser saves downloaded PDFs
+        :param out_dir: Final directory for the processed PDFs
+        :param failed_log_path: Path to batch-specific failed IRNs log file
+        """
         self.pw = pw
         self.log = logger
         self.browser = None
         self.context = None
         self.page = None
         self.on_download_success = on_download_success
-
-        # Ensure download directory exists
-        if dl_dir:
-            self.dl_path = Path(dl_dir).resolve()
-        else:
-            self.dl_path = Path(config.DOWNLOAD_DIR).resolve()
-            
+        self.dl_path = Path(dl_dir).resolve()
         self.dl_path.mkdir(parents=True, exist_ok=True)
-        
         self.out_dir = Path(out_dir).resolve() if out_dir else None
+        self.failed_log_path = failed_log_path
 
         # Result tracking
         self.succeeded: list[dict] = []
@@ -264,7 +283,7 @@ class GSTInvoiceDownloader:
 
     # ── Download ──────────────────────────────────────────────
 
-    def download_invoice(self, invoice_number: str, invoice_date: str = "") -> bool:
+    def download_invoice(self, invoice_number: str, invoice_date: str = "", irn: str = "") -> bool:
         """
         Click the download control and save the resulting file.
 
@@ -346,7 +365,7 @@ class GSTInvoiceDownloader:
             self.log.info(f"  [OK] Saved -> {save_path.name}")
             
             if self.on_download_success is not None:
-                self.on_download_success(str(save_path))
+                self.on_download_success(str(save_path), irn)
                 
             return True
 
@@ -453,7 +472,7 @@ class GSTInvoiceDownloader:
         if not self.search_irn(irn):
             return False
 
-        ok = self.download_invoice(inv, inv_date)
+        ok = self.download_invoice(inv, inv_date, irn)
         time.sleep(0.5)
         return ok
 
@@ -467,13 +486,21 @@ class GSTInvoiceDownloader:
         total = len(records)
         self.log.info(f"Processing {total - start_index} IRNs (starting from #{start_index + 1})")
         i = start_index
+        StateEmitter.emit("STATUS_UPDATE", {"status": "RUNNING"})
+        consecutive_failures = 0
+        
         while i < total:
+            remaining_queue = [r["irn"] for r in records[i:]]
+            StateEmitter.emit("QUEUE_UPDATE", {"queue": remaining_queue})
+            
             check_pause_cancel(self.log)
             rec = records[i]
             
             irn = rec["irn"]
             progress = f"[{i + 1}/{total}]"
             self.log.info(f"{progress} {'-' * 46}")
+            
+            StateEmitter.emit("DOWNLOADER_STATUS", {"status": "processing", "current": irn})
 
             # ── Session health check ──────────────────────────
             if not self.is_session_alive():
@@ -498,16 +525,31 @@ class GSTInvoiceDownloader:
 
             if success:
                 self.succeeded.append(rec)
+                StateEmitter.emit("DOWNLOADER_SUCCESS", {"irn": irn})
+                consecutive_failures = 0
+                if self.failed_log_path:
+                    update_failed_irn_log(self.failed_log_path, 'remove', irn)
             else:
                 self.failed.append(rec)
                 self.log.warning(
                     f"  [FAIL] after {config.MAX_RETRIES_PER_IRN} attempts -- {rec['invoice_number']}"
                 )
+                StateEmitter.emit("DOWNLOADER_FAIL", {"irn": irn, "error": "Download failed after retries"})
+                consecutive_failures += 1
+                if self.failed_log_path:
+                    update_failed_irn_log(self.failed_log_path, 'add', irn)
+
+            if consecutive_failures >= 10:
+                self.log.error("10 consecutive failures detected! Pausing pipeline for manual intervention.")
+                write_ipc_state("PAUSE_ERRORS")
+                check_pause_cancel(self.log)
+                consecutive_failures = 0 # Reset after resume
 
             i += 1
-
+            
             # ── Pacing ────────────────────────────────────────
             if i < total:
+                StateEmitter.emit("DOWNLOADER_STATUS", {"status": "idle"})
                 if i % config.BATCH_SIZE == 0:
                     self.log.info(
                         f"\n  [PAUSE] Batch pause ({config.BATCH_PAUSE_SEC}s) after {i} IRNs..."
@@ -516,6 +558,7 @@ class GSTInvoiceDownloader:
                 else:
                     human_delay()
 
+        StateEmitter.emit("DOWNLOADER_STATUS", {"status": "idle"})
         self._print_summary(total)
 
     # ── Summary & failed-IRN log ──────────────────────────────
@@ -538,12 +581,8 @@ class GSTInvoiceDownloader:
             for rec in self.failed:
                 print(f"     Row {rec['row']:>4}  {rec['invoice_number']}")
 
-            # Persist failed IRNs so the user can re-run for just those
-            with open(config.FAILED_LOG, "w", encoding="utf-8") as fh:
-                fh.write(f"# Failed IRNs -- {datetime.now():%Y-%m-%d %H:%M:%S}\n")
-                for rec in self.failed:
-                    fh.write(f"{rec['row']}|{rec['invoice_number']}|{rec['irn']}\n")
-            print(f"\n   Saved to {config.FAILED_LOG} for retry.")
+            if self.failed_log_path:
+                print(f"\n   Saved to {self.failed_log_path} for retry.")
 
         print()
         self.log.info(f"Final result: {s}/{s + f} succeeded")

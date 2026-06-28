@@ -42,6 +42,7 @@ from gst_downloader.core import GSTInvoiceDownloader
 from gst_downloader.excel_preprocessor import preprocess_excel
 from gst_downloader.pipeline import ProcessingPipeline
 from gst_downloader.pdf_modifier import _load_config
+from gst_downloader.state import StateEmitter
 
 
 def parse_args():
@@ -49,8 +50,8 @@ def parse_args():
         description="GST e-Invoice Bulk Downloader — downloads and modifies invoices via Playwright",
     )
     ap.add_argument(
-        "--raw-excel", default="uploads/invoices.xlsx",
-        help=f"Path to the raw uploaded Excel file",
+        "--cleaned-excel", required=True,
+        help=f"Path to the preprocessed Excel file",
     )
     ap.add_argument(
         "--start-from", type=int, default=1, dest="start_from",
@@ -68,6 +69,10 @@ def parse_args():
         "--batch-name", default=None, dest="batch_name",
         help="Name for this processing batch (used as subfolder name). "
              "Defaults to the Excel file stem.",
+    )
+    ap.add_argument(
+        "--retry-failed", action="store_true",
+        help="Only process IRNs listed in the batch's failed_irns.txt file",
     )
     return ap.parse_args()
 
@@ -97,21 +102,13 @@ def main():
     processed_excel_folder = Path(modifier_config["processed_excel_folder"])
     processed_excel_folder.mkdir(parents=True, exist_ok=True)
 
-    raw_excel_path = Path(args.raw_excel)
-    batch_name = args.batch_name or raw_excel_path.stem
-    cleaned_excel_path = processed_excel_folder / f"{batch_name}.xlsx"
+    cleaned_excel_path = Path(args.cleaned_excel)
+    batch_name = args.batch_name or cleaned_excel_path.stem
 
     logger.info(f"Batch name: {batch_name}")
 
-    # ── 0.5 Preprocess Excel ──────────────────────────────────
-    if raw_excel_path.exists():
-        try:
-            preprocess_excel(str(raw_excel_path), str(cleaned_excel_path), logger)
-        except Exception as e:
-            logger.error(f"Failed to preprocess {raw_excel_path}: {e}")
-            sys.exit(1)
-    else:
-        logger.error(f"Excel file not found: {raw_excel_path}")
+    if not cleaned_excel_path.exists():
+        logger.error(f"Excel file not found: {cleaned_excel_path}")
         sys.exit(1)
 
     # ── 1. Read Excel ─────────────────────────────────────────
@@ -119,6 +116,26 @@ def main():
     if not records:
         logger.error("No IRNs found — nothing to do.")
         sys.exit(1)
+        
+    failed_log_path = Path(modifier_config["processed_folder"]) / batch_name / "failed_irns.txt"
+    
+    if args.retry_failed:
+        logger.info(f"Retry mode active. Looking for failed IRNs at {failed_log_path}")
+        if not failed_log_path.exists():
+            logger.info("No failed IRNs file found for this batch. Nothing to retry.")
+            sys.exit(0)
+            
+        with open(failed_log_path, "r", encoding="utf-8") as f:
+            failed_irns = set(line.strip() for line in f if line.strip())
+            
+        records = [r for r in records if r["irn"] in failed_irns]
+        logger.info(f"Filtered to {len(records)} failed IRNs for retry.")
+        
+        if not records:
+            logger.info("No matching failed IRNs found in the excel file.")
+            sys.exit(0)
+        
+    StateEmitter.emit("INIT_BATCH", {"total_records": len(records)})
 
     # ── 2. Resolve --start-from ───────────────────────────────
     start_index = 0
@@ -139,12 +156,13 @@ def main():
         batch_name=batch_name,
         config_path=config_path,
         logger=logger,
+        failed_log_path=str(failed_log_path)
     )
     pipeline.start()
 
-    def on_download(path_str):
+    def on_download(path_str, irn=""):
         """Callback fired when a PDF is downloaded to staging."""
-        pipeline.notify_download(path_str)
+        pipeline.notify_download(path_str, irn)
 
     # ── 4. Launch Playwright and run ──────────────────────────
     with sync_playwright() as pw:
@@ -153,6 +171,7 @@ def main():
             on_download_success=on_download,
             dl_dir=pipeline.staging_dir,
             out_dir=pipeline.processed_dir,
+            failed_log_path=str(failed_log_path)
         )
         try:
             dl.launch_browser()
@@ -161,6 +180,7 @@ def main():
             dl.run(records, start_index=start_index)
         except KeyboardInterrupt:
             logger.info("\nInterrupted by user (Ctrl+C)")
+            StateEmitter.emit("PIPELINE_CANCELLED")
             dl._print_summary(len(records))
         except Exception as exc:
             logger.error(f"Fatal error: {exc}", exc_info=True)
@@ -179,6 +199,16 @@ def main():
             # Print final stats
             stats = pipeline.get_stats()
             logger.info(f"Pipeline stats: {stats}")
+            
+            try:
+                import json
+                with open("ipc_state.json", "r") as f:
+                    final_state = json.load(f).get("status", "")
+            except Exception:
+                final_state = ""
+                
+            if final_state not in ("CANCEL", "STOP"):
+                StateEmitter.emit("PIPELINE_COMPLETE")
 
             dl.close()
 

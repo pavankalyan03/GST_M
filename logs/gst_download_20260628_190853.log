@@ -1,0 +1,66 @@
+2026-06-28 19:08:53 [INFO] Log file: logs\gst_download_20260628_190853.log
+2026-06-28 19:08:53 [INFO] ==================================================
+2026-06-28 19:08:53 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 19:08:53 [INFO] ==================================================
+2026-06-28 19:08:53 [INFO] Batch name: August_2026
+2026-06-28 19:08:53 [INFO] Reading Excel file: D:\Invoice_Book\processed_excel\August_2026.xlsx
+2026-06-28 19:08:53 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 19:08:53 [INFO] Loaded 1015 valid IRN records
+2026-06-28 19:08:53 [INFO] [Pipeline] Starting pipeline for batch 'August_2026'
+2026-06-28 19:08:53 [INFO] [Pipeline] Staging:   staging\August_2026
+2026-06-28 19:08:53 [INFO] [Pipeline] Originals: D:\Invoice_Book\original\August_2026
+2026-06-28 19:08:53 [INFO] [Pipeline] Processed: D:\Invoice_Book\processed\August_2026
+2026-06-28 19:08:53 [INFO] [BackupWorker] Started
+2026-06-28 19:08:53 [INFO] [ModifierWorker-1] Started
+2026-06-28 19:08:53 [INFO] [ModifierWorker-2] Started
+2026-06-28 19:08:53 [INFO] [Pipeline] All workers started (2 modifier workers)
+2026-06-28 19:08:54 [INFO] Launching Chromium in headed mode...
+2026-06-28 19:08:55 [INFO] Browser ready
+2026-06-28 19:08:55 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 19:08:58 [INFO] Portal loaded
+2026-06-28 19:08:58 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 19:09:20 [INFO] User confirmed login -- automation starting
+2026-06-28 19:09:20 [INFO] Processing 1015 IRNs (starting from #1)
+2026-06-28 19:09:20 [INFO] [1/1015] ----------------------------------------------
+2026-06-28 19:09:20 [INFO]   Invoice: LIAA2DE270002368  |  Date: 06-06-2026  |  IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 19:09:21 [INFO]   Typed IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 19:09:36 [ERROR]   Search timeout: Locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for get_by_role("button", name="Search")
+
+2026-06-28 19:09:36 [INFO]   -> Retry 2/2
+2026-06-28 19:09:38 [INFO]   Invoice: LIAA2DE270002368  |  Date: 06-06-2026  |  IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 19:09:39 [INFO]   Typed IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 19:09:54 [ERROR]   Search timeout: Locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for get_by_role("button", name="Search")
+
+2026-06-28 19:09:54 [WARNING]   [FAIL] after 2 attempts -- LIAA2DE270002368
+2026-06-28 19:09:56 [INFO] [2/1015] ----------------------------------------------
+2026-06-28 19:09:56 [INFO]   Invoice: LIAA2JY270002305  |  Date: 06-06-2026  |  IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 19:09:57 [INFO]   Typed IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 19:10:12 [ERROR]   Search timeout: Locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for get_by_role("button", name="Search")
+
+2026-06-28 19:10:12 [INFO]   -> Retry 2/2
+2026-06-28 19:10:14 [INFO]   Invoice: LIAA2JY270002305  |  Date: 06-06-2026  |  IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 19:10:15 [INFO]   Typed IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 19:10:30 [ERROR]   Search timeout: Locator.click: Timeout 15000ms exceeded.
+Call log:
+  - waiting for get_by_role("button", name="Search")
+
+2026-06-28 19:10:30 [WARNING]   [FAIL] after 2 attempts -- LIAA2JY270002305
+2026-06-28 19:10:31 [INFO] [SYSTEM] Automation stopped by user.
+2026-06-28 19:10:31 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 19:10:31 [INFO] Final result: 0/2 succeeded
+2026-06-28 19:10:32 [INFO] Final result: 0/2 succeeded
+2026-06-28 19:10:32 [INFO] Waiting for pipeline workers to complete...
+2026-06-28 19:10:32 [INFO] [Pipeline] Initiating shutdown...
+2026-06-28 19:10:32 [INFO] [BackupWorker] Stopped
+2026-06-28 19:10:32 [INFO] [ModifierWorker-1] Stopped
+2026-06-28 19:10:32 [INFO] [ModifierWorker-2] Stopped
+2026-06-28 19:10:32 [INFO] [Pipeline] Final state: {'total': 0}
+2026-06-28 19:10:32 [INFO] [Pipeline] Shutdown complete
+2026-06-28 19:10:32 [INFO] Pipeline stats: {'total': 0}

@@ -14,7 +14,7 @@ import sys
 import subprocess
 import webbrowser
 from pathlib import Path
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -26,8 +26,14 @@ from ruamel.yaml import YAML
 import shutil
 import zipfile
 import tempfile
+import psutil
+import time
+from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 from gst_downloader import config
+from gst_downloader.excel_preprocessor import preprocess_excel
+from gst_downloader.pdf_modifier import _load_config
 
 app = FastAPI(title="GST Invoice Automation")
 
@@ -44,6 +50,46 @@ log_queue = queue.Queue()
 current_job_filename = ""
 current_batch_name = ""
 
+active_subprocess = None
+
+last_heartbeat = 0
+heartbeat_active = False
+
+global_pipeline_state = {
+    "status": "IDLE",
+    "metrics": {
+        "total": 0,
+        "processed": 0,
+        "errors": 0
+    },
+    "workers": {
+        "downloader": { "status": "idle", "current": None },
+        "modifier": { "status": "idle", "current": None }
+    },
+    "queue": [],
+    "errors": []
+}
+
+# Reset IPC state on server startup to avoid stale UI state
+try:
+    with open("ipc_state.json", "w") as f:
+        json.dump({"status": "IDLE"}, f)
+except Exception:
+    pass
+
+def reset_global_state():
+    global global_pipeline_state
+    global_pipeline_state.update({
+        "status": "IDLE",
+        "metrics": {"total": 0, "processed": 0, "errors": 0},
+        "workers": {
+            "downloader": { "status": "idle", "current": None },
+            "modifier": { "status": "idle", "current": None }
+        },
+        "queue": [],
+        "errors": []
+    })
+
 # Ensure directories exist
 Path(config.UPLOADS_DIR).mkdir(exist_ok=True)
 Path("static").mkdir(exist_ok=True)
@@ -57,20 +103,49 @@ async def get_index():
     with open("static/index.html", "r", encoding="utf-8") as f:
         return f.read()
 
+@app.post("/api/heartbeat")
+async def heartbeat():
+    """Receives ping from frontend to keep server alive."""
+    global last_heartbeat, heartbeat_active
+    last_heartbeat = time.time()
+    heartbeat_active = True
+    return {"status": "ok"}
+
+def heartbeat_monitor():
+    """Background thread that kills the server if the browser tab is closed."""
+    global last_heartbeat, heartbeat_active, active_subprocess
+    while True:
+        time.sleep(1)
+        if heartbeat_active and (time.time() - last_heartbeat > 5):
+            print("\n[SYSTEM] Browser tab closed. Shutting down server...")
+            if active_subprocess is not None:
+                try:
+                    parent = psutil.Process(active_subprocess.pid)
+                    for child in parent.children(recursive=True):
+                        child.kill()
+                    parent.kill()
+                except Exception:
+                    pass
+            os._exit(0)
+
 
 # ════════════════════════════════════════════════════════════════
 #  PIPELINE EXECUTION
 # ════════════════════════════════════════════════════════════════
 
-def run_pipeline_thread(filepath: str, start_from: str = "1", batch_name: str = ""):
+def run_pipeline_thread(filepath: str, start_from: str = "1", batch_name: str = "", retry_only: bool = False):
     """Run the main.py pipeline as a subprocess, streaming logs to the queue."""
+    global active_subprocess
+    
     cmd = [
         sys.executable, "-u", "main.py",
-        "--raw-excel", filepath,
+        "--cleaned-excel", filepath,
         "--start-from", start_from,
     ]
     if batch_name:
         cmd.extend(["--batch-name", batch_name])
+    if retry_only:
+        cmd.append("--retry-failed")
 
     process = subprocess.Popen(
         cmd,
@@ -81,13 +156,22 @@ def run_pipeline_thread(filepath: str, start_from: str = "1", batch_name: str = 
         encoding="utf-8",
         errors="replace",
     )
+    active_subprocess = process
 
     for line in iter(process.stdout.readline, ''):
         if line:
-            log_queue.put(line)
+            if line.startswith("__STATE_EVENT__:"):
+                try:
+                    payload = json.loads(line[len("__STATE_EVENT__:") :])
+                    _handle_state_event(payload)
+                except Exception as e:
+                    print(f"Error parsing state event: {e}")
+            else:
+                log_queue.put(line)
 
     process.stdout.close()
     return_code = process.wait()
+    active_subprocess = None
 
     # Read state to check if cancelled or stopped
     try:
@@ -106,13 +190,54 @@ def run_pipeline_thread(filepath: str, start_from: str = "1", batch_name: str = 
         log_queue.put(f"\n[SYSTEM] Automation finished with error code {return_code}\n")
 
 
+def _handle_state_event(payload):
+    global global_pipeline_state
+    event_type = payload.get("type")
+    data = payload.get("data", {})
+    
+    if event_type == "INIT_BATCH":
+        global_pipeline_state["status"] = "INITIALIZING"
+        global_pipeline_state["metrics"]["total"] = data.get("total_records", 0)
+    elif event_type == "STATUS_UPDATE":
+        global_pipeline_state["status"] = data.get("status", global_pipeline_state["status"])
+    elif event_type == "QUEUE_UPDATE":
+        global_pipeline_state["queue"] = data.get("queue", [])
+    elif event_type == "DOWNLOADER_STATUS":
+        global_pipeline_state["workers"]["downloader"]["status"] = data.get("status", "idle")
+        if "current" in data:
+            global_pipeline_state["workers"]["downloader"]["current"] = data.get("current")
+    elif event_type == "DOWNLOADER_SUCCESS":
+        global_pipeline_state["metrics"]["processed"] += 1
+    elif event_type == "DOWNLOADER_FAIL":
+        global_pipeline_state["metrics"]["errors"] += 1
+        global_pipeline_state["errors"].append({
+            "type": "DOWNLOAD",
+            "irn": data.get("irn", ""),
+            "message": data.get("error", "Failed")
+        })
+    elif event_type == "MODIFIER_STATUS":
+        global_pipeline_state["workers"]["modifier"]["status"] = data.get("status", "idle")
+        if "current" in data:
+            global_pipeline_state["workers"]["modifier"]["current"] = data.get("current")
+    elif event_type == "MODIFIER_FAIL":
+        global_pipeline_state["errors"].append({
+            "type": "MODIFIER",
+            "file": data.get("filename", ""),
+            "message": data.get("error", "Failed")
+        })
+    elif event_type == "PIPELINE_COMPLETE":
+        global_pipeline_state["status"] = "COMPLETED"
+    elif event_type == "PIPELINE_CANCELLED":
+        global_pipeline_state["status"] = "CANCELLED"
+
+
 # ════════════════════════════════════════════════════════════════
 #  FILE UPLOAD & PROCESSING
 # ════════════════════════════════════════════════════════════════
 
-@app.post("/upload")
-async def upload_file(file: UploadFile = File(...), start_from: int = 1, batch_name: str = ""):
-    """Upload an Excel or ZIP file and start the processing pipeline."""
+@app.post("/upload_and_preprocess")
+async def upload_and_preprocess(file: UploadFile = File(...), batch_name: str = Form("")):
+    """Upload an Excel or ZIP file, preprocess it, and pause at the checkpoint."""
     is_zip = file.filename.endswith('.zip')
     if not (file.filename.endswith('.xlsx') or is_zip):
         return {"status": "error", "message": "Only .xlsx and .zip files are supported."}
@@ -156,27 +281,98 @@ async def upload_file(file: UploadFile = File(...), start_from: int = 1, batch_n
         except Exception as e:
             return {"status": "error", "message": f"Error processing ZIP: {str(e)}"}
 
+    global current_job_filename, current_batch_name
+    current_batch_name = batch_name or excel_file_path.stem
+    current_job_filename = excel_file_path.name
+
+    # Load config to get the processed_excel_folder
+    config_path = config.PDF_CONFIG_FILE
+    try:
+        modifier_config = _load_config(config_path)
+    except Exception as e:
+        return {"status": "error", "message": f"Failed to load config: {e}"}
+        
+    processed_excel_folder = Path(modifier_config["processed_excel_folder"])
+    processed_excel_folder.mkdir(parents=True, exist_ok=True)
+    cleaned_excel_path = processed_excel_folder / f"{current_batch_name}.xlsx"
+
+    # Run preprocessing
+    try:
+        valid_count = preprocess_excel(str(excel_file_path), str(cleaned_excel_path))
+    except Exception as e:
+        return {"status": "error", "message": f"Preprocessing failed: {e}"}
+
+    # Set IPC state to PENDING_CONFIRMATION
+    with open("ipc_state.json", "w") as f:
+        json.dump({"status": "PENDING_CONFIRMATION", "batch_name": current_batch_name, "cleaned_excel": str(cleaned_excel_path)}, f)
+
+    # Check for existing failed IRNs
+    failed_log_path = Path(modifier_config.get("processed_folder", "processed")) / current_batch_name / "failed_irns.txt"
+    has_failed_irns = False
+    if failed_log_path.exists():
+        try:
+            with open(failed_log_path, "r", encoding="utf-8") as f:
+                if any(line.strip() for line in f):
+                    has_failed_irns = True
+        except Exception:
+            pass
+
+    return {
+        "status": "success",
+        "message": f"Preprocessed {excel_file_path.name}",
+        "batch_name": current_batch_name,
+        "valid_count": valid_count,
+        "cleaned_excel": str(cleaned_excel_path),
+        "has_failed_irns": has_failed_irns
+    }
+
+class StartAutomationRequest(BaseModel):
+    cleaned_excel_path: str
+    batch_name: str
+    start_from: int = 1
+    retry_only: bool = False
+
+@app.post("/start_automation")
+async def start_automation(req: StartAutomationRequest):
+    """Start the actual pipeline with the preprocessed (and potentially user-edited) Excel file."""
     # Reset IPC state to RUN
     with open("ipc_state.json", "w") as f:
         json.dump({"status": "RUN"}, f)
-
-    global current_job_filename, current_batch_name
-    current_job_filename = excel_file_path.name
-    current_batch_name = batch_name or excel_file_path.stem
+        
+    reset_global_state()
+    global_pipeline_state["status"] = "RUNNING"
 
     # Start process in background
     thread = threading.Thread(
         target=run_pipeline_thread,
-        args=(str(excel_file_path), str(start_from), current_batch_name),
+        args=(req.cleaned_excel_path, str(req.start_from), req.batch_name, req.retry_only),
         daemon=True,
     )
     thread.start()
 
     return {
         "status": "success",
-        "message": f"Started processing {excel_file_path.name}",
-        "batch_name": current_batch_name,
+        "message": f"Automation started for {req.batch_name}"
     }
+
+@app.post("/reset_job")
+async def reset_job():
+    """Reset the application state so a new file can be processed."""
+    reset_global_state()
+    try:
+        with open("ipc_state.json", "w") as f:
+            json.dump({"status": "IDLE"}, f)
+    except Exception:
+        pass
+    return {"status": "success"}
+
+@app.get("/download_excel")
+async def download_excel(filepath: str):
+    """Serve the preprocessed Excel file for verification or editing."""
+    path = Path(filepath)
+    if not path.exists():
+        return {"status": "error", "message": "File not found"}
+    return FileResponse(path, filename=path.name)
 
 
 # ════════════════════════════════════════════════════════════════
@@ -228,6 +424,31 @@ async def update_config(new_config: dict):
 #  PIPELINE STATE CONTROL
 # ════════════════════════════════════════════════════════════════
 
+@app.get("/api/history")
+async def get_history():
+    """Returns the job history from history.json."""
+    try:
+        with open("history.json", "r") as f:
+            return json.load(f)
+    except Exception:
+        return []
+
+@app.get("/api/errors")
+async def get_errors():
+    """Returns the parsed errors from the global pipeline state."""
+    global global_pipeline_state
+    # Formatting to match the old expected format if needed by older clients
+    formatted = []
+    for err in global_pipeline_state.get("errors", []):
+        formatted.append({
+            "row": err.get("row", "-"),
+            "invoice": err.get("file", err.get("irn", "-")),
+            "irn": err.get("irn", "-"),
+            "error": err.get("message", "Error")
+        })
+    return formatted
+
+
 @app.post("/state")
 async def set_state(req: dict):
     """
@@ -241,6 +462,22 @@ async def set_state(req: dict):
     with open("ipc_state.json", "w") as f:
         json.dump({"status": cmd}, f)
 
+    if cmd in ["CANCEL", "STOP"]:
+        global active_subprocess
+        if active_subprocess is not None:
+            def force_kill():
+                time.sleep(3)
+                if active_subprocess is not None and active_subprocess.poll() is None:
+                    print(f"[SYSTEM] Forcing kill of stuck automation process...")
+                    try:
+                        parent = psutil.Process(active_subprocess.pid)
+                        for child in parent.children(recursive=True):
+                            child.kill()
+                        parent.kill()
+                    except Exception:
+                        pass
+            threading.Thread(target=force_kill, daemon=True).start()
+
     if cmd == "CANCEL":
         _cleanup_batch_folders()
 
@@ -253,11 +490,20 @@ def _cleanup_batch_folders():
     if not current_batch_name:
         return
 
+    modifier_config = {}
+    try:
+        modifier_config = _load_config(config.PDF_CONFIG_FILE)
+    except Exception:
+        pass
+
     folders_to_clean = [
         Path(config.STAGING_DIR) / current_batch_name,
-        Path(config.ORIGINALS_DIR) / current_batch_name,
-        Path(config.PROCESSED_DIR) / current_batch_name,
     ]
+    
+    if "original_folder" in modifier_config:
+        folders_to_clean.append(Path(modifier_config["original_folder"]) / current_batch_name)
+    if "processed_folder" in modifier_config:
+        folders_to_clean.append(Path(modifier_config["processed_folder"]) / current_batch_name)
 
     for folder in folders_to_clean:
         if folder.exists():
@@ -303,6 +549,56 @@ async def get_progress():
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
+def dashboard_stream_generator():
+    """Generator for unified dashboard SSE (logs, health, state)."""
+    while True:
+        # Collect any new logs
+        new_logs = []
+        try:
+            while not log_queue.empty():
+                line = log_queue.get_nowait().replace('\n', '')
+                if line.strip():
+                    new_logs.append(line)
+        except queue.Empty:
+            pass
+
+        # Read pipeline state
+        pipeline_state = global_pipeline_state
+            
+        # Read IPC state
+        ipc_state = {"status": "IDLE"}
+        try:
+            if os.path.exists("ipc_state.json"):
+                with open("ipc_state.json", "r") as f:
+                    ipc_state = json.load(f)
+        except Exception:
+            pass
+
+        # System health
+        health = {
+            "cpu_percent": psutil.cpu_percent(),
+            "mem_percent": psutil.virtual_memory().percent
+        }
+
+        payload = {
+            "logs": new_logs,
+            "pipeline": pipeline_state,
+            "ipc_status": ipc_state.get("status", "IDLE"),
+            "health": health
+        }
+
+        yield f"data: {json.dumps(payload)}\n\n"
+        
+        # Sleep ~1 sec before next tick
+        threading.Event().wait(1.0)
+
+
+@app.get("/api/dashboard_stream")
+async def get_dashboard_stream():
+    """Unified SSE endpoint for dashboard updates."""
+    return StreamingResponse(dashboard_stream_generator(), media_type="text/event-stream")
+
+
 # ════════════════════════════════════════════════════════════════
 #  APP STARTUP
 # ════════════════════════════════════════════════════════════════
@@ -314,4 +610,5 @@ if __name__ == "__main__":
         webbrowser.open(f"http://localhost:{port}")
 
     threading.Timer(1.5, open_browser).start()
+    threading.Thread(target=heartbeat_monitor, daemon=True).start()
     uvicorn.run("app:app", host="0.0.0.0", port=port)

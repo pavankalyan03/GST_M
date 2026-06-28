@@ -10,7 +10,6 @@ STAGING_DIR = "staging"
 UPLOADS_DIR = "uploads"
 
 # ── Logs ─────────────────────────────────────────────────────
-FAILED_LOG = "failed_irns.txt"
 
 # ── Excel Structure (1-based column indices) ─────────────────
 IRN_COLUMN = 23          # Column W — 64-char IRN hash

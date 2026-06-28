@@ -69,10 +69,10 @@ ship_to_address:
 # └────────────────────────────────────────────────────────────────┘
 
 # Folder containing the original PDFs (backup copies)
-original_folder: D:\original
+original_folder: D:\Invoice_Book\original
 
 # Folder where modified PDFs will be saved
-processed_folder: D:\processed
+processed_folder: D:\Invoice_Book\processed
 
 # Folder where the processed/cleaned Excel files will be saved
-processed_excel_folder: D:\processed_excel
+processed_excel_folder: D:\Invoice_Book\processed_excel

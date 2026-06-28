@@ -79,3 +79,5 @@ def preprocess_excel(input_path: str, output_path: str, logger: logging.Logger =
         logger.info(f"Preprocessing complete. Extracted {valid_count} valid records into {output_path}")
     else:
         print(f"Preprocessing complete. Extracted {valid_count} valid records into {output_path}")
+        
+    return valid_count

@@ -3,149 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GST Invoice Automation</title>
-    <meta name="description" content="Automated GST e-Invoice downloader and modifier for bulk processing">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>GST Invoice Automation Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/styles.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-    </div>
+<body class="dark-theme">
+    <div class="dashboard-grid">
+        
+        <!-- Top Bar -->
+        <header class="top-bar glass-panel">
+            <div class="logo">
+                <i class="fa-solid fa-file-invoice"></i>
+                <h1>GST Automation</h1>
+            </div>
+            
+            <div class="health-indicators">
+                <div class="badge" id="cpu-badge"><i class="fa-solid fa-microchip"></i> CPU: <span id="cpu-val">--%</span></div>
+                <div class="badge" id="mem-badge"><i class="fa-solid fa-memory"></i> Mem: <span id="mem-val">--%</span></div>
+                <div class="badge success" id="status-badge"><i class="fa-solid fa-circle-check"></i> System Online</div>
+            </div>
 
-    <div class="container">
-        <header>
-            <h1>GST Invoice Automation</h1>
-            <p>Upload your monthly Excel file to download and process invoices automatically.</p>
+            <div class="top-actions">
+                <button class="icon-btn" id="history-btn" title="Job History"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                <button class="icon-btn" id="notif-btn" title="Notifications"><i class="fa-solid fa-bell"></i></button>
+            </div>
         </header>
 
-        <div class="tabs">
-            <button class="tab-btn active" id="tab-run-btn">Processing</button>
-            <button class="tab-btn" id="tab-settings-btn">Settings</button>
-        </div>
+        <!-- Hero Zone (Controls & Checkpoint) -->
+        <section class="hero-zone glass-panel">
+            
+            <div class="hero-header">
+                <h2>Control Center</h2>
+                <button class="secondary-btn" id="settings-toggle"><i class="fa-solid fa-gear"></i> Quick Settings</button>
+            </div>
 
-        <main>
-            <!-- ═══════════════════════════════════════════════ -->
-            <!--  PROCESSING VIEW                                -->
-            <!-- ═══════════════════════════════════════════════ -->
-            <div id="view-run">
-                <div class="upload-section card" id="upload-section">
-                    <h2>Upload Excel File</h2>
-                    <div class="drop-zone" id="drop-zone">
-                        <span class="drop-zone-prompt">Drag & drop your .xlsx or .zip file here or click to browse</span>
-                        <input type="file" name="file" id="file-input" accept=".xlsx,.zip">
+            <!-- Settings Accordion (Hidden by default) -->
+            <div class="settings-accordion" id="settings-panel" style="display: none;">
+                <form id="config-form">
+                    <div class="form-grid">
+                        <!-- Business Details -->
+                        <div class="input-group">
+                            <label>Client GSTIN (To Replace)</label>
+                            <input type="text" id="cfg-gstin" placeholder="Ex: 37DYVPK9951A1ZT">
+                        </div>
+                        <div class="input-group">
+                            <label>Header Name</label>
+                            <input type="text" id="cfg-header_name" placeholder="Ex: PAVAN ENTERPRISES">
+                        </div>
+                        <div class="input-group">
+                            <label>Recipient Name</label>
+                            <input type="text" id="cfg-recipient_name">
+                        </div>
+                        <div class="input-group">
+                            <label>Ship To Name</label>
+                            <input type="text" id="cfg-ship_to_name">
+                        </div>
+                        <div class="input-group" style="grid-column: 1 / -1;">
+                            <label>Recipient Address</label>
+                            <textarea id="cfg-recipient_address" rows="3" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); padding: 0.75rem; border-radius: 6px; color: #fff; font-family: var(--font); outline: none;"></textarea>
+                        </div>
+                        <div class="input-group" style="grid-column: 1 / -1;">
+                            <label>Ship To Address</label>
+                            <textarea id="cfg-ship_to_address" rows="3" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); padding: 0.75rem; border-radius: 6px; color: #fff; font-family: var(--font); outline: none;"></textarea>
+                        </div>
+                        <!-- Folder Paths -->
+                        <div class="input-group">
+                            <label>Original PDFs Folder</label>
+                            <input type="text" id="cfg-original_folder">
+                        </div>
+                        <div class="input-group">
+                            <label>Processed PDFs Folder</label>
+                            <input type="text" id="cfg-processed_folder">
+                        </div>
+                        <div class="input-group" style="grid-column: 1 / -1;">
+                            <label>Processed Excel Output Folder</label>
+                            <input type="text" id="cfg-processed_excel_folder">
+                        </div>
                     </div>
+                    <button type="submit" class="primary-btn small">Save Settings</button>
+                </form>
+            </div>
 
-                    <div class="advanced-settings-panel">
-                        <label for="start-from" style="color: var(--text-secondary); font-size: 0.9rem; margin-right: 10px;">Start From Row:</label>
-                        <input type="number" id="start-from" name="start-from" value="1" min="1" class="input-field" style="width: 100px;">
-                    </div>
-
-                    <div class="file-details" id="file-details" style="display: none;">
-                        <span id="file-name">filename.xlsx</span>
-                        <button class="btn btn-primary" id="process-btn">Start Processing</button>
-                    </div>
+            <!-- Upload & Preprocess State -->
+            <div class="dynamic-area" id="upload-area">
+                <div class="dropzone" id="dropzone">
+                    <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                    <h3>Drag & Drop Excel or ZIP here</h3>
+                    <p>or click to browse</p>
+                    <input type="file" id="file-input" accept=".xlsx,.zip" hidden>
                 </div>
-
-                <div class="dashboard-section card" id="dashboard-section" style="display: none;">
-                    <div class="dashboard-header">
-                        <h2>Processing Dashboard</h2>
-                        <span id="job-filename" class="job-filename"></span>
+                
+                <div class="upload-controls">
+                    <div class="input-group">
+                        <label>Batch Name (Optional)</label>
+                        <input type="text" id="batch-name" placeholder="e.g. June_2026">
                     </div>
-
-                    <div class="current-status">
-                        <span class="status-indicator animate-pulse" id="status-indicator"></span>
-                        <span class="status-text" id="current-status-text">Initializing automation...</span>
-                    </div>
-
-                    <div class="progress-container">
-                        <div class="progress-bar-bg">
-                            <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
-                        </div>
-                        <div class="progress-text" id="progress-text">0% Complete</div>
-                    </div>
-
-                    <div class="stats-grid">
-                        <div class="stat-box stat-total">
-                            <span class="stat-label">Total Records</span>
-                            <span class="stat-value" id="stat-total">--</span>
-                        </div>
-                        <div class="stat-box stat-success">
-                            <span class="stat-label">Processed</span>
-                            <span class="stat-value" id="stat-success">0</span>
-                        </div>
-                        <div class="stat-box stat-skipped">
-                            <span class="stat-label">Skipped</span>
-                            <span class="stat-value" id="stat-skipped">0</span>
-                        </div>
-                        <div class="stat-box stat-errors">
-                            <span class="stat-label">Errors</span>
-                            <span class="stat-value" id="stat-errors">0</span>
-                        </div>
-                    </div>
-
-                    <div class="process-controls">
-                        <button class="btn btn-warning" id="pause-btn">Pause</button>
-                        <button class="btn btn-danger" id="stop-btn" style="background-color: var(--error); border: none;">Stop</button>
-                        <button class="btn btn-danger" id="cancel-btn">Start Over</button>
-                    </div>
-
-                    <div class="console-wrapper">
-                        <h3>Recent Events</h3>
-                        <div class="console-output" id="console-output">
-                        </div>
-                    </div>
-
-                    <button class="btn btn-secondary" id="reset-btn" style="display: none; margin-top: 1.5rem; width: 100%;">Process Another File</button>
+                    <button class="primary-btn glow" id="btn-preprocess">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Upload & Preprocess
+                    </button>
                 </div>
             </div>
 
-            <!-- ═══════════════════════════════════════════════ -->
-            <!--  SETTINGS VIEW                                  -->
-            <!-- ═══════════════════════════════════════════════ -->
-            <div id="view-settings" style="display: none;">
-                <div class="card">
-                    <h2>PDF Modification Settings</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
-                        Configure what text to replace in the downloaded invoices. Leave fields empty to keep the original values.
-                    </p>
-                    <form id="config-form">
-                        <div id="config-fields-container">
-                            <!-- Fields injected by JS -->
-                        </div>
-                        <button type="button" class="btn btn-primary" id="save-config-btn" style="margin-top: 1.5rem;">Save Settings</button>
-                        <span id="config-save-status" style="margin-left: 10px; font-size: 0.9rem; color: var(--success); display: none;">Saved!</span>
-                    </form>
+            <!-- Human-in-the-Loop Checkpoint State (Hidden initially) -->
+            <div class="dynamic-area checkpoint-area" id="checkpoint-area" style="display: none;">
+                <div class="checkpoint-banner warning">
+                    <i class="fa-solid fa-hand"></i>
+                    <h3>Checkpoint: Preprocessing Complete</h3>
+                </div>
+                <div class="checkpoint-stats">
+                    <div class="stat-box">
+                        <span class="stat-value text-accent" id="cp-valid-count">0</span>
+                        <span class="stat-label">Valid IRNs Extracted</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-value" id="cp-batch-name">-</span>
+                        <span class="stat-label">Batch Name</span>
+                    </div>
+                </div>
+                <div class="checkpoint-actions">
+                    <a href="#" class="secondary-btn" id="btn-download-excel" target="_blank">
+                        <i class="fa-solid fa-file-excel"></i> Review Processed Excel
+                    </a>
+                    <button class="primary-btn glow success" id="btn-start-automation">
+                        <i class="fa-solid fa-play"></i> Confirm & Start Automation
+                    </button>
+                    <button class="primary-btn warning glow" id="btn-cp-retry-failed" style="display: none;">
+                        <i class="fa-solid fa-rotate-right"></i> Retry Failed IRNs
+                    </button>
+                    <button class="secondary-btn danger" id="btn-cancel-checkpoint">
+                        <i class="fa-solid fa-xmark"></i> Cancel
+                    </button>
                 </div>
             </div>
-        </main>
-    </div>
+            
+            <!-- Running State Controls (Hidden initially) -->
+            <div class="dynamic-area running-area" id="running-area" style="display: none;">
+                <div class="running-status">
+                    <div class="pulse-ring" id="running-pulse"></div>
+                    <h3 id="current-state-title">Automation Running</h3>
+                </div>
+                <div class="running-actions">
+                    <button class="primary-btn glow" id="btn-new-job" style="display:none;"><i class="fa-solid fa-rotate"></i> Process Another File</button>
+                    <button class="primary-btn warning glow" id="btn-retry-failed" style="display:none;"><i class="fa-solid fa-rotate-right"></i> Retry Failed IRNs</button>
+                    <button class="primary-btn success glow" id="btn-prompt-continue" style="display:none;"><i class="fa-solid fa-check"></i> I have Logged In - Continue</button>
+                    <button class="secondary-btn warning" id="btn-pause"><i class="fa-solid fa-pause"></i> Pause</button>
+                    <button class="secondary-btn success" id="btn-resume" style="display:none;"><i class="fa-solid fa-play"></i> Resume</button>
+                    <button class="secondary-btn danger" id="btn-stop"><i class="fa-solid fa-stop"></i> Stop</button>
+                </div>
+            </div>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!--  BATCH NAME PROMPT MODAL                       -->
-    <!-- ═══════════════════════════════════════════════ -->
-    <div id="batch-name-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <h3 style="color: var(--primary); margin-bottom: 10px;">Name This Batch</h3>
-            <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.9rem;">
-                Give a meaningful name for this processing run.<br>
-                This will be used to organize your output folders.
-            </p>
-            <input type="text" id="batch-name-input" class="input-field" style="width: 100%; margin-bottom: 15px;" placeholder="e.g. June_2026_Invoices">
-            <button class="btn btn-primary" id="batch-name-confirm-btn" style="width: 100%;">Proceed</button>
-        </div>
-    </div>
+        </section>
 
-    <!-- ═══════════════════════════════════════════════ -->
-    <!--  LOGIN PROMPT MODAL                            -->
-    <!-- ═══════════════════════════════════════════════ -->
-    <div id="ui-prompt-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <h3 style="color: var(--warning); margin-bottom: 10px;">Manual Action Required</h3>
-            <p id="ui-prompt-text" style="margin-bottom: 20px;">Please login to the portal</p>
-            <button class="btn btn-primary" id="ui-prompt-continue-btn" style="width: 100%;">Continue</button>
+        <!-- Metrics Ribbon -->
+        <section class="metrics-ribbon">
+            <div class="metric-card glass-panel">
+                <div class="metric-icon"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="metric-data">
+                    <span class="label">Total Records</span>
+                    <span class="value" id="metric-total">0</span>
+                </div>
+            </div>
+            <div class="metric-card glass-panel">
+                <div class="metric-icon text-success"><i class="fa-solid fa-check-double"></i></div>
+                <div class="metric-data">
+                    <span class="label">Processed</span>
+                    <span class="value text-success" id="metric-processed">0</span>
+                </div>
+            </div>
+            <div class="metric-card glass-panel">
+                <div class="metric-icon text-danger"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                <div class="metric-data">
+                    <span class="label">Errors</span>
+                    <span class="value text-danger" id="metric-errors">0</span>
+                </div>
+            </div>
+            <div class="metric-card glass-panel">
+                <div class="metric-icon text-accent"><i class="fa-solid fa-gauge-high"></i></div>
+                <div class="metric-data">
+                    <span class="label">Throughput</span>
+                    <span class="value" id="metric-speed">0 / min</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Bar bridging the gap -->
+        <div class="progress-container glass-panel">
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="main-progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="progress-text" id="main-progress-text">0% Complete</div>
         </div>
+
+        <!-- Operations Grid (Split View) -->
+        <section class="operations-grid">
+            
+            <!-- Left: Live Pipeline -->
+            <div class="panel-left glass-panel">
+                <h3>Live Pipeline Status</h3>
+                
+                <div class="worker-stages">
+                    <div class="worker-stage" id="worker-downloader">
+                        <div class="stage-icon"><i class="fa-brands fa-edge"></i></div>
+                        <div class="stage-info">
+                            <h4>Downloader Worker</h4>
+                            <p class="status-text text-muted">Waiting...</p>
+                        </div>
+                    </div>
+                    <div class="worker-stage" id="worker-modifier">
+                        <div class="stage-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                        <div class="stage-info">
+                            <h4>PDF Modifier</h4>
+                            <p class="status-text text-muted">Waiting...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="queue-monitor mt-4">
+                    <h4>Next in Queue</h4>
+                    <ul class="queue-list" id="queue-list">
+                        <li class="empty-msg">Queue is empty</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Right: Logs & Errors Tabs -->
+            <div class="panel-right glass-panel">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="terminal-tab"><i class="fa-solid fa-terminal"></i> Live Logs</button>
+                    <button class="tab-btn" data-tab="errors-tab"><i class="fa-solid fa-bug"></i> Error Dashboard <span class="badge danger" id="tab-error-count">0</span></button>
+                </div>
+                
+                <div class="tab-content active" id="terminal-tab">
+                    <div class="terminal" id="terminal-output">
+                        <!-- Logs injected here -->
+                        <div class="log-line system">System initialized. Awaiting upload...</div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="errors-tab" style="display: none;">
+                    <div class="error-dashboard">
+                        <table class="error-table">
+                            <thead>
+                                <tr>
+                                    <th>Row</th>
+                                    <th>Invoice #</th>
+                                    <th>IRN</th>
+                                    <th>Error Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody id="error-table-body">
+                                <tr><td colspan="4" class="text-center text-muted">No errors recorded yet.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
     </div>
 
     <script src="/static/script.js"></script>

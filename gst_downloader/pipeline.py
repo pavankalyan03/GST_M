@@ -26,6 +26,8 @@ from typing import Callable
 
 from gst_downloader import config
 from gst_downloader.pdf_modifier import modify_single_pdf, _load_config
+from gst_downloader.state import StateEmitter
+from gst_downloader.utils import update_failed_irn_log
 
 
 # ════════════════════════════════════════════════════════════════
@@ -52,6 +54,7 @@ class FileRecord:
     backup_path: str = ""
     output_path: str = ""
     state: str = FileState.STAGED
+    irn: str = ""
     attempts: int = 0
     last_error: str = ""
     created_at: str = ""
@@ -73,7 +76,7 @@ class PipelineStateManager:
     """
 
     def __init__(self, staging_dir: Path, originals_dir: Path, processed_dir: Path,
-                 logger: logging.Logger, max_retries: int = 3):
+                 logger: logging.Logger, max_retries: int = 3, failed_log_path: str = None):
         self._lock = threading.Lock()
         self._records: dict[str, FileRecord] = {}  # filename -> FileRecord
         self._logger = logger
@@ -82,13 +85,14 @@ class PipelineStateManager:
         self.originals_dir = originals_dir
         self.processed_dir = processed_dir
         self.max_retries = max_retries
+        self.failed_log_path = failed_log_path
 
         # Ensure directories exist
         self.staging_dir.mkdir(parents=True, exist_ok=True)
         self.originals_dir.mkdir(parents=True, exist_ok=True)
         self.processed_dir.mkdir(parents=True, exist_ok=True)
 
-    def register_file(self, filename: str, staging_path: str) -> bool:
+    def register_file(self, filename: str, staging_path: str, irn: str = "") -> bool:
         """Register a newly downloaded file. Returns False if already registered."""
         with self._lock:
             if filename in self._records:
@@ -101,6 +105,7 @@ class PipelineStateManager:
                 staging_path=staging_path,
                 backup_path=str(self.originals_dir / filename),
                 output_path=str(self.processed_dir / filename),
+                irn=irn
             )
             self._logger.info(f"[StateManager] Registered: {filename}")
             return True
@@ -147,6 +152,8 @@ class PipelineStateManager:
                             f"[StateManager] {rec.filename} permanently failed after "
                             f"{rec.attempts} attempts: {rec.last_error}"
                         )
+                        if self.failed_log_path and rec.irn:
+                            update_failed_irn_log(self.failed_log_path, 'add', rec.irn)
                         continue
                     rec.state = FileState.MODIFYING
                     rec.attempts += 1
@@ -178,6 +185,9 @@ class PipelineStateManager:
         with self._lock:
             rec = self._records.get(filename)
             if rec and rec.state == FileState.COMPLETED:
+                if self.failed_log_path and rec.irn:
+                    update_failed_irn_log(self.failed_log_path, 'remove', rec.irn)
+                    
                 staging = Path(rec.staging_path)
                 if staging.exists():
                     try:
@@ -353,6 +363,8 @@ class ModifierWorker:
         try:
             in_path = rec.backup_path  # Read from originals (backup copy)
             out_path = rec.output_path
+            
+            StateEmitter.emit("MODIFIER_STATUS", {"status": "processing", "current": rec.filename})
 
             if not Path(in_path).exists():
                 # Fall back to staging path if backup hasn't arrived yet
@@ -361,6 +373,7 @@ class ModifierWorker:
                     self.state.transition(rec.filename, FileState.FAILED,
                                           "Source file not found for modification")
                     self.log.error(f"[ModifierWorker-{self.worker_id}] Source not found: {rec.filename}")
+                    StateEmitter.emit("MODIFIER_FAIL", {"filename": rec.filename, "error": "Source not found"})
                     return
 
             self.log.info(f"[ModifierWorker-{self.worker_id}] Modifying: {rec.filename}")
@@ -370,21 +383,27 @@ class ModifierWorker:
                 self.state.transition(rec.filename, FileState.COMPLETED)
                 self.state.cleanup_staging(rec.filename)
                 self.log.info(f"[ModifierWorker-{self.worker_id}] Completed: {rec.filename}")
+                StateEmitter.emit("MODIFIER_SUCCESS", {"filename": rec.filename})
             elif result["status"] == "skipped":
                 # No changes needed — still mark as completed
                 self.state.transition(rec.filename, FileState.COMPLETED)
                 self.state.cleanup_staging(rec.filename)
                 self.log.info(f"[ModifierWorker-{self.worker_id}] Skipped (no changes): {rec.filename}")
+                StateEmitter.emit("MODIFIER_SUCCESS", {"filename": rec.filename})
             else:
                 error_msg = "; ".join(result["errors"][:2])  # Keep error concise
                 self.state.transition(rec.filename, FileState.RETRY, error_msg)
                 self.log.warning(
                     f"[ModifierWorker-{self.worker_id}] Failed: {rec.filename} — {error_msg[:100]}"
                 )
+                StateEmitter.emit("MODIFIER_FAIL", {"filename": rec.filename, "error": error_msg})
 
         except Exception as e:
             self.state.transition(rec.filename, FileState.RETRY, str(e))
             self.log.error(f"[ModifierWorker-{self.worker_id}] Exception: {rec.filename} — {e}")
+            StateEmitter.emit("MODIFIER_FAIL", {"filename": rec.filename, "error": str(e)})
+        finally:
+            StateEmitter.emit("MODIFIER_STATUS", {"status": "idle"})
 
 
 # ════════════════════════════════════════════════════════════════
@@ -400,7 +419,7 @@ class ProcessingPipeline:
     """
 
     def __init__(self, batch_name: str, config_path: str, logger: logging.Logger,
-                 num_modifier_workers: int = None):
+                 num_modifier_workers: int = None, failed_log_path: str = None):
         self.batch_name = batch_name
         self.config_path = config_path
         self.log = logger
@@ -423,6 +442,7 @@ class ProcessingPipeline:
             processed_dir=processed_dir,
             logger=logger,
             max_retries=config.MAX_RETRY_ATTEMPTS,
+            failed_log_path=failed_log_path
         )
 
         # Store dirs for external access
@@ -463,13 +483,13 @@ class ProcessingPipeline:
 
         self.log.info(f"[Pipeline] All workers started ({len(self.modifier_workers)} modifier workers)")
 
-    def notify_download(self, file_path: str):
+    def notify_download(self, file_path: str, irn: str = ""):
         """
         Called by the downloader when a new PDF has been saved to staging.
         Registers the file with the state manager for processing.
         """
         filename = Path(file_path).name
-        self.state_manager.register_file(filename, file_path)
+        self.state_manager.register_file(filename, file_path, irn)
 
     def shutdown(self, wait: bool = True, timeout: float = 60.0):
         """

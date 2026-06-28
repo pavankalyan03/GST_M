@@ -1,0 +1,103 @@
+2026-06-28 18:39:04 [INFO] Log file: logs\gst_download_20260628_183904.log
+2026-06-28 18:39:04 [INFO] ==================================================
+2026-06-28 18:39:04 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 18:39:04 [INFO] ==================================================
+2026-06-28 18:39:04 [INFO] Batch name: June_2026
+2026-06-28 18:39:04 [INFO] Reading Excel file: D:\Invoice_Book\processed_excel\June_2026.xlsx
+2026-06-28 18:39:04 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 18:39:04 [INFO] Loaded 5 valid IRN records
+2026-06-28 18:39:04 [INFO] [Pipeline] Starting pipeline for batch 'June_2026'
+2026-06-28 18:39:04 [INFO] [Pipeline] Staging:   staging\June_2026
+2026-06-28 18:39:04 [INFO] [Pipeline] Originals: D:\Invoice_Book\original\June_2026
+2026-06-28 18:39:04 [INFO] [Pipeline] Processed: D:\Invoice_Book\processed\June_2026
+2026-06-28 18:39:04 [INFO] [BackupWorker] Started
+2026-06-28 18:39:04 [INFO] [ModifierWorker-1] Started
+2026-06-28 18:39:04 [INFO] [ModifierWorker-2] Started
+2026-06-28 18:39:04 [INFO] [Pipeline] All workers started (2 modifier workers)
+2026-06-28 18:39:06 [INFO] Launching Chromium in headed mode...
+2026-06-28 18:39:07 [INFO] Browser ready
+2026-06-28 18:39:07 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 18:39:11 [INFO] Portal loaded
+2026-06-28 18:39:11 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 18:39:49 [INFO] User confirmed login -- automation starting
+2026-06-28 18:39:49 [INFO] Processing 5 IRNs (starting from #1)
+2026-06-28 18:39:49 [INFO] [1/5] ----------------------------------------------
+2026-06-28 18:39:49 [INFO]   Invoice: 2601370040023560  |  Date: 23-01-2026  |  IRN: 93c826e82bcacdb45cbdf07d...4883ec1aa2dd
+2026-06-28 18:39:50 [INFO]   Typed IRN: 93c826e82bcacdb45cbdf07d...4883ec1aa2dd
+2026-06-28 18:39:50 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 18:39:51 [INFO]   Search results visible
+2026-06-28 18:39:52 [INFO]   Download triggered via row icon
+2026-06-28 18:39:53 [INFO]   [OK] Saved -> 2601370040023560_23-01-2026.pdf
+2026-06-28 18:39:53 [INFO] [StateManager] Registered: 2601370040023560_23-01-2026.pdf
+2026-06-28 18:39:53 [INFO] [BackupWorker] Backed up: 2601370040023560_23-01-2026.pdf
+2026-06-28 18:39:53 [INFO] [ModifierWorker-2] Modifying: 2601370040023560_23-01-2026.pdf
+2026-06-28 18:39:53 [WARNING] [ModifierWorker-2] Failed: 2601370040023560_23-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:39:53 [INFO] [ModifierWorker-2] Modifying: 2601370040023560_23-01-2026.pdf
+2026-06-28 18:39:53 [WARNING] [ModifierWorker-2] Failed: 2601370040023560_23-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:39:53 [WARNING] [StateManager] 2601370040023560_23-01-2026.pdf permanently failed after 4 attempts: GSTIN '' not found in PDF
+2026-06-28 18:39:55 [INFO] [2/5] ----------------------------------------------
+2026-06-28 18:39:55 [INFO]   Invoice: FAO8332605076149  |  Date: 02-01-2026  |  IRN: fd6661fc3743e43949bcfd02...aabab0b2f42c
+2026-06-28 18:39:56 [INFO]   Typed IRN: fd6661fc3743e43949bcfd02...aabab0b2f42c
+2026-06-28 18:39:56 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 18:39:57 [INFO]   Search results visible
+2026-06-28 18:39:58 [INFO]   Download triggered via row icon
+2026-06-28 18:39:58 [INFO]   [OK] Saved -> FAO8332605076149_02-01-2026.pdf
+2026-06-28 18:39:58 [INFO] [StateManager] Registered: FAO8332605076149_02-01-2026.pdf
+2026-06-28 18:39:58 [INFO] [BackupWorker] Backed up: FAO8332605076149_02-01-2026.pdf
+2026-06-28 18:39:58 [INFO] [ModifierWorker-2] Modifying: FAO8332605076149_02-01-2026.pdf
+2026-06-28 18:39:58 [WARNING] [ModifierWorker-2] Failed: FAO8332605076149_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:39:58 [INFO] [ModifierWorker-2] Modifying: FAO8332605076149_02-01-2026.pdf
+2026-06-28 18:39:58 [WARNING] [ModifierWorker-2] Failed: FAO8332605076149_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:39:58 [WARNING] [StateManager] FAO8332605076149_02-01-2026.pdf permanently failed after 4 attempts: GSTIN '' not found in PDF
+2026-06-28 18:40:00 [INFO] [3/5] ----------------------------------------------
+2026-06-28 18:40:00 [INFO]   Invoice: FAO8332605076156  |  Date: 02-01-2026  |  IRN: a2bc27d2eb98dd1782078667...264137437904
+2026-06-28 18:40:01 [INFO]   Typed IRN: a2bc27d2eb98dd1782078667...264137437904
+2026-06-28 18:40:01 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 18:40:02 [INFO]   Search results visible
+2026-06-28 18:40:02 [INFO]   Download triggered via row icon
+2026-06-28 18:40:03 [INFO]   [OK] Saved -> FAO8332605076156_02-01-2026.pdf
+2026-06-28 18:40:03 [INFO] [StateManager] Registered: FAO8332605076156_02-01-2026.pdf
+2026-06-28 18:40:03 [INFO] [BackupWorker] Backed up: FAO8332605076156_02-01-2026.pdf
+2026-06-28 18:40:03 [INFO] [ModifierWorker-2] Modifying: FAO8332605076156_02-01-2026.pdf
+2026-06-28 18:40:03 [WARNING] [ModifierWorker-2] Failed: FAO8332605076156_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:40:03 [INFO] [ModifierWorker-2] Modifying: FAO8332605076156_02-01-2026.pdf
+2026-06-28 18:40:03 [WARNING] [ModifierWorker-2] Failed: FAO8332605076156_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:40:03 [WARNING] [StateManager] FAO8332605076156_02-01-2026.pdf permanently failed after 4 attempts: GSTIN '' not found in PDF
+2026-06-28 18:40:05 [INFO] [4/5] ----------------------------------------------
+2026-06-28 18:40:05 [INFO]   Invoice: FAO8332605076169  |  Date: 02-01-2026  |  IRN: cc6a845f83fd2c28e957fd89...93f51eaf58b0
+2026-06-28 18:40:06 [INFO]   Typed IRN: cc6a845f83fd2c28e957fd89...93f51eaf58b0
+2026-06-28 18:40:06 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 18:40:07 [INFO]   Search results visible
+2026-06-28 18:40:08 [INFO]   Download triggered via row icon
+2026-06-28 18:40:08 [INFO]   [OK] Saved -> FAO8332605076169_02-01-2026.pdf
+2026-06-28 18:40:08 [INFO] [StateManager] Registered: FAO8332605076169_02-01-2026.pdf
+2026-06-28 18:40:08 [INFO] [BackupWorker] Backed up: FAO8332605076169_02-01-2026.pdf
+2026-06-28 18:40:08 [INFO] [ModifierWorker-2] Modifying: FAO8332605076169_02-01-2026.pdf
+2026-06-28 18:40:08 [WARNING] [ModifierWorker-2] Failed: FAO8332605076169_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:40:08 [INFO] [ModifierWorker-2] Modifying: FAO8332605076169_02-01-2026.pdf
+2026-06-28 18:40:08 [WARNING] [ModifierWorker-2] Failed: FAO8332605076169_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:40:08 [WARNING] [StateManager] FAO8332605076169_02-01-2026.pdf permanently failed after 4 attempts: GSTIN '' not found in PDF
+2026-06-28 18:40:10 [INFO] [5/5] ----------------------------------------------
+2026-06-28 18:40:10 [INFO]   Invoice: FAO8332605076213  |  Date: 02-01-2026  |  IRN: 6a42e746cc15d6a1b9777f14...df7fb46c1051
+2026-06-28 18:40:11 [INFO]   Typed IRN: 6a42e746cc15d6a1b9777f14...df7fb46c1051
+2026-06-28 18:40:11 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 18:40:12 [INFO]   Search results visible
+2026-06-28 18:40:12 [INFO]   Download triggered via row icon
+2026-06-28 18:40:12 [INFO]   [OK] Saved -> FAO8332605076213_02-01-2026.pdf
+2026-06-28 18:40:12 [INFO] [StateManager] Registered: FAO8332605076213_02-01-2026.pdf
+2026-06-28 18:40:13 [INFO] [BackupWorker] Backed up: FAO8332605076213_02-01-2026.pdf
+2026-06-28 18:40:13 [INFO] Final result: 5/5 succeeded
+2026-06-28 18:40:13 [INFO] [ModifierWorker-2] Modifying: FAO8332605076213_02-01-2026.pdf
+2026-06-28 18:40:13 [WARNING] [ModifierWorker-2] Failed: FAO8332605076213_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:40:13 [INFO] [ModifierWorker-1] Modifying: FAO8332605076213_02-01-2026.pdf
+2026-06-28 18:40:13 [WARNING] [ModifierWorker-1] Failed: FAO8332605076213_02-01-2026.pdf — GSTIN '' not found in PDF
+2026-06-28 18:40:13 [WARNING] [StateManager] FAO8332605076213_02-01-2026.pdf permanently failed after 4 attempts: GSTIN '' not found in PDF
+2026-06-28 18:40:13 [INFO] Final result: 5/5 succeeded
+2026-06-28 18:40:13 [INFO] Waiting for pipeline workers to complete...
+2026-06-28 18:40:13 [INFO] [Pipeline] Initiating shutdown...
+2026-06-28 18:40:13 [INFO] [ModifierWorker-2] Stopped
+2026-06-28 18:40:13 [INFO] [BackupWorker] Stopped
+2026-06-28 18:40:13 [INFO] [ModifierWorker-1] Stopped
+2026-06-28 18:40:13 [INFO] [Pipeline] Final state: {<FileState.PERMANENTLY_FAILED: 'PERMANENTLY_FAILED'>: 5, 'total': 5}
+2026-06-28 18:40:13 [INFO] [Pipeline] Shutdown complete
+2026-06-28 18:40:13 [INFO] Pipeline stats: {<FileState.PERMANENTLY_FAILED: 'PERMANENTLY_FAILED'>: 5, 'total': 5}
