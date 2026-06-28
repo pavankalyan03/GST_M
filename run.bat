@@ -1,4 +1,6 @@
-﻿@echo off
+@echo off
 echo Starting GST Invoice Automation...
-python app.py
+cd %~dp0
+set PYTHONPATH=%cd%
+python gst_downloader\app.py
 pause

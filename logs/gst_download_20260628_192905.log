@@ -1,8 +1,0 @@
-2026-06-28 19:29:05 [INFO] Log file: logs\gst_download_20260628_192905.log
-2026-06-28 19:29:05 [INFO] ==================================================
-2026-06-28 19:29:05 [INFO]   GST e-Invoice Bulk Downloader
-2026-06-28 19:29:05 [INFO] ==================================================
-2026-06-28 19:29:05 [INFO] Batch name: August_2026
-2026-06-28 19:29:05 [INFO] Reading Excel file: D:\Invoice_Book\processed_excel\August_2026.xlsx
-2026-06-28 19:29:06 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
-2026-06-28 19:29:06 [INFO] Loaded 1015 valid IRN records

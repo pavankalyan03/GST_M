@@ -1,0 +1,43 @@
+2026-06-28 20:17:09 [INFO] Log file: C:\Users\SASI KOTHA\Desktop\GST_M\data\logs\gst_download_20260628_201709.log
+2026-06-28 20:17:09 [INFO] ==================================================
+2026-06-28 20:17:09 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 20:17:09 [INFO] ==================================================
+2026-06-28 20:17:09 [INFO] Batch name: July_2026
+2026-06-28 20:17:09 [INFO] Reading Excel file: D:\Invoice_Book\processed_excel\July_2026.xlsx
+2026-06-28 20:17:09 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 20:17:09 [INFO] Loaded 5 valid IRN records
+2026-06-28 20:17:09 [INFO] [Pipeline] Starting pipeline for batch 'July_2026'
+2026-06-28 20:17:09 [INFO] [Pipeline] Staging:   C:\Users\SASI KOTHA\Desktop\GST_M\data\staging\July_2026
+2026-06-28 20:17:09 [INFO] [Pipeline] Originals: D:\Invoice_Book\original\July_2026
+2026-06-28 20:17:09 [INFO] [Pipeline] Processed: D:\Invoice_Book\processed\July_2026
+2026-06-28 20:17:09 [INFO] [BackupWorker] Started
+2026-06-28 20:17:09 [INFO] [ModifierWorker-1] Started
+2026-06-28 20:17:09 [INFO] [ModifierWorker-2] Started
+2026-06-28 20:17:09 [INFO] [Pipeline] All workers started (2 modifier workers)
+2026-06-28 20:17:11 [INFO] Launching Chromium in headed mode...
+2026-06-28 20:17:12 [INFO] Browser ready
+2026-06-28 20:17:12 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 20:17:19 [INFO] Portal loaded
+2026-06-28 20:17:19 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 20:20:50 [INFO] User confirmed login -- automation starting
+2026-06-28 20:20:50 [INFO] Processing 5 IRNs (starting from #1)
+2026-06-28 20:20:50 [INFO] [1/5] ----------------------------------------------
+2026-06-28 20:20:50 [INFO]   [SKIPPED] Already processed: 2601370040023560_23-01-2026.pdf
+2026-06-28 20:20:52 [INFO] [2/5] ----------------------------------------------
+2026-06-28 20:20:52 [INFO]   [SKIPPED] Already processed: FAO8332605076149_02-01-2026.pdf
+2026-06-28 20:20:53 [INFO] [3/5] ----------------------------------------------
+2026-06-28 20:20:53 [INFO]   [SKIPPED] Already processed: FAO8332605076156_02-01-2026.pdf
+2026-06-28 20:20:55 [INFO] [4/5] ----------------------------------------------
+2026-06-28 20:20:55 [INFO]   [SKIPPED] Already processed: FAO8332605076169_02-01-2026.pdf
+2026-06-28 20:20:56 [INFO] [5/5] ----------------------------------------------
+2026-06-28 20:20:56 [INFO]   [SKIPPED] Already processed: FAO8332605076213_02-01-2026.pdf
+2026-06-28 20:20:56 [INFO] Final result: 5/5 succeeded
+2026-06-28 20:20:57 [INFO] Final result: 5/5 succeeded
+2026-06-28 20:20:57 [INFO] Waiting for pipeline workers to complete...
+2026-06-28 20:20:57 [INFO] [Pipeline] Initiating shutdown...
+2026-06-28 20:20:57 [INFO] [BackupWorker] Stopped
+2026-06-28 20:20:57 [INFO] [ModifierWorker-1] Stopped
+2026-06-28 20:20:57 [INFO] [ModifierWorker-2] Stopped
+2026-06-28 20:20:57 [INFO] [Pipeline] Final state: {'total': 0}
+2026-06-28 20:20:57 [INFO] [Pipeline] Shutdown complete
+2026-06-28 20:20:57 [INFO] Pipeline stats: {'total': 0}

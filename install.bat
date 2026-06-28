@@ -1,6 +1,6 @@
-﻿@echo off
+@echo off
 echo Installing requirements...
-pip install -r requirements.txt
+pip install -r config\requirements.txt
 echo.
 echo Installing Playwright Browser...
 playwright install chromium

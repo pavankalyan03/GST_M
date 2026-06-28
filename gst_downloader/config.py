@@ -2,12 +2,18 @@
 #  CONFIGURATION — Adjust these values to match your environment
 # ════════════════════════════════════════════════════════════════
 
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
+
 # ── Folder Paths ──────────────────────────────────────────────
 # staging/     → Temporary landing zone for downloads (cleaned after processing)
 # uploads/     → Where uploaded Excel/ZIP files are temporarily stored
 
-STAGING_DIR = "staging"
-UPLOADS_DIR = "uploads"
+STAGING_DIR = str(DATA_DIR / "staging")
+UPLOADS_DIR = str(DATA_DIR / "uploads")
 
 # ── Logs ─────────────────────────────────────────────────────
 
@@ -33,6 +39,6 @@ ELEMENT_TIMEOUT_MS = 15_000   # Max wait for a UI element to appear
 MAX_RETRIES_PER_IRN = 2  # Attempts per IRN before marking it as failed
 
 # ── PDF Modification ────────────────────────────────────────
-PDF_CONFIG_FILE = "pdf_config.yaml"
+PDF_CONFIG_FILE = str(BASE_DIR / "config" / "pdf_config.yaml")
 MAX_MODIFIER_WORKERS = 2  # Number of parallel PDF modification workers
 MAX_RETRY_ATTEMPTS = 3    # Max retries for a failed PDF modification
