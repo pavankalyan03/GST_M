@@ -8,6 +8,7 @@ processed/
 processed_excel/
 uploads/
 staging/
+config/requirements.txt
 
 # Python Cache
 __pycache__/
@@ -41,4 +42,3 @@ pipeline_state.json
 *.csv
 *.zip
 
-config/requirements.txt
