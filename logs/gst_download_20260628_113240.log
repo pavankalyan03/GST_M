@@ -1,0 +1,58 @@
+2026-06-28 11:32:40 [INFO] Log file: logs\gst_download_20260628_113240.log
+2026-06-28 11:32:40 [INFO] ==================================================
+2026-06-28 11:32:40 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 11:32:40 [INFO] ==================================================
+2026-06-28 11:32:40 [INFO] Preprocessing raw Excel file: input\invoices.xlsx
+2026-06-28 11:32:46 [INFO] Preprocessing complete. Extracted 1015 valid records into input\invoices_rate18.xlsx
+2026-06-28 11:32:46 [INFO] Reading Excel file: input\invoices_rate18.xlsx
+2026-06-28 11:32:46 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 11:32:46 [INFO] Loaded 1015 valid IRN records
+2026-06-28 11:32:48 [INFO] Launching Chromium in headed mode...
+2026-06-28 11:32:51 [INFO] Browser ready
+2026-06-28 11:32:51 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 11:32:54 [INFO] Portal loaded
+2026-06-28 11:32:54 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 11:34:15 [INFO] User confirmed login -- automation starting
+2026-06-28 11:34:15 [INFO] Processing 1015 IRNs (starting from #1)
+2026-06-28 11:34:15 [INFO] [1/1015] ----------------------------------------------
+2026-06-28 11:34:15 [INFO]   Invoice: LIAA2DE270002368  |  Date: 06-06-2026  |  IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 11:34:16 [INFO]   Typed IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 11:34:17 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 11:34:18 [INFO]   Search results visible
+2026-06-28 11:34:19 [INFO]   Download triggered via row icon
+2026-06-28 11:34:21 [INFO]   [OK] Saved -> LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 11:34:21 [INFO] Worker modifying: LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 11:34:22 [INFO] Worker modification OK: LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 11:34:23 [INFO] [2/1015] ----------------------------------------------
+2026-06-28 11:34:23 [INFO]   Invoice: LIAA2JY270002305  |  Date: 06-06-2026  |  IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 11:34:24 [INFO]   Typed IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 11:34:24 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 11:34:26 [INFO]   Search results visible
+2026-06-28 11:34:27 [INFO]   Download triggered via row icon
+2026-06-28 11:34:27 [INFO]   [OK] Saved -> LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 11:34:27 [INFO] Worker modifying: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 11:34:27 [INFO] Worker modification OK: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 11:34:28 [INFO] [3/1015] ----------------------------------------------
+2026-06-28 11:34:28 [INFO]   Invoice: LIAA2JY270002368  |  Date: 08-06-2026  |  IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 11:34:29 [INFO]   Typed IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 11:34:30 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 11:34:31 [INFO]   Search results visible
+2026-06-28 11:34:31 [INFO]   Download triggered via row icon
+2026-06-28 11:34:32 [INFO]   [OK] Saved -> LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 11:34:32 [INFO] Worker modifying: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 11:34:32 [INFO] Worker modification OK: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 11:34:34 [INFO] [4/1015] ----------------------------------------------
+2026-06-28 11:34:34 [INFO]   Invoice: LIAA4DU270002383  |  Date: 06-06-2026  |  IRN: 46465eaa5c948ba9fcd9a02f...abe649f5412c
+2026-06-28 11:34:35 [INFO]   Typed IRN: 46465eaa5c948ba9fcd9a02f...abe649f5412c
+2026-06-28 11:34:35 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 11:34:37 [INFO]   Search results visible
+2026-06-28 11:34:37 [INFO]   Download triggered via row icon
+2026-06-28 11:34:38 [INFO]   [OK] Saved -> LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 11:34:38 [INFO] Worker modifying: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 11:34:39 [INFO] Worker modification OK: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 11:34:40 [INFO] [SYSTEM] Automation stopped by user.
+2026-06-28 11:34:40 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 11:34:40 [INFO] Final result: 4/4 succeeded
+2026-06-28 11:34:41 [INFO] Final result: 4/4 succeeded
+2026-06-28 11:34:41 [INFO] Waiting for background modifications to complete...

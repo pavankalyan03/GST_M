@@ -1,1 +1,19 @@
 include dat in file name
+remove v1
+update context and documentation
+
+automatically opens gstportal page
+
+
+Input paths are not working properly
+When i clicked clean, it is getting stopped at click enter something but not closing the browser
+
+
+1. drop the downloaded file into box
+2. It should ask for to rename where it will become the target folders names
+
+List all edcases from end to end and handle them
+
+
+Lets work on modifier seperately. It is still not working.
+Input processing should be handeled properly.

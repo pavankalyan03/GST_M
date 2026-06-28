@@ -1,0 +1,102 @@
+2026-06-28 02:15:07 [INFO] Log file: logs\gst_download_20260628_021507.log
+2026-06-28 02:15:07 [INFO] ==================================================
+2026-06-28 02:15:07 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 02:15:07 [INFO] ==================================================
+2026-06-28 02:15:07 [INFO] Preprocessing raw Excel file: input\invoices.xlsx
+2026-06-28 02:15:10 [INFO] Preprocessing complete. Extracted 1015 valid records into input\invoices_rate18.xlsx
+2026-06-28 02:15:10 [INFO] Reading Excel file: input\invoices_rate18.xlsx
+2026-06-28 02:15:11 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 02:15:11 [INFO] Loaded 1015 valid IRN records
+2026-06-28 02:15:12 [INFO] Launching Chromium in headed mode...
+2026-06-28 02:15:13 [INFO] Browser ready
+2026-06-28 02:15:13 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 02:15:16 [INFO] Portal loaded
+2026-06-28 02:15:16 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 02:15:56 [INFO] User confirmed login -- automation starting
+2026-06-28 02:15:56 [INFO] Processing 1015 IRNs (starting from #1)
+2026-06-28 02:15:56 [INFO] [1/1015] ----------------------------------------------
+2026-06-28 02:15:56 [INFO]   Invoice: LIAA2DE270002368  |  Date: 06-06-2026  |  IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 02:15:58 [INFO]   Typed IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 02:15:58 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:15:59 [INFO]   Search results visible
+2026-06-28 02:16:00 [INFO]   Download triggered via row icon
+2026-06-28 02:16:01 [INFO]   [OK] Saved -> LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 02:16:01 [INFO] Worker modifying: LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 02:16:01 [ERROR] Worker modification errors for LIAA2DE270002368_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:02 [INFO] [2/1015] ----------------------------------------------
+2026-06-28 02:16:03 [INFO]   Invoice: LIAA2JY270002305  |  Date: 06-06-2026  |  IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 02:16:03 [INFO]   Typed IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 02:16:04 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:05 [INFO]   Search results visible
+2026-06-28 02:16:05 [INFO]   Download triggered via row icon
+2026-06-28 02:16:05 [INFO]   [OK] Saved -> LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 02:16:05 [INFO] Worker modifying: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 02:16:05 [ERROR] Worker modification errors for LIAA2JY270002305_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:07 [INFO] [3/1015] ----------------------------------------------
+2026-06-28 02:16:07 [INFO]   Invoice: LIAA2JY270002368  |  Date: 08-06-2026  |  IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 02:16:08 [INFO]   Typed IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 02:16:08 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:09 [INFO]   Search results visible
+2026-06-28 02:16:10 [INFO]   Download triggered via row icon
+2026-06-28 02:16:10 [INFO]   [OK] Saved -> LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 02:16:10 [INFO] Worker modifying: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 02:16:10 [ERROR] Worker modification errors for LIAA2JY270002368_08-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:13 [INFO] [4/1015] ----------------------------------------------
+2026-06-28 02:16:13 [INFO]   Invoice: LIAA4DU270002383  |  Date: 06-06-2026  |  IRN: 46465eaa5c948ba9fcd9a02f...abe649f5412c
+2026-06-28 02:16:14 [INFO]   Typed IRN: 46465eaa5c948ba9fcd9a02f...abe649f5412c
+2026-06-28 02:16:14 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:15 [INFO]   Search results visible
+2026-06-28 02:16:15 [INFO]   Download triggered via row icon
+2026-06-28 02:16:15 [INFO]   [OK] Saved -> LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 02:16:15 [INFO] Worker modifying: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 02:16:15 [ERROR] Worker modification errors for LIAA4DU270002383_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:17 [INFO] [5/1015] ----------------------------------------------
+2026-06-28 02:16:17 [INFO]   Invoice: LIAA4DU270002384  |  Date: 06-06-2026  |  IRN: 64c34305918bcb3778910b90...f34d0e6806ca
+2026-06-28 02:16:18 [INFO]   Typed IRN: 64c34305918bcb3778910b90...f34d0e6806ca
+2026-06-28 02:16:18 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:20 [INFO]   Search results visible
+2026-06-28 02:16:21 [INFO]   Download triggered via row icon
+2026-06-28 02:16:21 [INFO]   [OK] Saved -> LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 02:16:21 [INFO] Worker modifying: LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 02:16:21 [ERROR] Worker modification errors for LIAA4DU270002384_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:23 [INFO] [6/1015] ----------------------------------------------
+2026-06-28 02:16:23 [INFO]   Invoice: LIAA4R5270002350  |  Date: 06-06-2026  |  IRN: 66c0618c459d0a84de9f8483...79175bfe3d6c
+2026-06-28 02:16:24 [INFO]   Typed IRN: 66c0618c459d0a84de9f8483...79175bfe3d6c
+2026-06-28 02:16:24 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:26 [INFO]   Search results visible
+2026-06-28 02:16:26 [INFO]   Download triggered via row icon
+2026-06-28 02:16:26 [INFO]   [OK] Saved -> LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 02:16:26 [INFO] Worker modifying: LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 02:16:26 [ERROR] Worker modification errors for LIAA4R5270002350_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:28 [INFO] [7/1015] ----------------------------------------------
+2026-06-28 02:16:28 [INFO]   Invoice: LIAA5EU270002404  |  Date: 06-06-2026  |  IRN: cbf3c148066b2398110ceca9...9b8eff0d6533
+2026-06-28 02:16:29 [INFO]   Typed IRN: cbf3c148066b2398110ceca9...9b8eff0d6533
+2026-06-28 02:16:29 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:30 [INFO]   Search results visible
+2026-06-28 02:16:31 [INFO]   Download triggered via row icon
+2026-06-28 02:16:31 [INFO]   [OK] Saved -> LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 02:16:31 [INFO] Worker modifying: LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 02:16:31 [ERROR] Worker modification errors for LIAA5EU270002404_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:33 [INFO] [8/1015] ----------------------------------------------
+2026-06-28 02:16:33 [INFO]   Invoice: LIAA5EU270002407  |  Date: 06-06-2026  |  IRN: 863ff5541ecd04c160db5f0b...938c370594c6
+2026-06-28 02:16:34 [INFO]   Typed IRN: 863ff5541ecd04c160db5f0b...938c370594c6
+2026-06-28 02:16:34 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:35 [INFO]   Search results visible
+2026-06-28 02:16:35 [INFO]   Download triggered via row icon
+2026-06-28 02:16:35 [INFO]   [OK] Saved -> LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 02:16:35 [INFO] Worker modifying: LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 02:16:35 [ERROR] Worker modification errors for LIAA5EU270002407_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:37 [INFO] [9/1015] ----------------------------------------------
+2026-06-28 02:16:37 [INFO]   Invoice: LIAA5XA270002401  |  Date: 06-06-2026  |  IRN: dc4c579169cd1a7422099898...e083ba55bc6a
+2026-06-28 02:16:38 [INFO]   Typed IRN: dc4c579169cd1a7422099898...e083ba55bc6a
+2026-06-28 02:16:38 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:16:40 [INFO]   Search results visible
+2026-06-28 02:16:40 [INFO]   Download triggered via row icon
+2026-06-28 02:16:40 [INFO]   [OK] Saved -> LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 02:16:40 [INFO] Worker modifying: LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 02:16:40 [ERROR] Worker modification errors for LIAA5XA270002401_06-06-2026.pdf: ["string indices must be integers, not 'str'"]
+2026-06-28 02:16:43 [INFO] [SYSTEM] Automation paused. Waiting for resume...
+2026-06-28 02:22:03 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 02:22:03 [INFO] Final result: 9/9 succeeded
+2026-06-28 02:22:03 [INFO] Waiting for background modifications to complete...

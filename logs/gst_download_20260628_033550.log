@@ -1,0 +1,88 @@
+2026-06-28 03:35:50 [INFO] Log file: logs\gst_download_20260628_033550.log
+2026-06-28 03:35:50 [INFO] ==================================================
+2026-06-28 03:35:50 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 03:35:50 [INFO] ==================================================
+2026-06-28 03:35:50 [INFO] Preprocessing raw Excel file: input\invoices.xlsx
+2026-06-28 03:35:57 [INFO] Preprocessing complete. Extracted 1015 valid records into input\invoices_rate18.xlsx
+2026-06-28 03:35:57 [INFO] Reading Excel file: input\invoices_rate18.xlsx
+2026-06-28 03:35:57 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 03:35:58 [INFO] Loaded 1015 valid IRN records
+2026-06-28 03:35:59 [INFO] Launching Chromium in headed mode...
+2026-06-28 03:36:03 [INFO] Browser ready
+2026-06-28 03:36:03 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 03:36:06 [INFO] Portal loaded
+2026-06-28 03:36:06 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 03:36:49 [INFO] User confirmed login -- automation starting
+2026-06-28 03:36:49 [INFO] Processing 1015 IRNs (starting from #1)
+2026-06-28 03:36:49 [INFO] [1/1015] ----------------------------------------------
+2026-06-28 03:36:50 [INFO]   Invoice: LIAA2DE270002368  |  Date: 06-06-2026  |  IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 03:36:51 [INFO]   Typed IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 03:36:51 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 03:36:52 [INFO]   Search results visible
+2026-06-28 03:36:53 [INFO]   Download triggered via row icon
+2026-06-28 03:36:54 [INFO]   [OK] Saved -> LIAA2DE270002368_06-06-2026_2.pdf
+2026-06-28 03:36:54 [INFO] Worker modifying: LIAA2DE270002368_06-06-2026_2.pdf
+2026-06-28 03:36:55 [ERROR] Worker modification errors for LIAA2DE270002368_06-06-2026_2.pdf: ['Traceback (most recent call last):\n  File "C:\\Users\\SASI KOTHA\\Desktop\\GST_M\\gst_downloader\\pdf_modifier.py", line 495, in modify_single_pdf\n    x = job["insert_pos"].x0\n        ^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Point\' object has no attribute \'x0\'\n']
+2026-06-28 03:36:56 [INFO] [2/1015] ----------------------------------------------
+2026-06-28 03:36:56 [INFO]   [SKIPPED] Already processed: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 03:36:58 [INFO] [3/1015] ----------------------------------------------
+2026-06-28 03:36:58 [INFO]   [SKIPPED] Already processed: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 03:36:59 [INFO] [4/1015] ----------------------------------------------
+2026-06-28 03:36:59 [INFO]   [SKIPPED] Already processed: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 03:37:01 [INFO] [5/1015] ----------------------------------------------
+2026-06-28 03:37:01 [INFO]   [SKIPPED] Already processed: LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 03:37:02 [INFO] [6/1015] ----------------------------------------------
+2026-06-28 03:37:02 [INFO]   [SKIPPED] Already processed: LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 03:37:03 [INFO] [7/1015] ----------------------------------------------
+2026-06-28 03:37:03 [INFO]   [SKIPPED] Already processed: LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 03:37:05 [INFO] [8/1015] ----------------------------------------------
+2026-06-28 03:37:05 [INFO]   [SKIPPED] Already processed: LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 03:37:06 [INFO] [9/1015] ----------------------------------------------
+2026-06-28 03:37:06 [INFO]   [SKIPPED] Already processed: LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 03:37:08 [INFO] [10/1015] ----------------------------------------------
+2026-06-28 03:37:08 [INFO]   [SKIPPED] Already processed: LIAA6OB270002427_08-06-2026.pdf
+2026-06-28 03:37:09 [INFO] [11/1015] ----------------------------------------------
+2026-06-28 03:37:09 [INFO]   [SKIPPED] Already processed: LIAA8CQ270002347_06-06-2026.pdf
+2026-06-28 03:37:11 [INFO] [12/1015] ----------------------------------------------
+2026-06-28 03:37:11 [INFO]   [SKIPPED] Already processed: LIAA9FN270002404_06-06-2026.pdf
+2026-06-28 03:37:13 [INFO] [13/1015] ----------------------------------------------
+2026-06-28 03:37:13 [INFO]   [SKIPPED] Already processed: LIAA9FN270002405_06-06-2026.pdf
+2026-06-28 03:37:14 [INFO] [14/1015] ----------------------------------------------
+2026-06-28 03:37:14 [INFO]   [SKIPPED] Already processed: LIAAAUT270002500_06-06-2026.pdf
+2026-06-28 03:37:15 [INFO] [15/1015] ----------------------------------------------
+2026-06-28 03:37:15 [INFO]   [SKIPPED] Already processed: LIAAAUT270002502_06-06-2026.pdf
+2026-06-28 03:37:17 [INFO] [16/1015] ----------------------------------------------
+2026-06-28 03:37:17 [INFO]   [SKIPPED] Already processed: LIAAAUT270002503_06-06-2026.pdf
+2026-06-28 03:37:18 [INFO] [17/1015] ----------------------------------------------
+2026-06-28 03:37:18 [INFO]   [SKIPPED] Already processed: LIAAB58270002391_06-06-2026.pdf
+2026-06-28 03:37:19 [INFO] [18/1015] ----------------------------------------------
+2026-06-28 03:37:19 [INFO]   [SKIPPED] Already processed: LIAAD4S270002367_06-06-2026.pdf
+2026-06-28 03:37:21 [INFO] [19/1015] ----------------------------------------------
+2026-06-28 03:37:21 [INFO]   [SKIPPED] Already processed: LIAADE4270002344_06-06-2026.pdf
+2026-06-28 03:37:22 [INFO] [20/1015] ----------------------------------------------
+2026-06-28 03:37:22 [INFO]   [SKIPPED] Already processed: LIAADTX270002349_06-06-2026.pdf
+2026-06-28 03:37:23 [INFO] [21/1015] ----------------------------------------------
+2026-06-28 03:37:23 [INFO]   [SKIPPED] Already processed: LIAADTX270002351_06-06-2026.pdf
+2026-06-28 03:37:25 [INFO] [22/1015] ----------------------------------------------
+2026-06-28 03:37:25 [INFO]   [SKIPPED] Already processed: LIAAE7Z270002322_06-06-2026.pdf
+2026-06-28 03:37:26 [INFO] [23/1015] ----------------------------------------------
+2026-06-28 03:37:26 [INFO]   [SKIPPED] Already processed: LIAAEGC270002454_06-06-2026.pdf
+2026-06-28 03:37:28 [INFO] [24/1015] ----------------------------------------------
+2026-06-28 03:37:28 [INFO]   [SKIPPED] Already processed: LIAAEGC270002455_06-06-2026.pdf
+2026-06-28 03:37:30 [INFO] [SYSTEM] Automation paused. Waiting for resume...
+2026-06-28 03:37:32 [INFO] [SYSTEM] Automation resumed.
+2026-06-28 03:37:32 [INFO] [25/1015] ----------------------------------------------
+2026-06-28 03:37:32 [INFO]   Invoice: LIAAES5270002399  |  Date: 06-06-2026  |  IRN: db475f28fa050948d5df8bda...c2078f025746
+2026-06-28 03:37:34 [INFO]   Typed IRN: db475f28fa050948d5df8bda...c2078f025746
+2026-06-28 03:37:34 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 03:37:35 [INFO]   Search results visible
+2026-06-28 03:37:36 [INFO]   Download triggered via row icon
+2026-06-28 03:37:37 [INFO]   [OK] Saved -> LIAAES5270002399_06-06-2026.pdf
+2026-06-28 03:37:37 [INFO] Worker modifying: LIAAES5270002399_06-06-2026.pdf
+2026-06-28 03:37:37 [ERROR] Worker modification errors for LIAAES5270002399_06-06-2026.pdf: ['Traceback (most recent call last):\n  File "C:\\Users\\SASI KOTHA\\Desktop\\GST_M\\gst_downloader\\pdf_modifier.py", line 495, in modify_single_pdf\n    x = job["insert_pos"].x0\n        ^^^^^^^^^^^^^^^^^^^^\nAttributeError: \'Point\' object has no attribute \'x0\'\n']
+2026-06-28 03:37:38 [INFO] [SYSTEM] Automation cancelled by user.
+2026-06-28 03:37:38 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 03:37:38 [INFO] Final result: 25/25 succeeded
+2026-06-28 03:37:40 [INFO] Final result: 25/25 succeeded
+2026-06-28 03:37:40 [INFO] Waiting for background modifications to complete...

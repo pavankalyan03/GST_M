@@ -1,13 +1,19 @@
+"""
+GST Invoice Automation — Main Entry Point
+===========================================
+
+Orchestrates the full pipeline:
+  1. Preprocess Excel → filter relevant invoices
+  2. Read IRN records
+  3. Start the processing pipeline (backup + modification workers)
+  4. Launch Playwright browser for downloads
+  5. Graceful shutdown with state persistence
+"""
+
 import os
 import sys
 import argparse
-
-
-# Resume from row 25
-# python main.py --start-from 25
-
-# Use custom delays (slower)
-# python main.py --delay-min 5 --delay-max 10
+from pathlib import Path
 
 # Force UTF-8 output on Windows to avoid UnicodeEncodeError with special chars
 if sys.platform == "win32":
@@ -34,14 +40,17 @@ from gst_downloader.logger import setup_logging
 from gst_downloader.excel_reader import read_irns_from_excel
 from gst_downloader.core import GSTInvoiceDownloader
 from gst_downloader.excel_preprocessor import preprocess_excel
+from gst_downloader.pipeline import ProcessingPipeline
+from gst_downloader.pdf_modifier import _load_config
+
 
 def parse_args():
     ap = argparse.ArgumentParser(
-        description="GST e-Invoice Bulk Downloader — downloads invoices one-by-one via Playwright",
+        description="GST e-Invoice Bulk Downloader — downloads and modifies invoices via Playwright",
     )
     ap.add_argument(
-        "--excel", default=config.DEFAULT_EXCEL_FILE,
-        help=f"Path to the Excel file with IRNs (default: {config.DEFAULT_EXCEL_FILE})",
+        "--raw-excel", default="uploads/invoices.xlsx",
+        help=f"Path to the raw uploaded Excel file",
     )
     ap.add_argument(
         "--start-from", type=int, default=1, dest="start_from",
@@ -54,6 +63,11 @@ def parse_args():
     ap.add_argument(
         "--delay-max", type=float, default=config.MAX_DELAY_SEC,
         help=f"Maximum delay between searches in seconds (default: {config.MAX_DELAY_SEC})",
+    )
+    ap.add_argument(
+        "--batch-name", default=None, dest="batch_name",
+        help="Name for this processing batch (used as subfolder name). "
+             "Defaults to the Excel file stem.",
     )
     return ap.parse_args()
 
@@ -70,36 +84,76 @@ def main():
     config.MIN_DELAY_SEC = args.delay_min
     config.MAX_DELAY_SEC = args.delay_max
 
-    # ── 0. Preprocess Excel ───────────────────────────────────
-    if os.path.exists(config.RAW_EXCEL_FILE):
+    # ── 0. Compute Dynamic Paths ──────────────────────────────
+    config_path = config.PDF_CONFIG_FILE
+    
+    # Load config to get the processed_excel_folder
+    try:
+        modifier_config = _load_config(config_path)
+    except Exception as e:
+        logger.error(f"Failed to load config: {e}")
+        sys.exit(1)
+        
+    processed_excel_folder = Path(modifier_config["processed_excel_folder"])
+    processed_excel_folder.mkdir(parents=True, exist_ok=True)
+
+    raw_excel_path = Path(args.raw_excel)
+    batch_name = args.batch_name or raw_excel_path.stem
+    cleaned_excel_path = processed_excel_folder / f"{batch_name}.xlsx"
+
+    logger.info(f"Batch name: {batch_name}")
+
+    # ── 0.5 Preprocess Excel ──────────────────────────────────
+    if raw_excel_path.exists():
         try:
-            preprocess_excel(config.RAW_EXCEL_FILE, args.excel, logger)
+            preprocess_excel(str(raw_excel_path), str(cleaned_excel_path), logger)
         except Exception as e:
-            logger.error(f"Failed to preprocess {config.RAW_EXCEL_FILE}: {e}")
+            logger.error(f"Failed to preprocess {raw_excel_path}: {e}")
             sys.exit(1)
+    else:
+        logger.error(f"Excel file not found: {raw_excel_path}")
+        sys.exit(1)
 
     # ── 1. Read Excel ─────────────────────────────────────────
-    records = read_irns_from_excel(args.excel, logger)
+    records = read_irns_from_excel(str(cleaned_excel_path), logger)
     if not records:
         logger.error("No IRNs found — nothing to do.")
         sys.exit(1)
 
     # ── 2. Resolve --start-from ───────────────────────────────
-    #    The user passes an Excel row number; convert to a list index.
     start_index = 0
     if args.start_from > 1:
-        # Find the record whose row number matches
         for idx, rec in enumerate(records):
             if rec["row"] >= args.start_from:
                 start_index = idx
                 break
         else:
             logger.warning(f"Row {args.start_from} not found -- starting from the beginning")
+
+    if start_index > 0:
+        logger.info(f"[UI_JUMP] {start_index}")
         logger.info(f"Resuming from row {records[start_index]['row']} (index {start_index})")
 
-    # ── 3. Launch Playwright and run ──────────────────────────
+    # ── 3. Initialize Processing Pipeline ─────────────────────
+    pipeline = ProcessingPipeline(
+        batch_name=batch_name,
+        config_path=config_path,
+        logger=logger,
+    )
+    pipeline.start()
+
+    def on_download(path_str):
+        """Callback fired when a PDF is downloaded to staging."""
+        pipeline.notify_download(path_str)
+
+    # ── 4. Launch Playwright and run ──────────────────────────
     with sync_playwright() as pw:
-        dl = GSTInvoiceDownloader(pw, logger)
+        dl = GSTInvoiceDownloader(
+            pw, logger,
+            on_download_success=on_download,
+            dl_dir=pipeline.staging_dir,
+            out_dir=pipeline.processed_dir,
+        )
         try:
             dl.launch_browser()
             dl.navigate_to_portal()
@@ -110,13 +164,22 @@ def main():
             dl._print_summary(len(records))
         except Exception as exc:
             logger.error(f"Fatal error: {exc}", exc_info=True)
-            dl._print_summary(len(records))
         finally:
-            print("Press ENTER to close the browser...")
-            try:
-                input()
-            except EOFError:
-                pass
+            if hasattr(dl, 'browser') and dl.browser:
+                try:
+                    dl.browser.close()
+                except Exception:
+                    pass
+            dl._print_summary(len(records))
+
+            # Shutdown pipeline — wait for all workers to finish current tasks
+            logger.info("Waiting for pipeline workers to complete...")
+            pipeline.shutdown(wait=True, timeout=120)
+
+            # Print final stats
+            stats = pipeline.get_stats()
+            logger.info(f"Pipeline stats: {stats}")
+
             dl.close()
 
 

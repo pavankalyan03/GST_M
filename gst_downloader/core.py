@@ -7,6 +7,51 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeout
 from gst_downloader import config
 from gst_downloader.utils import human_delay, sanitize_filename
 
+import json
+
+def read_ipc_state():
+    try:
+        with open("ipc_state.json", "r") as f:
+            return json.load(f).get("status", "RUN")
+    except Exception:
+        return "RUN"
+
+def write_ipc_state(state):
+    try:
+        with open("ipc_state.json", "w") as f:
+            json.dump({"status": state}, f)
+    except Exception:
+        pass
+
+def wait_for_ui_prompt():
+    write_ipc_state("UI_PROMPT")
+    while True:
+        state = read_ipc_state()
+        if state in ["RUN", "RESUME", "PROMPT_CONTINUE", "CANCEL", "STOP"]:
+            break
+        time.sleep(1)
+    
+    state = read_ipc_state()
+    if state == "CANCEL":
+        raise KeyboardInterrupt("Cancelled by UI")
+    if state == "STOP":
+        raise KeyboardInterrupt("Stopped by UI")
+    write_ipc_state("RUN")
+
+def check_pause_cancel(log):
+    state = read_ipc_state()
+    if state == "CANCEL":
+        log.info("[SYSTEM] Automation cancelled by user.")
+        raise KeyboardInterrupt("Cancelled by UI")
+    if state == "STOP":
+        log.info("[SYSTEM] Automation stopped by user.")
+        raise KeyboardInterrupt("Stopped by UI")
+    if state == "PAUSE":
+        log.info("[SYSTEM] Automation paused. Waiting for resume...")
+        while read_ipc_state() == "PAUSE":
+            time.sleep(1)
+        log.info("[SYSTEM] Automation resumed.")
+
 #  CORE AUTOMATION CLASS
 # ════════════════════════════════════════════════════════════════
 
@@ -16,16 +61,23 @@ class GSTInvoiceDownloader:
     on the GST e-Invoice portal and download the corresponding JSONs.
     """
 
-    def __init__(self, pw, logger: logging.Logger):
+    def __init__(self, pw, logger: logging.Logger, on_download_success=None, dl_dir=None, out_dir=None):
         self.pw = pw
         self.log = logger
         self.browser = None
         self.context = None
         self.page = None
+        self.on_download_success = on_download_success
 
         # Ensure download directory exists
-        self.dl_path = Path(config.DOWNLOAD_DIR).resolve()
+        if dl_dir:
+            self.dl_path = Path(dl_dir).resolve()
+        else:
+            self.dl_path = Path(config.DOWNLOAD_DIR).resolve()
+            
         self.dl_path.mkdir(parents=True, exist_ok=True)
+        
+        self.out_dir = Path(out_dir).resolve() if out_dir else None
 
         # Result tracking
         self.succeeded: list[dict] = []
@@ -46,6 +98,10 @@ class GSTInvoiceDownloader:
         )
         self.page = self.context.new_page()
         self.page.set_default_timeout(config.ELEMENT_TIMEOUT_MS)
+        
+        # Force the browser to the front so the user sees it immediately
+        self.page.bring_to_front()
+        
         self.log.info("Browser ready")
 
     def navigate_to_portal(self):
@@ -78,9 +134,10 @@ class GSTInvoiceDownloader:
         print("   3.  Select the  'By IRN'  sub-tab")
         print("   4.  Confirm you can see the IRN input field")
         print()
-        print("   Then come back here and press ENTER.")
+        print("   Then come back here and click Continue in the UI.")
         print("=" * 62)
-        input("\n   >>> Press ENTER to start downloading... ")
+        self.log.info("[UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.")
+        wait_for_ui_prompt()
         print()
         self.log.info("User confirmed login -- automation starting")
 
@@ -98,9 +155,10 @@ class GSTInvoiceDownloader:
         print("   1.  Re-login (handle CAPTCHA / OTP)")
         print("   2.  Navigate back to  Received → By IRN")
         print()
-        print("   Then press ENTER here to continue.")
+        print("   Then click Continue in the UI.")
         print("=" * 62)
-        input("\n   >>> Press ENTER to resume... ")
+        self.log.info("[UI_PROMPT] Action Required: SESSION EXPIRED. Please log in manually, then click Continue.")
+        wait_for_ui_prompt()
         print()
         self.log.info("User confirmed re-login -- resuming")
 
@@ -286,6 +344,10 @@ class GSTInvoiceDownloader:
 
             download.save_as(str(save_path))
             self.log.info(f"  [OK] Saved -> {save_path.name}")
+            
+            if self.on_download_success is not None:
+                self.on_download_success(str(save_path))
+                
             return True
 
         except PlaywrightTimeout:
@@ -375,6 +437,17 @@ class GSTInvoiceDownloader:
         inv = record["invoice_number"]
         inv_date = record.get("invoice_date", "")
 
+        safe_name = sanitize_filename(inv)
+        if inv_date:
+            safe_name = f"{safe_name}_{inv_date}"
+            
+        # ── Smart Resume: Check if already processed ──
+        if self.out_dir:
+            final_path = self.out_dir / f"{safe_name}.pdf"
+            if final_path.exists():
+                self.log.info(f"  [SKIPPED] Already processed: {final_path.name}")
+                return True
+
         self.log.info(f"  Invoice: {inv}  |  Date: {inv_date}  |  IRN: {irn[:24]}...{irn[-12:]}")
 
         if not self.search_irn(irn):
@@ -393,11 +466,12 @@ class GSTInvoiceDownloader:
         """
         total = len(records)
         self.log.info(f"Processing {total - start_index} IRNs (starting from #{start_index + 1})")
-        print()
-
         i = start_index
         while i < total:
+            check_pause_cancel(self.log)
             rec = records[i]
+            
+            irn = rec["irn"]
             progress = f"[{i + 1}/{total}]"
             self.log.info(f"{progress} {'-' * 46}")
 

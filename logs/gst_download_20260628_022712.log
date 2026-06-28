@@ -1,0 +1,48 @@
+2026-06-28 02:27:12 [INFO] Log file: logs\gst_download_20260628_022712.log
+2026-06-28 02:27:12 [INFO] ==================================================
+2026-06-28 02:27:12 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 02:27:12 [INFO] ==================================================
+2026-06-28 02:27:12 [INFO] Preprocessing raw Excel file: input\invoices.xlsx
+2026-06-28 02:27:15 [INFO] Preprocessing complete. Extracted 1015 valid records into input\invoices_rate18.xlsx
+2026-06-28 02:27:15 [INFO] Reading Excel file: input\invoices_rate18.xlsx
+2026-06-28 02:27:16 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 02:27:16 [INFO] Loaded 1015 valid IRN records
+2026-06-28 02:27:17 [INFO] Launching Chromium in headed mode...
+2026-06-28 02:27:18 [INFO] Browser ready
+2026-06-28 02:27:18 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 02:27:22 [INFO] Portal loaded
+2026-06-28 02:27:22 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 02:27:54 [INFO] User confirmed login -- automation starting
+2026-06-28 02:27:54 [INFO] Processing 1015 IRNs (starting from #1)
+2026-06-28 02:27:54 [INFO] [1/1015] ----------------------------------------------
+2026-06-28 02:27:54 [INFO]   Invoice: LIAA2DE270002368  |  Date: 06-06-2026  |  IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 02:27:55 [INFO]   Typed IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 02:27:55 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:27:57 [INFO]   Search results visible
+2026-06-28 02:27:57 [INFO]   Download triggered via row icon
+2026-06-28 02:27:58 [INFO]   [OK] Saved -> LIAA2DE270002368_06-06-2026_1.pdf
+2026-06-28 02:27:58 [INFO] Worker modifying: LIAA2DE270002368_06-06-2026_1.pdf
+2026-06-28 02:27:58 [ERROR] Worker modification errors for LIAA2DE270002368_06-06-2026_1.pdf: ['Traceback (most recent call last):\n  File "C:\\Users\\SASI KOTHA\\Desktop\\GST_M\\gst_downloader\\pdf_modifier.py", line 384, in modify_single_pdf\n    gstin = config["gstin"]\n            ~~~~~~^^^^^^^^^\nTypeError: string indices must be integers, not \'str\'\n']
+2026-06-28 02:28:00 [INFO] [2/1015] ----------------------------------------------
+2026-06-28 02:28:00 [INFO]   Invoice: LIAA2JY270002305  |  Date: 06-06-2026  |  IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 02:28:01 [INFO]   Typed IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 02:28:01 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:28:02 [INFO]   Search results visible
+2026-06-28 02:28:03 [INFO]   Download triggered via row icon
+2026-06-28 02:28:03 [INFO]   [OK] Saved -> LIAA2JY270002305_06-06-2026_1.pdf
+2026-06-28 02:28:03 [INFO] Worker modifying: LIAA2JY270002305_06-06-2026_1.pdf
+2026-06-28 02:28:03 [ERROR] Worker modification errors for LIAA2JY270002305_06-06-2026_1.pdf: ['Traceback (most recent call last):\n  File "C:\\Users\\SASI KOTHA\\Desktop\\GST_M\\gst_downloader\\pdf_modifier.py", line 384, in modify_single_pdf\n    gstin = config["gstin"]\n            ~~~~~~^^^^^^^^^\nTypeError: string indices must be integers, not \'str\'\n']
+2026-06-28 02:28:05 [INFO] [3/1015] ----------------------------------------------
+2026-06-28 02:28:05 [INFO]   Invoice: LIAA2JY270002368  |  Date: 08-06-2026  |  IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 02:28:05 [INFO]   Typed IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 02:28:06 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:28:07 [INFO]   Search results visible
+2026-06-28 02:28:07 [INFO]   Download triggered via row icon
+2026-06-28 02:28:07 [INFO]   [OK] Saved -> LIAA2JY270002368_08-06-2026_1.pdf
+2026-06-28 02:28:07 [INFO] Worker modifying: LIAA2JY270002368_08-06-2026_1.pdf
+2026-06-28 02:28:07 [ERROR] Worker modification errors for LIAA2JY270002368_08-06-2026_1.pdf: ['Traceback (most recent call last):\n  File "C:\\Users\\SASI KOTHA\\Desktop\\GST_M\\gst_downloader\\pdf_modifier.py", line 384, in modify_single_pdf\n    gstin = config["gstin"]\n            ~~~~~~^^^^^^^^^\nTypeError: string indices must be integers, not \'str\'\n']
+2026-06-28 02:28:09 [INFO] [SYSTEM] Automation paused. Waiting for resume...
+2026-06-28 02:31:10 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 02:31:10 [INFO] Final result: 3/3 succeeded
+2026-06-28 02:31:10 [INFO] Waiting for background modifications to complete...

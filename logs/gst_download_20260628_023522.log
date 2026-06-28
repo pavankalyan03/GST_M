@@ -1,0 +1,89 @@
+2026-06-28 02:35:22 [INFO] Log file: logs\gst_download_20260628_023522.log
+2026-06-28 02:35:22 [INFO] ==================================================
+2026-06-28 02:35:22 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 02:35:22 [INFO] ==================================================
+2026-06-28 02:35:22 [INFO] Preprocessing raw Excel file: input\invoices.xlsx
+2026-06-28 02:35:26 [INFO] Preprocessing complete. Extracted 1015 valid records into input\invoices_rate18.xlsx
+2026-06-28 02:35:26 [INFO] Reading Excel file: input\invoices_rate18.xlsx
+2026-06-28 02:35:26 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 02:35:26 [INFO] Loaded 1015 valid IRN records
+2026-06-28 02:35:26 [INFO] Resuming from row 500 (index 498)
+2026-06-28 02:35:27 [INFO] Launching Chromium in headed mode...
+2026-06-28 02:35:28 [INFO] Browser ready
+2026-06-28 02:35:28 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 02:35:33 [INFO] Portal loaded
+2026-06-28 02:35:33 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 02:36:11 [INFO] User confirmed login -- automation starting
+2026-06-28 02:36:11 [INFO] Processing 517 IRNs (starting from #499)
+2026-06-28 02:36:11 [INFO] [499/1015] ----------------------------------------------
+2026-06-28 02:36:11 [INFO]   Invoice: LIAA28A270001185  |  Date: 06-06-2026  |  IRN: 85d4d1d16a0430fd428c7280...4890aafa4fb5
+2026-06-28 02:36:12 [INFO]   Typed IRN: 85d4d1d16a0430fd428c7280...4890aafa4fb5
+2026-06-28 02:36:12 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:36:14 [INFO]   Search results visible
+2026-06-28 02:36:14 [INFO]   Download triggered via row icon
+2026-06-28 02:36:15 [INFO]   [OK] Saved -> LIAA28A270001185_06-06-2026.pdf
+2026-06-28 02:36:15 [INFO] Worker modifying: LIAA28A270001185_06-06-2026.pdf
+2026-06-28 02:36:16 [INFO] Worker modification OK: LIAA28A270001185_06-06-2026.pdf
+2026-06-28 02:36:17 [INFO] [500/1015] ----------------------------------------------
+2026-06-28 02:36:17 [INFO]   Invoice: LIAA28A270001187  |  Date: 06-06-2026  |  IRN: b64cb0cb2ee1cc97aa14e756...009bd3d527b1
+2026-06-28 02:36:18 [INFO]   Typed IRN: b64cb0cb2ee1cc97aa14e756...009bd3d527b1
+2026-06-28 02:36:18 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:36:19 [INFO]   Search results visible
+2026-06-28 02:36:20 [INFO]   Download triggered via row icon
+2026-06-28 02:36:20 [INFO]   [OK] Saved -> LIAA28A270001187_06-06-2026.pdf
+2026-06-28 02:36:20 [INFO] Worker modifying: LIAA28A270001187_06-06-2026.pdf
+2026-06-28 02:36:20 [INFO] Worker modification OK: LIAA28A270001187_06-06-2026.pdf
+2026-06-28 02:36:20 [INFO] 
+  [PAUSE] Batch pause (20s) after 500 IRNs...
+2026-06-28 02:36:40 [INFO] [501/1015] ----------------------------------------------
+2026-06-28 02:36:40 [INFO]   Invoice: LIAA28A270001188  |  Date: 06-06-2026  |  IRN: c6ee3ab0e61b5bb8bb07be8d...bb1d8e2d4a5c
+2026-06-28 02:36:41 [INFO]   Typed IRN: c6ee3ab0e61b5bb8bb07be8d...bb1d8e2d4a5c
+2026-06-28 02:36:41 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:36:42 [INFO]   Search results visible
+2026-06-28 02:36:43 [INFO]   Download triggered via row icon
+2026-06-28 02:36:43 [INFO]   [OK] Saved -> LIAA28A270001188_06-06-2026.pdf
+2026-06-28 02:36:43 [INFO] Worker modifying: LIAA28A270001188_06-06-2026.pdf
+2026-06-28 02:36:44 [INFO] Worker modification OK: LIAA28A270001188_06-06-2026.pdf
+2026-06-28 02:36:46 [INFO] [502/1015] ----------------------------------------------
+2026-06-28 02:36:46 [INFO]   Invoice: LIAA28A270001189  |  Date: 06-06-2026  |  IRN: 767d7c58af08affbb04a063e...21cc5fd83392
+2026-06-28 02:36:46 [INFO]   Typed IRN: 767d7c58af08affbb04a063e...21cc5fd83392
+2026-06-28 02:36:47 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:36:48 [INFO]   Search results visible
+2026-06-28 02:36:48 [INFO]   Download triggered via row icon
+2026-06-28 02:36:48 [INFO]   [OK] Saved -> LIAA28A270001189_06-06-2026.pdf
+2026-06-28 02:36:48 [INFO] Worker modifying: LIAA28A270001189_06-06-2026.pdf
+2026-06-28 02:36:49 [INFO] Worker modification OK: LIAA28A270001189_06-06-2026.pdf
+2026-06-28 02:36:50 [INFO] [503/1015] ----------------------------------------------
+2026-06-28 02:36:50 [INFO]   Invoice: LIAA28A270001190  |  Date: 06-06-2026  |  IRN: e3f9f1c6a0f9d42d75bf9bb3...c51cdc8033b1
+2026-06-28 02:36:51 [INFO]   Typed IRN: e3f9f1c6a0f9d42d75bf9bb3...c51cdc8033b1
+2026-06-28 02:36:51 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:36:52 [INFO]   Search results visible
+2026-06-28 02:36:52 [INFO]   Download triggered via row icon
+2026-06-28 02:36:53 [INFO]   [OK] Saved -> LIAA28A270001190_06-06-2026.pdf
+2026-06-28 02:36:53 [INFO] Worker modifying: LIAA28A270001190_06-06-2026.pdf
+2026-06-28 02:36:53 [INFO] Worker modification OK: LIAA28A270001190_06-06-2026.pdf
+2026-06-28 02:36:54 [INFO] [SYSTEM] Automation paused. Waiting for resume...
+2026-06-28 02:37:19 [INFO] [SYSTEM] Automation resumed.
+2026-06-28 02:37:19 [INFO] [504/1015] ----------------------------------------------
+2026-06-28 02:37:19 [INFO]   Invoice: LIAA28A270001191  |  Date: 06-06-2026  |  IRN: 4e4b386076fa67b098caa122...864be11601cf
+2026-06-28 02:37:20 [INFO]   Typed IRN: 4e4b386076fa67b098caa122...864be11601cf
+2026-06-28 02:37:20 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:37:21 [INFO]   Search results visible
+2026-06-28 02:37:22 [INFO]   Download triggered via row icon
+2026-06-28 02:37:22 [INFO]   [OK] Saved -> LIAA28A270001191_06-06-2026.pdf
+2026-06-28 02:37:22 [INFO] Worker modifying: LIAA28A270001191_06-06-2026.pdf
+2026-06-28 02:37:22 [INFO] Worker modification OK: LIAA28A270001191_06-06-2026.pdf
+2026-06-28 02:37:24 [INFO] [505/1015] ----------------------------------------------
+2026-06-28 02:37:24 [INFO]   Invoice: LIAA2EQ270001152  |  Date: 06-06-2026  |  IRN: d832c709e5d20c6c4570119f...ba259a1554de
+2026-06-28 02:37:25 [INFO]   Typed IRN: d832c709e5d20c6c4570119f...ba259a1554de
+2026-06-28 02:37:25 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 02:37:27 [INFO]   Search results visible
+2026-06-28 02:37:27 [INFO]   Download triggered via row icon
+2026-06-28 02:37:27 [INFO]   [OK] Saved -> LIAA2EQ270001152_06-06-2026.pdf
+2026-06-28 02:37:27 [INFO] Worker modifying: LIAA2EQ270001152_06-06-2026.pdf
+2026-06-28 02:37:28 [INFO] Worker modification OK: LIAA2EQ270001152_06-06-2026.pdf
+2026-06-28 02:37:30 [INFO] [SYSTEM] Automation paused. Waiting for resume...
+2026-06-28 02:44:37 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 02:44:37 [INFO] Final result: 7/7 succeeded
+2026-06-28 02:44:37 [INFO] Waiting for background modifications to complete...

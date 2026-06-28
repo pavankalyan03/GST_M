@@ -1,0 +1,42 @@
+﻿# Output and Data Directories
+backups/
+modified_invoices/
+input/
+original/
+downloads/
+processed/
+processed_excel/
+uploads/
+staging/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env/
+.venv/
+
+# Environment Variables
+.env
+.env.local
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# IPC State
+ipc_state.json
+pipeline_state.json
+
+# Temporary files
+*.pdf
+*.xlsx
+*.csv
+*.zip

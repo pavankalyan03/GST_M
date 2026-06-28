@@ -15,17 +15,19 @@ def preprocess_excel(input_path: str, output_path: str, logger: logging.Logger =
             logger.error(msg)
         raise FileNotFoundError(msg)
         
-    wb_in = openpyxl.load_workbook(input_path, data_only=True)
+    wb_in = openpyxl.load_workbook(input_path, read_only=True, data_only=True)
     if "B2B" not in wb_in.sheetnames:
         raise ValueError("The input Excel does not contain a 'B2B' sheet.")
         
     ws_in = wb_in["B2B"]
     
-    rows = list(ws_in.iter_rows(min_row=5, max_row=6, values_only=True))
-    if len(rows) < 2:
+    # iter_rows gives a generator, we just need the first two rows from row 5
+    row_iter = ws_in.iter_rows(min_row=5, max_row=6, values_only=True)
+    row5 = next(row_iter, None)
+    row6 = next(row_iter, None)
+    
+    if row5 is None or row6 is None:
         raise ValueError("The 'B2B' sheet does not have enough rows for headers.")
-        
-    row5, row6 = rows[0], rows[1]
     
     # Construct combined header
     header = []
@@ -44,9 +46,8 @@ def preprocess_excel(input_path: str, output_path: str, logger: logging.Logger =
     except ValueError as e:
         raise ValueError(f"Required column not found in headers: {e}")
         
-    wb_out = openpyxl.Workbook()
-    ws_out = wb_out.active
-    ws_out.title = "B2B_Filtered"
+    wb_out = openpyxl.Workbook(write_only=True)
+    ws_out = wb_out.create_sheet(title="B2B_Filtered")
     
     ws_out.append(header)
     

@@ -1,3 +1,5 @@
 """
-GST e-Invoice Bulk Downloader Package
+GST e-Invoice Automation Package
+==================================
+Bulk download and modify GST invoices from the e-Invoice portal.
 """

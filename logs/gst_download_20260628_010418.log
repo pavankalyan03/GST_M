@@ -1,0 +1,18 @@
+2026-06-28 01:04:18 [INFO] Log file: logs\gst_download_20260628_010418.log
+2026-06-28 01:04:18 [INFO] ==================================================
+2026-06-28 01:04:18 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 01:04:18 [INFO] ==================================================
+2026-06-28 01:04:18 [INFO] Preprocessing raw Excel file: input/invoices.xlsx
+2026-06-28 01:04:24 [INFO] Preprocessing complete. Extracted 1015 valid records into input/Invoices_rate18.xlsx
+2026-06-28 01:04:24 [INFO] Reading Excel file: input/Invoices_rate18.xlsx
+2026-06-28 01:04:24 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 01:04:24 [INFO] Loaded 1015 valid IRN records
+2026-06-28 01:04:24 [INFO] Loaded pdf_config.yaml for modifications.
+2026-06-28 01:04:25 [INFO] Launching Chromium in headed mode...
+2026-06-28 01:04:26 [INFO] Browser ready
+2026-06-28 01:04:26 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 01:04:31 [INFO] Portal loaded
+2026-06-28 01:04:55 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 01:04:55 [INFO] Final result: 0/0 succeeded
+2026-06-28 01:04:55 [INFO] Waiting for background modifications to complete...

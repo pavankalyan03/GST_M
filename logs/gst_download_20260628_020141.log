@@ -1,0 +1,24 @@
+2026-06-28 02:01:41 [INFO] Log file: logs\gst_download_20260628_020141.log
+2026-06-28 02:01:41 [INFO] ==================================================
+2026-06-28 02:01:41 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 02:01:41 [INFO] ==================================================
+2026-06-28 02:01:41 [INFO] Preprocessing raw Excel file: input\invoices.xlsx
+2026-06-28 02:01:45 [INFO] Preprocessing complete. Extracted 1015 valid records into input\invoices_rate18.xlsx
+2026-06-28 02:01:45 [INFO] Reading Excel file: input\invoices_rate18.xlsx
+2026-06-28 02:01:45 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 02:01:45 [INFO] Loaded 1015 valid IRN records
+2026-06-28 02:01:47 [INFO] Launching Chromium in headed mode...
+2026-06-28 02:01:48 [INFO] Browser ready
+2026-06-28 02:01:48 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 02:01:55 [INFO] Portal loaded
+2026-06-28 02:01:55 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 02:01:55 [ERROR] Fatal error: name 'wait_for_ui_prompt' is not defined
+Traceback (most recent call last):
+  File "C:\Users\SASI KOTHA\Desktop\GST_M\main.py", line 146, in main
+    dl.prompt_manual_login()
+  File "C:\Users\SASI KOTHA\Desktop\GST_M\gst_downloader\core.py", line 91, in prompt_manual_login
+    wait_for_ui_prompt()
+    ^^^^^^^^^^^^^^^^^^
+NameError: name 'wait_for_ui_prompt' is not defined
+2026-06-28 02:01:55 [INFO] Final result: 0/0 succeeded
+2026-06-28 02:01:55 [INFO] Waiting for background modifications to complete...

@@ -1,0 +1,194 @@
+2026-06-28 14:09:56 [INFO] Log file: logs\gst_download_20260628_140956.log
+2026-06-28 14:09:56 [INFO] ==================================================
+2026-06-28 14:09:56 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 14:09:56 [INFO] ==================================================
+2026-06-28 14:09:56 [INFO] Batch name: June_2026
+2026-06-28 14:09:56 [INFO] Preprocessing raw Excel file: uploads\invoices.xlsx
+2026-06-28 14:10:01 [INFO] Preprocessing complete. Extracted 1015 valid records into D:\processed_excel\June_2026.xlsx
+2026-06-28 14:10:01 [INFO] Reading Excel file: D:\processed_excel\June_2026.xlsx
+2026-06-28 14:10:01 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 14:10:02 [INFO] Loaded 1015 valid IRN records
+2026-06-28 14:10:02 [INFO] [Pipeline] Starting pipeline for batch 'June_2026'
+2026-06-28 14:10:02 [INFO] [Pipeline] Staging:   staging\June_2026
+2026-06-28 14:10:02 [INFO] [Pipeline] Originals: D:\original\June_2026
+2026-06-28 14:10:02 [INFO] [Pipeline] Processed: D:\processed\June_2026
+2026-06-28 14:10:02 [INFO] [BackupWorker] Started
+2026-06-28 14:10:02 [INFO] [ModifierWorker-1] Started
+2026-06-28 14:10:02 [INFO] [ModifierWorker-2] Started
+2026-06-28 14:10:02 [INFO] [Pipeline] All workers started (2 modifier workers)
+2026-06-28 14:10:04 [INFO] Launching Chromium in headed mode...
+2026-06-28 14:10:06 [INFO] Browser ready
+2026-06-28 14:10:06 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 14:10:31 [INFO] Portal loaded
+2026-06-28 14:10:31 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 14:11:34 [INFO] User confirmed login -- automation starting
+2026-06-28 14:11:34 [INFO] Processing 1015 IRNs (starting from #1)
+2026-06-28 14:11:34 [INFO] [1/1015] ----------------------------------------------
+2026-06-28 14:11:34 [INFO]   Invoice: LIAA2DE270002368  |  Date: 06-06-2026  |  IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 14:11:36 [INFO]   Typed IRN: 675d50f09190d18f08f5a5dc...ed833a0ff0d9
+2026-06-28 14:11:36 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:11:37 [INFO]   Search results visible
+2026-06-28 14:11:39 [INFO]   Download triggered via row icon
+2026-06-28 14:11:40 [INFO]   [OK] Saved -> LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 14:11:40 [INFO] [StateManager] Registered: LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 14:11:41 [INFO] [BackupWorker] Backed up: LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 14:11:41 [INFO] [ModifierWorker-2] Modifying: LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 14:11:42 [INFO] [ModifierWorker-2] Completed: LIAA2DE270002368_06-06-2026.pdf
+2026-06-28 14:11:43 [INFO] [2/1015] ----------------------------------------------
+2026-06-28 14:11:43 [INFO]   Invoice: LIAA2JY270002305  |  Date: 06-06-2026  |  IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 14:11:44 [INFO]   Typed IRN: f9ce261e58ea02ba7d742f60...6ca8aaa4dc22
+2026-06-28 14:11:44 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:11:45 [INFO]   Search results visible
+2026-06-28 14:11:46 [INFO]   Download triggered via row icon
+2026-06-28 14:11:47 [INFO]   [OK] Saved -> LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 14:11:47 [INFO] [StateManager] Registered: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 14:11:47 [INFO] [BackupWorker] Backed up: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 14:11:47 [INFO] [ModifierWorker-1] Modifying: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 14:11:48 [INFO] [ModifierWorker-1] Completed: LIAA2JY270002305_06-06-2026.pdf
+2026-06-28 14:11:49 [INFO] [3/1015] ----------------------------------------------
+2026-06-28 14:11:49 [INFO]   Invoice: LIAA2JY270002368  |  Date: 08-06-2026  |  IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 14:11:50 [INFO]   Typed IRN: e7c3c532ba6ab85462eeb4ed...41abd93c2980
+2026-06-28 14:11:51 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:11:52 [INFO]   Search results visible
+2026-06-28 14:11:53 [INFO]   Download triggered via row icon
+2026-06-28 14:11:55 [INFO]   [OK] Saved -> LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 14:11:55 [INFO] [StateManager] Registered: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 14:11:55 [INFO] [BackupWorker] Backed up: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 14:11:55 [INFO] [ModifierWorker-2] Modifying: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 14:11:56 [INFO] [ModifierWorker-2] Completed: LIAA2JY270002368_08-06-2026.pdf
+2026-06-28 14:11:57 [INFO] [4/1015] ----------------------------------------------
+2026-06-28 14:11:57 [INFO]   Invoice: LIAA4DU270002383  |  Date: 06-06-2026  |  IRN: 46465eaa5c948ba9fcd9a02f...abe649f5412c
+2026-06-28 14:11:58 [INFO]   Typed IRN: 46465eaa5c948ba9fcd9a02f...abe649f5412c
+2026-06-28 14:11:58 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:00 [INFO]   Search results visible
+2026-06-28 14:12:01 [INFO]   Download triggered via row icon
+2026-06-28 14:12:02 [INFO]   [OK] Saved -> LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 14:12:02 [INFO] [StateManager] Registered: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 14:12:02 [INFO] [BackupWorker] Backed up: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 14:12:02 [INFO] [ModifierWorker-2] Modifying: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 14:12:03 [INFO] [ModifierWorker-2] Completed: LIAA4DU270002383_06-06-2026.pdf
+2026-06-28 14:12:04 [INFO] [5/1015] ----------------------------------------------
+2026-06-28 14:12:04 [INFO]   Invoice: LIAA4DU270002384  |  Date: 06-06-2026  |  IRN: 64c34305918bcb3778910b90...f34d0e6806ca
+2026-06-28 14:12:05 [INFO]   Typed IRN: 64c34305918bcb3778910b90...f34d0e6806ca
+2026-06-28 14:12:05 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:07 [INFO]   Search results visible
+2026-06-28 14:12:08 [INFO]   Download triggered via row icon
+2026-06-28 14:12:08 [INFO]   [OK] Saved -> LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 14:12:08 [INFO] [StateManager] Registered: LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 14:12:08 [INFO] [BackupWorker] Backed up: LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 14:12:08 [INFO] [ModifierWorker-2] Modifying: LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 14:12:09 [INFO] [ModifierWorker-2] Completed: LIAA4DU270002384_06-06-2026.pdf
+2026-06-28 14:12:10 [INFO] [6/1015] ----------------------------------------------
+2026-06-28 14:12:10 [INFO]   Invoice: LIAA4R5270002350  |  Date: 06-06-2026  |  IRN: 66c0618c459d0a84de9f8483...79175bfe3d6c
+2026-06-28 14:12:11 [INFO]   Typed IRN: 66c0618c459d0a84de9f8483...79175bfe3d6c
+2026-06-28 14:12:12 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:13 [INFO]   Search results visible
+2026-06-28 14:12:14 [INFO]   Download triggered via row icon
+2026-06-28 14:12:14 [INFO]   [OK] Saved -> LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 14:12:14 [INFO] [StateManager] Registered: LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 14:12:14 [INFO] [BackupWorker] Backed up: LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 14:12:15 [INFO] [ModifierWorker-1] Modifying: LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 14:12:15 [INFO] [ModifierWorker-1] Completed: LIAA4R5270002350_06-06-2026.pdf
+2026-06-28 14:12:16 [INFO] [7/1015] ----------------------------------------------
+2026-06-28 14:12:16 [INFO]   Invoice: LIAA5EU270002404  |  Date: 06-06-2026  |  IRN: cbf3c148066b2398110ceca9...9b8eff0d6533
+2026-06-28 14:12:17 [INFO]   Typed IRN: cbf3c148066b2398110ceca9...9b8eff0d6533
+2026-06-28 14:12:17 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:18 [INFO]   Search results visible
+2026-06-28 14:12:19 [INFO]   Download triggered via row icon
+2026-06-28 14:12:19 [INFO]   [OK] Saved -> LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 14:12:19 [INFO] [StateManager] Registered: LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 14:12:19 [INFO] [BackupWorker] Backed up: LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 14:12:20 [INFO] [ModifierWorker-2] Modifying: LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 14:12:20 [INFO] [ModifierWorker-2] Completed: LIAA5EU270002404_06-06-2026.pdf
+2026-06-28 14:12:21 [INFO] [8/1015] ----------------------------------------------
+2026-06-28 14:12:21 [INFO]   Invoice: LIAA5EU270002407  |  Date: 06-06-2026  |  IRN: 863ff5541ecd04c160db5f0b...938c370594c6
+2026-06-28 14:12:22 [INFO]   Typed IRN: 863ff5541ecd04c160db5f0b...938c370594c6
+2026-06-28 14:12:23 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:25 [INFO]   Search results visible
+2026-06-28 14:12:25 [INFO]   Download triggered via row icon
+2026-06-28 14:12:25 [INFO]   [OK] Saved -> LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 14:12:25 [INFO] [StateManager] Registered: LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 14:12:26 [INFO] [BackupWorker] Backed up: LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 14:12:26 [INFO] [ModifierWorker-1] Modifying: LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 14:12:27 [INFO] [ModifierWorker-1] Completed: LIAA5EU270002407_06-06-2026.pdf
+2026-06-28 14:12:27 [INFO] [9/1015] ----------------------------------------------
+2026-06-28 14:12:27 [INFO]   Invoice: LIAA5XA270002401  |  Date: 06-06-2026  |  IRN: dc4c579169cd1a7422099898...e083ba55bc6a
+2026-06-28 14:12:28 [INFO]   Typed IRN: dc4c579169cd1a7422099898...e083ba55bc6a
+2026-06-28 14:12:29 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:30 [INFO]   Search results visible
+2026-06-28 14:12:31 [INFO]   Download triggered via row icon
+2026-06-28 14:12:31 [INFO]   [OK] Saved -> LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 14:12:31 [INFO] [StateManager] Registered: LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 14:12:31 [INFO] [BackupWorker] Backed up: LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 14:12:31 [INFO] [ModifierWorker-1] Modifying: LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 14:12:32 [INFO] [ModifierWorker-1] Completed: LIAA5XA270002401_06-06-2026.pdf
+2026-06-28 14:12:33 [INFO] [10/1015] ----------------------------------------------
+2026-06-28 14:12:33 [INFO]   Invoice: LIAA6OB270002427  |  Date: 08-06-2026  |  IRN: 9ac47dae0657be01696502be...2caf6819f591
+2026-06-28 14:12:34 [INFO]   Typed IRN: 9ac47dae0657be01696502be...2caf6819f591
+2026-06-28 14:12:34 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:36 [INFO]   Search results visible
+2026-06-28 14:12:37 [INFO]   Download triggered via row icon
+2026-06-28 14:12:37 [INFO]   [OK] Saved -> LIAA6OB270002427_08-06-2026.pdf
+2026-06-28 14:12:37 [INFO] [StateManager] Registered: LIAA6OB270002427_08-06-2026.pdf
+2026-06-28 14:12:38 [INFO] [BackupWorker] Backed up: LIAA6OB270002427_08-06-2026.pdf
+2026-06-28 14:12:38 [INFO] [ModifierWorker-1] Modifying: LIAA6OB270002427_08-06-2026.pdf
+2026-06-28 14:12:39 [INFO] [ModifierWorker-1] Completed: LIAA6OB270002427_08-06-2026.pdf
+2026-06-28 14:12:39 [INFO] [11/1015] ----------------------------------------------
+2026-06-28 14:12:39 [INFO]   Invoice: LIAA8CQ270002347  |  Date: 06-06-2026  |  IRN: dab6af647a617a341c072e93...f535915d9043
+2026-06-28 14:12:40 [INFO]   Typed IRN: dab6af647a617a341c072e93...f535915d9043
+2026-06-28 14:12:41 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:42 [INFO]   Search results visible
+2026-06-28 14:12:43 [INFO]   Download triggered via row icon
+2026-06-28 14:12:43 [INFO]   [OK] Saved -> LIAA8CQ270002347_06-06-2026.pdf
+2026-06-28 14:12:43 [INFO] [StateManager] Registered: LIAA8CQ270002347_06-06-2026.pdf
+2026-06-28 14:12:44 [INFO] [BackupWorker] Backed up: LIAA8CQ270002347_06-06-2026.pdf
+2026-06-28 14:12:44 [INFO] [ModifierWorker-1] Modifying: LIAA8CQ270002347_06-06-2026.pdf
+2026-06-28 14:12:45 [INFO] [ModifierWorker-1] Completed: LIAA8CQ270002347_06-06-2026.pdf
+2026-06-28 14:12:45 [INFO] [12/1015] ----------------------------------------------
+2026-06-28 14:12:45 [INFO]   Invoice: LIAA9FN270002404  |  Date: 06-06-2026  |  IRN: 9d2a3cc93145faf86cf95c6b...8d9699c71fd3
+2026-06-28 14:12:46 [INFO]   Typed IRN: 9d2a3cc93145faf86cf95c6b...8d9699c71fd3
+2026-06-28 14:12:46 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:48 [INFO]   Search results visible
+2026-06-28 14:12:49 [INFO]   Download triggered via row icon
+2026-06-28 14:12:49 [INFO]   [OK] Saved -> LIAA9FN270002404_06-06-2026.pdf
+2026-06-28 14:12:49 [INFO] [StateManager] Registered: LIAA9FN270002404_06-06-2026.pdf
+2026-06-28 14:12:50 [INFO] [BackupWorker] Backed up: LIAA9FN270002404_06-06-2026.pdf
+2026-06-28 14:12:50 [INFO] [ModifierWorker-2] Modifying: LIAA9FN270002404_06-06-2026.pdf
+2026-06-28 14:12:51 [INFO] [ModifierWorker-2] Completed: LIAA9FN270002404_06-06-2026.pdf
+2026-06-28 14:12:51 [INFO] [13/1015] ----------------------------------------------
+2026-06-28 14:12:51 [INFO]   Invoice: LIAA9FN270002405  |  Date: 06-06-2026  |  IRN: 96e4de5be1a8f903ba72e35d...7d5efc49a34b
+2026-06-28 14:12:52 [INFO]   Typed IRN: 96e4de5be1a8f903ba72e35d...7d5efc49a34b
+2026-06-28 14:12:53 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:12:54 [INFO]   Search results visible
+2026-06-28 14:12:55 [INFO]   Download triggered via row icon
+2026-06-28 14:12:56 [INFO]   [OK] Saved -> LIAA9FN270002405_06-06-2026.pdf
+2026-06-28 14:12:56 [INFO] [StateManager] Registered: LIAA9FN270002405_06-06-2026.pdf
+2026-06-28 14:12:56 [INFO] [BackupWorker] Backed up: LIAA9FN270002405_06-06-2026.pdf
+2026-06-28 14:12:56 [INFO] [ModifierWorker-2] Modifying: LIAA9FN270002405_06-06-2026.pdf
+2026-06-28 14:12:58 [INFO] [ModifierWorker-2] Completed: LIAA9FN270002405_06-06-2026.pdf
+2026-06-28 14:12:58 [INFO] [SYSTEM] Automation paused. Waiting for resume...
+2026-06-28 14:13:08 [INFO] [SYSTEM] Automation resumed.
+2026-06-28 14:13:08 [INFO] [14/1015] ----------------------------------------------
+2026-06-28 14:13:08 [INFO]   Invoice: LIAAAUT270002500  |  Date: 06-06-2026  |  IRN: 8b0a72f11e00cf12a1f1f035...8ad27e8d1726
+2026-06-28 14:13:09 [INFO]   Typed IRN: 8b0a72f11e00cf12a1f1f035...8ad27e8d1726
+2026-06-28 14:13:09 [INFO]   Clicked Search -- waiting for results...
+2026-06-28 14:13:11 [INFO]   Search results visible
+2026-06-28 14:13:11 [INFO]   Download triggered via row icon
+2026-06-28 14:13:12 [INFO]   [OK] Saved -> LIAAAUT270002500_06-06-2026.pdf
+2026-06-28 14:13:12 [INFO] [StateManager] Registered: LIAAAUT270002500_06-06-2026.pdf
+2026-06-28 14:13:12 [INFO] [BackupWorker] Backed up: LIAAAUT270002500_06-06-2026.pdf
+2026-06-28 14:13:12 [INFO] [ModifierWorker-2] Modifying: LIAAAUT270002500_06-06-2026.pdf
+2026-06-28 14:13:13 [INFO] [ModifierWorker-2] Completed: LIAAAUT270002500_06-06-2026.pdf
+2026-06-28 14:13:14 [INFO] [SYSTEM] Automation stopped by user.
+2026-06-28 14:13:14 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 14:13:14 [INFO] Final result: 14/14 succeeded
+2026-06-28 14:13:16 [INFO] Final result: 14/14 succeeded
+2026-06-28 14:13:16 [INFO] Waiting for pipeline workers to complete...
+2026-06-28 14:13:16 [INFO] [Pipeline] Initiating shutdown...
+2026-06-28 14:13:16 [INFO] [BackupWorker] Stopped
+2026-06-28 14:13:16 [INFO] [ModifierWorker-2] Stopped
+2026-06-28 14:13:16 [INFO] [ModifierWorker-1] Stopped
+2026-06-28 14:13:16 [INFO] [Pipeline] Final state: {<FileState.COMPLETED: 'COMPLETED'>: 14, 'total': 14}
+2026-06-28 14:13:16 [INFO] [Pipeline] Shutdown complete
+2026-06-28 14:13:16 [INFO] Pipeline stats: {<FileState.COMPLETED: 'COMPLETED'>: 14, 'total': 14}

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GST Invoice Automation</title>
+    <meta name="description" content="Automated GST e-Invoice downloader and modifier for bulk processing">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>GST Invoice Automation</h1>
+            <p>Upload your monthly Excel file to download and process invoices automatically.</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" id="tab-run-btn">Processing</button>
+            <button class="tab-btn" id="tab-settings-btn">Settings</button>
+        </div>
+
+        <main>
+            <!-- ═══════════════════════════════════════════════ -->
+            <!--  PROCESSING VIEW                                -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div id="view-run">
+                <div class="upload-section card" id="upload-section">
+                    <h2>Upload Excel File</h2>
+                    <div class="drop-zone" id="drop-zone">
+                        <span class="drop-zone-prompt">Drag & drop your .xlsx or .zip file here or click to browse</span>
+                        <input type="file" name="file" id="file-input" accept=".xlsx,.zip">
+                    </div>
+
+                    <div class="advanced-settings-panel">
+                        <label for="start-from" style="color: var(--text-secondary); font-size: 0.9rem; margin-right: 10px;">Start From Row:</label>
+                        <input type="number" id="start-from" name="start-from" value="1" min="1" class="input-field" style="width: 100px;">
+                    </div>
+
+                    <div class="file-details" id="file-details" style="display: none;">
+                        <span id="file-name">filename.xlsx</span>
+                        <button class="btn btn-primary" id="process-btn">Start Processing</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-section card" id="dashboard-section" style="display: none;">
+                    <div class="dashboard-header">
+                        <h2>Processing Dashboard</h2>
+                        <span id="job-filename" class="job-filename"></span>
+                    </div>
+
+                    <div class="current-status">
+                        <span class="status-indicator animate-pulse" id="status-indicator"></span>
+                        <span class="status-text" id="current-status-text">Initializing automation...</span>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="progress-text" id="progress-text">0% Complete</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-box stat-total">
+                            <span class="stat-label">Total Records</span>
+                            <span class="stat-value" id="stat-total">--</span>
+                        </div>
+                        <div class="stat-box stat-success">
+                            <span class="stat-label">Processed</span>
+                            <span class="stat-value" id="stat-success">0</span>
+                        </div>
+                        <div class="stat-box stat-skipped">
+                            <span class="stat-label">Skipped</span>
+                            <span class="stat-value" id="stat-skipped">0</span>
+                        </div>
+                        <div class="stat-box stat-errors">
+                            <span class="stat-label">Errors</span>
+                            <span class="stat-value" id="stat-errors">0</span>
+                        </div>
+                    </div>
+
+                    <div class="process-controls">
+                        <button class="btn btn-warning" id="pause-btn">Pause</button>
+                        <button class="btn btn-danger" id="stop-btn" style="background-color: var(--error); border: none;">Stop</button>
+                        <button class="btn btn-danger" id="cancel-btn">Start Over</button>
+                    </div>
+
+                    <div class="console-wrapper">
+                        <h3>Recent Events</h3>
+                        <div class="console-output" id="console-output">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-secondary" id="reset-btn" style="display: none; margin-top: 1.5rem; width: 100%;">Process Another File</button>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════ -->
+            <!--  SETTINGS VIEW                                  -->
+            <!-- ═══════════════════════════════════════════════ -->
+            <div id="view-settings" style="display: none;">
+                <div class="card">
+                    <h2>PDF Modification Settings</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+                        Configure what text to replace in the downloaded invoices. Leave fields empty to keep the original values.
+                    </p>
+                    <form id="config-form">
+                        <div id="config-fields-container">
+                            <!-- Fields injected by JS -->
+                        </div>
+                        <button type="button" class="btn btn-primary" id="save-config-btn" style="margin-top: 1.5rem;">Save Settings</button>
+                        <span id="config-save-status" style="margin-left: 10px; font-size: 0.9rem; color: var(--success); display: none;">Saved!</span>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  BATCH NAME PROMPT MODAL                       -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div id="batch-name-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 style="color: var(--primary); margin-bottom: 10px;">Name This Batch</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 15px; font-size: 0.9rem;">
+                Give a meaningful name for this processing run.<br>
+                This will be used to organize your output folders.
+            </p>
+            <input type="text" id="batch-name-input" class="input-field" style="width: 100%; margin-bottom: 15px;" placeholder="e.g. June_2026_Invoices">
+            <button class="btn btn-primary" id="batch-name-confirm-btn" style="width: 100%;">Proceed</button>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!--  LOGIN PROMPT MODAL                            -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <div id="ui-prompt-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3 style="color: var(--warning); margin-bottom: 10px;">Manual Action Required</h3>
+            <p id="ui-prompt-text" style="margin-bottom: 20px;">Please login to the portal</p>
+            <button class="btn btn-primary" id="ui-prompt-continue-btn" style="width: 100%;">Continue</button>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

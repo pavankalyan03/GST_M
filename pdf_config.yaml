@@ -1,28 +1,28 @@
 # ╔════════════════════════════════════════════════════════════════╗
-# ║           GST INVOICE PDF — MODIFICATION CONFIG              ║
+# ║           GST INVOICE PDF — MODIFICATION CONFIG                ║
 # ╠════════════════════════════════════════════════════════════════╣
-# ║                                                              ║
-# ║   HOW TO USE:                                                ║
-# ║   1. Look at the 'original' values (from your PDF)           ║
-# ║   2. Type your new values in the 'new' fields                ║
-# ║   3. Leave 'new' as "" to keep the original (no change)      ║
-# ║   4. Run:  python modify_pdfs.py --apply                    ║
-# ║                                                              ║
-# ║   Generated from: BOM7-125914.pdf                           ║
+# ║                                                                ║
+# ║   HOW TO USE:                                                  ║
+# ║   1. Look at the 'original' values (from your PDF)             ║
+# ║   2. Type your new values in the 'new' fields                  ║
+# ║   3. Leave 'new' as "" to keep the original (no change)        ║
+# ║   4. Run:  python modify_pdfs.py --apply                       ║
+# ║                                                                ║
+# ║   Generated from: BOM7-125914.pdf                              ║
 # ╚════════════════════════════════════════════════════════════════╝
 
 
 # Your GSTIN (used to locate your details in every PDF)
-gstin: "37DYVPK9951A1ZT"
+gstin: 37DYVPK9951A1ZT
 
 
 # ┌────────────────────────────────────────────────────────────────┐
-# │  HEADER  —  The large business name at the top of page 1      │
+# │  HEADER  —  The large business name at the top of page 1       │
 # └────────────────────────────────────────────────────────────────┘
 
 header_name:
-  original: "SRI RAJLAXMI SILKS"
-  new: "MAHADEV ENTREPRISES"
+  original: SRI RAJLAXMI SILKS
+  new: PAVAN ENTERPRISES
 
 
 # ┌────────────────────────────────────────────────────────────────┐
@@ -31,33 +31,34 @@ header_name:
 # └────────────────────────────────────────────────────────────────┘
 
 recipient_name:
-  original: "SRI RAJLAXMI SILKS"
-  new: "MAHADEV ENTREPRISES"
+  original: SRI RAJLAXMI SILKS
+  new: PAVAN ENTERPRISES
 
 recipient_address:
   original: |
     guntur
     guntur
     522001
-  new: ""
+  new: "Ground Floor, 1-16-261, 2nd Lane Ali Nagar, Old Guntur, \nGuntur, Andhra Pradesh,\n\
+    522001\nState: Andhra Pradesh"
 
 
 # ┌────────────────────────────────────────────────────────────────┐
-# │  SHIP TO  —  Your shipping address (right column)             │
+# │  SHIP TO  —  Your shipping address (right column)              │
 # │              under "Ship To" in Party Details                  │
 # └────────────────────────────────────────────────────────────────┘
 
 ship_to_name:
-  original: "SRI RAJLAXMI SILKS"
-  new: "MAHADEV ENTREPRISES"
+  original: SRI RAJLAXMI SILKS
+  new: PAVAN ENTERPRISES
 
 ship_to_address:
   original: |
     d.no old61-11-790 ali nagar 2nd line old Guntur
     GUNTUR
     522001
-  new: |
-    HIG 111,BALAJI NAGR NEAR KUKATPALLI METRO STATIO
+  new: |-
+    HIG 111, BALAJI NAGR NEAR KUKATPALLI METRO STATION
     KPHB
     500072
     State: Telangana
@@ -67,8 +68,11 @@ ship_to_address:
 # │  SETTINGS                                                      │
 # └────────────────────────────────────────────────────────────────┘
 
-# Folder containing the original PDFs
-input_folder: "downloads"
+# Folder containing the original PDFs (backup copies)
+original_folder: D:\original
 
-# Folder where modified PDFs will be saved (originals are NEVER touched)
-output_folder: "modified_invoices"
+# Folder where modified PDFs will be saved
+processed_folder: D:\processed
+
+# Folder where the processed/cleaned Excel files will be saved
+processed_excel_folder: D:\processed_excel
