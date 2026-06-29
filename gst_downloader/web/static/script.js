@@ -1,26 +1,26 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // UI Elements
     const settingsToggle = document.getElementById('settings-toggle');
     const settingsPanel = document.getElementById('settings-panel');
     const configForm = document.getElementById('config-form');
-    
+
     const dropzone = document.getElementById('dropzone');
     const fileInput = document.getElementById('file-input');
     const btnPreprocess = document.getElementById('btn-preprocess');
     const batchNameInput = document.getElementById('batch-name');
-    
+
     const areaUpload = document.getElementById('upload-area');
     const areaCheckpoint = document.getElementById('checkpoint-area');
     const areaRunning = document.getElementById('running-area');
-    
+
     // Checkpoint Elements
     const cpValidCount = document.getElementById('cp-valid-count');
     const cpBatchName = document.getElementById('cp-batch-name');
     const btnDownloadExcel = document.getElementById('btn-download-excel');
     const btnStartAuto = document.getElementById('btn-start-automation');
     const btnCancelCp = document.getElementById('btn-cancel-checkpoint');
-    
+
     // Running Controls
     const btnPause = document.getElementById('btn-pause');
     const btnResume = document.getElementById('btn-resume');
@@ -29,33 +29,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnNewJob = document.getElementById('btn-new-job');
     const btnRetryFailed = document.getElementById('btn-retry-failed');
     const runningPulse = document.getElementById('running-pulse');
-    
+
     // Metrics
     const metricTotal = document.getElementById('metric-total');
     const metricProcessed = document.getElementById('metric-processed');
     const metricErrors = document.getElementById('metric-errors');
     const metricSpeed = document.getElementById('metric-speed');
-    
+
     const progressBar = document.getElementById('main-progress-bar');
     const progressText = document.getElementById('main-progress-text');
-    
+
     // Tabs
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     const errorTableBody = document.getElementById('error-table-body');
     const tabErrorCount = document.getElementById('tab-error-count');
-    
+
     let selectedFile = null;
     let currentCleanedExcelPath = null;
     let currentBatchName = null;
-    
+
     // ── 1. Settings Accordion ──
     settingsToggle.addEventListener('click', () => {
         settingsPanel.style.display = settingsPanel.style.display === 'none' ? 'block' : 'none';
     });
-    
+
     fetch('/config').then(r => r.json()).then(data => {
-        if(data.status === 'success') {
+        if (data.status === 'success') {
             document.getElementById('cfg-gstin').value = data.config.gstin || '';
             document.getElementById('cfg-header_name').value = data.config.header_name || '';
             document.getElementById('cfg-recipient_name').value = data.config.recipient_name || '';
@@ -83,10 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         fetch('/config', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
-        }).then(r=>r.json()).then(data => {
-            if(data.status === 'success') {
+        }).then(r => r.json()).then(data => {
+            if (data.status === 'success') {
                 alert('Settings saved!');
                 settingsPanel.style.display = 'none';
             }
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── 2. Drag & Drop Upload ──
     dropzone.addEventListener('click', () => fileInput.click());
-    
+
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropzone.addEventListener(eventName, preventDefaults, false);
     });
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
         handleFiles(files);
     });
 
-    fileInput.addEventListener('change', function() {
+    fileInput.addEventListener('change', function () {
         handleFiles(this.files);
     });
 
@@ -135,36 +135,36 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Please select an Excel or ZIP file first.');
             return;
         }
-        
+
         btnPreprocess.disabled = true;
         btnPreprocess.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
-        
+
         const formData = new FormData();
         formData.append('file', selectedFile);
         formData.append('batch_name', batchNameInput.value);
-        
+
         try {
             const response = await fetch('/upload_and_preprocess', {
                 method: 'POST',
                 body: formData
             });
             const data = await response.json();
-            
+
             if (data.status === 'success') {
                 currentCleanedExcelPath = data.cleaned_excel;
                 currentBatchName = data.batch_name;
-                
+
                 cpValidCount.innerText = data.valid_count;
                 metricTotal.innerText = data.valid_count;
                 cpBatchName.innerText = data.batch_name;
-                
+
                 const btnCpRetryFailed = document.getElementById('btn-cp-retry-failed');
                 if (btnCpRetryFailed) {
                     btnCpRetryFailed.style.display = data.has_failed_irns ? 'inline-flex' : 'none';
                 }
-                
+
                 btnDownloadExcel.href = '/download_excel?filepath=' + encodeURIComponent(data.cleaned_excel);
-                
+
                 areaUpload.style.display = 'none';
                 areaCheckpoint.style.display = 'flex';
             } else {
@@ -180,20 +180,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── 3. Checkpoint Actions ──
     btnCancelCp.addEventListener('click', () => {
-        fetch('/state', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({command: 'CANCEL'}) });
+        fetch('/state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ command: 'CANCEL' }) });
         areaCheckpoint.style.display = 'none';
         areaUpload.style.display = 'flex';
         selectedFile = null;
         dropzone.querySelector('h3').innerText = 'Drag & Drop Excel or ZIP here';
     });
-    
+
     btnStartAuto.addEventListener('click', async () => {
         areaCheckpoint.style.display = 'none';
         areaRunning.style.display = 'flex';
-        
+
         await fetch('/start_automation', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 cleaned_excel_path: currentCleanedExcelPath,
                 batch_name: currentBatchName,
@@ -207,10 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCpRetryFailed.addEventListener('click', async () => {
             areaCheckpoint.style.display = 'none';
             areaRunning.style.display = 'flex';
-            
+
             await fetch('/start_automation', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     cleaned_excel_path: currentCleanedExcelPath,
                     batch_name: currentBatchName,
@@ -223,26 +223,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ── 4. Control Buttons ──
     btnPromptContinue.addEventListener('click', () => {
-        fetch('/state', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({command: 'PROMPT_CONTINUE'}) });
+        fetch('/state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ command: 'PROMPT_CONTINUE' }) });
     });
     btnPause.addEventListener('click', () => {
-        fetch('/state', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({command: 'PAUSE'}) });
+        fetch('/state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ command: 'PAUSE' }) });
     });
     btnResume.addEventListener('click', () => {
-        fetch('/state', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({command: 'RESUME'}) });
+        fetch('/state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ command: 'RESUME' }) });
     });
     btnStop.addEventListener('click', () => {
-        if(confirm("Are you sure you want to completely stop the automation?")) {
-            fetch('/state', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({command: 'STOP'}) });
-            
+        if (confirm("Are you sure you want to completely stop the automation?")) {
+            fetch('/state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ command: 'STOP' }) });
+
             // Immediately reset UI visuals
             areaRunning.style.display = 'none';
             areaUpload.style.display = 'flex';
-            
+
             selectedFile = null;
             document.getElementById('dropzone').querySelector('h3').innerText = 'Drag & Drop Excel or ZIP here';
             document.getElementById('batch-name').value = '';
-            
+
             metricTotal.innerText = '0';
             metricProcessed.innerText = '0';
             metricErrors.innerText = '0';
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('terminal-output').innerHTML = '<div class="log-line system">System initialized. Awaiting upload...</div>';
             errorTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No errors recorded yet.</td></tr>';
             tabErrorCount.innerText = '0';
-            
+
             // Wait a few seconds for backend force-kill to complete before resetting IPC state
             setTimeout(() => {
                 fetch('/reset_job', { method: 'POST' });
@@ -262,14 +262,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnNewJob) {
         btnNewJob.addEventListener('click', async () => {
             await fetch('/reset_job', { method: 'POST' });
-            
+
             areaRunning.style.display = 'none';
             areaUpload.style.display = 'flex';
-            
+
             selectedFile = null;
             document.getElementById('dropzone').querySelector('h3').innerText = 'Drag & Drop Excel or ZIP here';
             document.getElementById('batch-name').value = '';
-            
+
             metricTotal.innerText = '0';
             metricProcessed.innerText = '0';
             metricErrors.innerText = '0';
@@ -285,10 +285,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnRetryFailed) {
         btnRetryFailed.addEventListener('click', async () => {
             if (btnStop.style.display !== 'none' || btnResume.style.display !== 'none') {
-                await fetch('/state', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({command: 'STOP'}) });
+                await fetch('/state', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ command: 'STOP' }) });
                 await new Promise(r => setTimeout(r, 2000));
             }
-            
+
             if (currentBatchName && currentCleanedExcelPath) {
                 metricTotal.innerText = '0';
                 metricProcessed.innerText = '0';
@@ -299,10 +299,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('terminal-output').innerHTML = '<div class="log-line system">Retrying failed IRNs...</div>';
                 errorTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-muted">No errors recorded yet.</td></tr>';
                 tabErrorCount.innerText = '0';
-                
+
                 await fetch('/start_automation', {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         cleaned_excel_path: currentCleanedExcelPath,
                         batch_name: currentBatchName,
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btn.addEventListener('click', () => {
             tabBtns.forEach(b => b.classList.remove('active'));
             tabContents.forEach(c => c.style.display = 'none');
-            
+
             btn.classList.add('active');
             document.getElementById(btn.dataset.tab).style.display = 'block';
         });
@@ -330,34 +330,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── 6. SSE Dashboard Stream ──
     const terminalOutput = document.getElementById('terminal-output');
     const evtSource = new EventSource("/api/dashboard_stream");
-    
+
     let startTime = null;
     let previousProcessed = 0;
-    
-    evtSource.onmessage = function(event) {
+
+    evtSource.onmessage = function (event) {
         if (event.data === ": keep-alive") return;
-        
+
         try {
             const data = JSON.parse(event.data);
-            
+
             // Health
-            if(data.health) {
+            if (data.health) {
                 document.getElementById('cpu-val').innerText = data.health.cpu_percent + '%';
                 document.getElementById('mem-val').innerText = data.health.mem_percent + '%';
             }
-            
+
             // Logs
-            if(data.logs && data.logs.length > 0) {
+            if (data.logs && data.logs.length > 0) {
                 data.logs.forEach(log => {
                     const el = document.createElement('div');
                     el.className = 'log-line';
                     if (log.includes('ERROR') || log.includes('Failed')) el.classList.add('error');
                     else if (log.includes('SUCCESS') || log.includes('successfully')) el.classList.add('success');
                     else if (log.includes('SYSTEM')) el.classList.add('system');
-                    
+
                     el.textContent = log;
                     terminalOutput.appendChild(el);
-                    
+
                     // Simple logic to set total if log contains it
                     if (log.includes('[UI_TOTAL]')) {
                         const total = parseInt(log.split(' ')[1]);
@@ -366,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 terminalOutput.scrollTop = terminalOutput.scrollHeight;
             }
-            
+
             // IPC Status (for UI layout toggles)
             if (data.ipc_status) {
                 if (data.ipc_status === 'PENDING_CONFIRMATION') {
@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Pipeline State
             if (data.pipeline) {
                 const p = data.pipeline;
-                
+
                 // Metrics
                 const metrics = p.metrics || {};
                 metricProcessed.innerText = metrics.processed || 0;
@@ -409,19 +409,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (metrics.total) {
                     metricTotal.innerText = metrics.total;
                 }
-                
+
                 const t = metrics.total || parseInt(metricTotal.innerText) || 0;
                 if (t > 0) {
                     const pct = Math.min(100, Math.round(((metrics.processed || 0) + (metrics.errors || 0)) / t * 100));
                     progressBar.style.width = pct + '%';
                     progressText.innerText = pct + '% Complete';
                 }
-                
+
                 // Throughput calc
                 if (p.status !== 'COMPLETED' && p.status !== 'CANCELLED') {
                     if ((metrics.processed || 0) > previousProcessed) {
                         previousProcessed = metrics.processed;
-                        if(!startTime) startTime = Date.now();
+                        if (!startTime) startTime = Date.now();
                     }
                     if (startTime && metrics.processed > 0) {
                         const elapsedMs = Date.now() - startTime;
@@ -439,30 +439,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Worker Stages
                 const wDownloader = document.getElementById('worker-downloader');
                 const wModifier = document.getElementById('worker-modifier');
-                
+
                 const dWorker = (p.workers && p.workers.downloader) || {};
                 const mWorker = (p.workers && p.workers.modifier) || {};
-                
+
                 if (dWorker.status === 'processing') {
                     wDownloader.className = 'worker-stage active';
                     wDownloader.querySelector('.status-text').innerText = 'Downloading: ' + (dWorker.current || '...');
-                } else if(dWorker.status === 'error') {
+                } else if (dWorker.status === 'error') {
                     wDownloader.className = 'worker-stage error';
                 } else {
                     wDownloader.className = 'worker-stage';
                     wDownloader.querySelector('.status-text').innerText = dWorker.status || 'Idle';
                 }
-                
+
                 if (mWorker.status === 'processing') {
                     wModifier.className = 'worker-stage active';
                     wModifier.querySelector('.status-text').innerText = 'Modifying: ' + (mWorker.current || '...');
-                } else if(mWorker.status === 'error') {
+                } else if (mWorker.status === 'error') {
                     wModifier.className = 'worker-stage error';
                 } else {
                     wModifier.className = 'worker-stage';
                     wModifier.querySelector('.status-text').innerText = mWorker.status || 'Idle';
                 }
-                
+
                 // Queue List
                 const qList = document.getElementById('queue-list');
                 if (p.queue && p.queue.length > 0) {
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     qList.innerHTML = '<li class="empty-msg">Queue is empty</li>';
                 }
-                
+
                 // Errors
                 if (p.errors) {
                     tabErrorCount.innerText = p.errors.length;
@@ -487,14 +487,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         errorTableBody.appendChild(tr);
                     });
                 }
-                
+
                 // Control Center Status
                 if (p.status) {
                     let title = "Automation Running";
                     let pulseColor = "var(--success)";
                     let pulseAnim = "pulse 2s infinite";
                     let isDone = false;
-                    
+
                     if (p.status === 'COMPLETED') {
                         title = "Automation Completed";
                         pulseAnim = "none";
@@ -522,11 +522,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         pulseAnim = "pulse 2s infinite";
                         pulseColor = "var(--success)";
                     }
-                    
+
                     document.getElementById('current-state-title').innerText = title;
                     runningPulse.style.animation = pulseAnim;
                     runningPulse.style.background = pulseColor;
-                    
+
                     if (isDone) {
                         btnPause.style.display = 'none';
                         btnResume.style.display = 'none';
@@ -542,15 +542,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
             }
-            
+
         } catch (e) {
             console.error("Error parsing SSE data", e);
         }
     };
 
-    // ── 8. Heartbeat to keep backend alive ──
+    // ── 8. Heartbeat to keep backend alive and update UI status ──
     setInterval(() => {
-        fetch('/api/heartbeat', { method: 'POST' }).catch(() => {});
+        fetch('/api/heartbeat', { method: 'POST' })
+            .then(res => {
+                const badge = document.getElementById('status-badge');
+                if (badge && res.ok) {
+                    badge.className = 'badge success';
+                    badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> System Online';
+                } else if (badge) {
+                    badge.className = 'badge danger';
+                    badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> System Offline';
+                }
+            })
+            .catch(() => {
+                const badge = document.getElementById('status-badge');
+                if (badge) {
+                    badge.className = 'badge danger';
+                    badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> System Offline';
+                }
+            });
     }, 2000);
 
     // Note: Error fetching polling was removed since errors are streamed via SSE.

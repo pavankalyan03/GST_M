@@ -1,0 +1,233 @@
+2026-06-29 10:57:57 [INFO] Log file: C:\Users\SASI KOTHA\Desktop\GST_M\data\logs\gst_download_20260629_105757.log
+2026-06-29 10:57:57 [INFO] ==================================================
+2026-06-29 10:57:57 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-29 10:57:57 [INFO] ==================================================
+2026-06-29 10:57:57 [INFO] Batch name: July_2026
+2026-06-29 10:57:57 [INFO] Reading Excel file: D:\Invoice_Book\processed_excel\July_2026.xlsx
+2026-06-29 10:57:59 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-29 10:58:04 [INFO] Loaded 9738 valid IRN records
+2026-06-29 10:58:04 [INFO] [Pipeline] Starting pipeline for batch 'July_2026'
+2026-06-29 10:58:04 [INFO] [Pipeline] Staging:   C:\Users\SASI KOTHA\Desktop\GST_M\data\staging\July_2026
+2026-06-29 10:58:04 [INFO] [Pipeline] Originals: D:\Invoice_Book\original\July_2026
+2026-06-29 10:58:04 [INFO] [Pipeline] Processed: D:\Invoice_Book\processed\July_2026
+2026-06-29 10:58:05 [INFO] [BackupWorker] Started
+2026-06-29 10:58:05 [INFO] [ModifierWorker-1] Started
+2026-06-29 10:58:05 [INFO] [ModifierWorker-2] Started
+2026-06-29 10:58:05 [INFO] [Pipeline] All workers started (2 modifier workers)
+2026-06-29 10:58:19 [INFO] Launching Chromium in headed mode...
+2026-06-29 10:58:23 [INFO] Browser ready
+2026-06-29 10:58:23 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-29 10:58:26 [INFO] Portal loaded
+2026-06-29 10:58:26 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-29 10:59:06 [INFO] User confirmed login -- automation starting
+2026-06-29 10:59:06 [INFO] Processing 9738 IRNs (starting from #1)
+2026-06-29 10:59:06 [INFO] [1/9738] ----------------------------------------------
+2026-06-29 10:59:06 [INFO]   [SKIPPED] Already processed: 2601370040023560_23-01-2026.pdf
+2026-06-29 10:59:08 [INFO] [2/9738] ----------------------------------------------
+2026-06-29 10:59:08 [INFO]   [SKIPPED] Already processed: FAO8332605076149_02-01-2026.pdf
+2026-06-29 10:59:09 [INFO] [3/9738] ----------------------------------------------
+2026-06-29 10:59:09 [INFO]   [SKIPPED] Already processed: FAO8332605076156_02-01-2026.pdf
+2026-06-29 10:59:10 [INFO] [4/9738] ----------------------------------------------
+2026-06-29 10:59:10 [INFO]   [SKIPPED] Already processed: FAO8332605076169_02-01-2026.pdf
+2026-06-29 10:59:12 [INFO] [5/9738] ----------------------------------------------
+2026-06-29 10:59:12 [INFO]   [SKIPPED] Already processed: FAO8332605076213_02-01-2026.pdf
+2026-06-29 10:59:14 [INFO] [6/9738] ----------------------------------------------
+2026-06-29 10:59:14 [INFO]   Invoice: FAO8332605076294  |  Date: 02-01-2026  |  IRN: 3a301d056a473c8cbbb6ba66...29573721ca09
+2026-06-29 10:59:15 [INFO]   Typed IRN: 3a301d056a473c8cbbb6ba66...29573721ca09
+2026-06-29 10:59:15 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:16 [INFO]   Search results visible
+2026-06-29 10:59:18 [INFO]   Download triggered via row icon
+2026-06-29 10:59:19 [INFO]   [OK] Saved -> FAO8332605076294_02-01-2026.pdf
+2026-06-29 10:59:19 [INFO] [StateManager] Registered: FAO8332605076294_02-01-2026.pdf
+2026-06-29 10:59:19 [INFO] [BackupWorker] Backed up: FAO8332605076294_02-01-2026.pdf
+2026-06-29 10:59:19 [INFO] [ModifierWorker-1] Modifying: FAO8332605076294_02-01-2026.pdf
+2026-06-29 10:59:20 [INFO] [ModifierWorker-1] Completed: FAO8332605076294_02-01-2026.pdf
+2026-06-29 10:59:21 [INFO] [7/9738] ----------------------------------------------
+2026-06-29 10:59:21 [INFO]   Invoice: FAO8332605076316  |  Date: 02-01-2026  |  IRN: 5ee8bb6e6a6d2ad7edcf25ed...a1841d07aa65
+2026-06-29 10:59:22 [INFO]   Typed IRN: 5ee8bb6e6a6d2ad7edcf25ed...a1841d07aa65
+2026-06-29 10:59:22 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:24 [INFO]   Search results visible
+2026-06-29 10:59:24 [INFO]   Download triggered via row icon
+2026-06-29 10:59:25 [INFO]   [OK] Saved -> FAO8332605076316_02-01-2026.pdf
+2026-06-29 10:59:25 [INFO] [StateManager] Registered: FAO8332605076316_02-01-2026.pdf
+2026-06-29 10:59:25 [INFO] [BackupWorker] Backed up: FAO8332605076316_02-01-2026.pdf
+2026-06-29 10:59:25 [INFO] [ModifierWorker-1] Modifying: FAO8332605076316_02-01-2026.pdf
+2026-06-29 10:59:26 [INFO] [ModifierWorker-1] Completed: FAO8332605076316_02-01-2026.pdf
+2026-06-29 10:59:27 [INFO] [8/9738] ----------------------------------------------
+2026-06-29 10:59:27 [INFO]   Invoice: FAO8332605076481  |  Date: 02-01-2026  |  IRN: 929e1da5937acb312cd07bbb...38083319dfc6
+2026-06-29 10:59:28 [INFO]   Typed IRN: 929e1da5937acb312cd07bbb...38083319dfc6
+2026-06-29 10:59:28 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:29 [INFO]   Search results visible
+2026-06-29 10:59:30 [INFO]   Download triggered via row icon
+2026-06-29 10:59:30 [INFO]   [OK] Saved -> FAO8332605076481_02-01-2026.pdf
+2026-06-29 10:59:30 [INFO] [StateManager] Registered: FAO8332605076481_02-01-2026.pdf
+2026-06-29 10:59:30 [INFO] [BackupWorker] Backed up: FAO8332605076481_02-01-2026.pdf
+2026-06-29 10:59:30 [INFO] [ModifierWorker-1] Modifying: FAO8332605076481_02-01-2026.pdf
+2026-06-29 10:59:31 [INFO] [ModifierWorker-1] Completed: FAO8332605076481_02-01-2026.pdf
+2026-06-29 10:59:32 [INFO] [9/9738] ----------------------------------------------
+2026-06-29 10:59:32 [INFO]   Invoice: FAO8332605076496  |  Date: 02-01-2026  |  IRN: a55736b45229388505dc6881...7d91b62fcc29
+2026-06-29 10:59:33 [INFO]   Typed IRN: a55736b45229388505dc6881...7d91b62fcc29
+2026-06-29 10:59:33 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:34 [INFO]   Search results visible
+2026-06-29 10:59:35 [INFO]   Download triggered via row icon
+2026-06-29 10:59:35 [INFO]   [OK] Saved -> FAO8332605076496_02-01-2026.pdf
+2026-06-29 10:59:35 [INFO] [StateManager] Registered: FAO8332605076496_02-01-2026.pdf
+2026-06-29 10:59:35 [INFO] [BackupWorker] Backed up: FAO8332605076496_02-01-2026.pdf
+2026-06-29 10:59:35 [INFO] [ModifierWorker-1] Modifying: FAO8332605076496_02-01-2026.pdf
+2026-06-29 10:59:36 [INFO] [ModifierWorker-1] Completed: FAO8332605076496_02-01-2026.pdf
+2026-06-29 10:59:37 [INFO] [10/9738] ----------------------------------------------
+2026-06-29 10:59:37 [INFO]   Invoice: FAO8332605076497  |  Date: 02-01-2026  |  IRN: d952871a78c03cf7aa28e5ed...0ac6ca283577
+2026-06-29 10:59:38 [INFO]   Typed IRN: d952871a78c03cf7aa28e5ed...0ac6ca283577
+2026-06-29 10:59:38 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:40 [INFO]   Search results visible
+2026-06-29 10:59:41 [INFO]   Download triggered via row icon
+2026-06-29 10:59:41 [INFO]   [OK] Saved -> FAO8332605076497_02-01-2026.pdf
+2026-06-29 10:59:41 [INFO] [StateManager] Registered: FAO8332605076497_02-01-2026.pdf
+2026-06-29 10:59:42 [INFO] [BackupWorker] Backed up: FAO8332605076497_02-01-2026.pdf
+2026-06-29 10:59:42 [INFO] [ModifierWorker-2] Modifying: FAO8332605076497_02-01-2026.pdf
+2026-06-29 10:59:43 [INFO] [11/9738] ----------------------------------------------
+2026-06-29 10:59:43 [INFO] [ModifierWorker-2] Completed: FAO8332605076497_02-01-2026.pdf
+2026-06-29 10:59:43 [INFO]   Invoice: FAO8332605076508  |  Date: 02-01-2026  |  IRN: 52c8db2a5401dcdec82de173...146df2734980
+2026-06-29 10:59:44 [INFO]   Typed IRN: 52c8db2a5401dcdec82de173...146df2734980
+2026-06-29 10:59:45 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:46 [INFO]   Search results visible
+2026-06-29 10:59:47 [INFO]   Download triggered via row icon
+2026-06-29 10:59:47 [INFO]   [OK] Saved -> FAO8332605076508_02-01-2026.pdf
+2026-06-29 10:59:47 [INFO] [StateManager] Registered: FAO8332605076508_02-01-2026.pdf
+2026-06-29 10:59:48 [INFO] [BackupWorker] Backed up: FAO8332605076508_02-01-2026.pdf
+2026-06-29 10:59:48 [INFO] [ModifierWorker-2] Modifying: FAO8332605076508_02-01-2026.pdf
+2026-06-29 10:59:49 [INFO] [ModifierWorker-2] Completed: FAO8332605076508_02-01-2026.pdf
+2026-06-29 10:59:49 [INFO] [12/9738] ----------------------------------------------
+2026-06-29 10:59:49 [INFO]   Invoice: FAO8332605076516  |  Date: 02-01-2026  |  IRN: 6e43a1472b314d15ca052c79...829697087388
+2026-06-29 10:59:51 [INFO]   Typed IRN: 6e43a1472b314d15ca052c79...829697087388
+2026-06-29 10:59:51 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:52 [INFO]   Search results visible
+2026-06-29 10:59:53 [INFO]   Download triggered via row icon
+2026-06-29 10:59:53 [INFO]   [OK] Saved -> FAO8332605076516_02-01-2026.pdf
+2026-06-29 10:59:53 [INFO] [StateManager] Registered: FAO8332605076516_02-01-2026.pdf
+2026-06-29 10:59:53 [INFO] [BackupWorker] Backed up: FAO8332605076516_02-01-2026.pdf
+2026-06-29 10:59:54 [INFO] [ModifierWorker-2] Modifying: FAO8332605076516_02-01-2026.pdf
+2026-06-29 10:59:55 [INFO] [ModifierWorker-2] Completed: FAO8332605076516_02-01-2026.pdf
+2026-06-29 10:59:55 [INFO] [13/9738] ----------------------------------------------
+2026-06-29 10:59:55 [INFO]   Invoice: FAO8332605076525  |  Date: 02-01-2026  |  IRN: 12cfec9c4bbe40f5ac5fea50...6eabb0ac17a6
+2026-06-29 10:59:56 [INFO]   Typed IRN: 12cfec9c4bbe40f5ac5fea50...6eabb0ac17a6
+2026-06-29 10:59:56 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 10:59:58 [INFO]   Search results visible
+2026-06-29 10:59:59 [INFO]   Download triggered via row icon
+2026-06-29 10:59:59 [INFO]   [OK] Saved -> FAO8332605076525_02-01-2026.pdf
+2026-06-29 10:59:59 [INFO] [StateManager] Registered: FAO8332605076525_02-01-2026.pdf
+2026-06-29 10:59:59 [INFO] [BackupWorker] Backed up: FAO8332605076525_02-01-2026.pdf
+2026-06-29 11:00:00 [INFO] [ModifierWorker-2] Modifying: FAO8332605076525_02-01-2026.pdf
+2026-06-29 11:00:01 [INFO] [ModifierWorker-2] Completed: FAO8332605076525_02-01-2026.pdf
+2026-06-29 11:00:02 [INFO] [14/9738] ----------------------------------------------
+2026-06-29 11:00:02 [INFO]   Invoice: FAO8332605076527  |  Date: 02-01-2026  |  IRN: 3f199af261f1c84507ccce25...74d100e38b48
+2026-06-29 11:00:03 [INFO]   Typed IRN: 3f199af261f1c84507ccce25...74d100e38b48
+2026-06-29 11:00:03 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:05 [INFO]   Search results visible
+2026-06-29 11:00:05 [INFO]   Download triggered via row icon
+2026-06-29 11:00:06 [INFO]   [OK] Saved -> FAO8332605076527_02-01-2026.pdf
+2026-06-29 11:00:06 [INFO] [StateManager] Registered: FAO8332605076527_02-01-2026.pdf
+2026-06-29 11:00:06 [INFO] [BackupWorker] Backed up: FAO8332605076527_02-01-2026.pdf
+2026-06-29 11:00:06 [INFO] [ModifierWorker-2] Modifying: FAO8332605076527_02-01-2026.pdf
+2026-06-29 11:00:07 [INFO] [ModifierWorker-2] Completed: FAO8332605076527_02-01-2026.pdf
+2026-06-29 11:00:08 [INFO] [15/9738] ----------------------------------------------
+2026-06-29 11:00:08 [INFO]   Invoice: FAO8332605076553  |  Date: 02-01-2026  |  IRN: 3b481ddd5ca8d7b94429535a...66abd969fcc2
+2026-06-29 11:00:09 [INFO]   Typed IRN: 3b481ddd5ca8d7b94429535a...66abd969fcc2
+2026-06-29 11:00:09 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:10 [INFO]   Search results visible
+2026-06-29 11:00:11 [INFO]   Download triggered via row icon
+2026-06-29 11:00:11 [INFO]   [OK] Saved -> FAO8332605076553_02-01-2026.pdf
+2026-06-29 11:00:11 [INFO] [StateManager] Registered: FAO8332605076553_02-01-2026.pdf
+2026-06-29 11:00:12 [INFO] [BackupWorker] Backed up: FAO8332605076553_02-01-2026.pdf
+2026-06-29 11:00:12 [INFO] [ModifierWorker-2] Modifying: FAO8332605076553_02-01-2026.pdf
+2026-06-29 11:00:13 [INFO] [16/9738] ----------------------------------------------
+2026-06-29 11:00:13 [INFO] [ModifierWorker-2] Completed: FAO8332605076553_02-01-2026.pdf
+2026-06-29 11:00:14 [INFO]   Invoice: FAO8332605076562  |  Date: 02-01-2026  |  IRN: 38712d87b30dd990ffcfd355...7ad1e0fa217b
+2026-06-29 11:00:15 [INFO]   Typed IRN: 38712d87b30dd990ffcfd355...7ad1e0fa217b
+2026-06-29 11:00:15 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:16 [INFO]   Search results visible
+2026-06-29 11:00:17 [INFO]   Download triggered via row icon
+2026-06-29 11:00:17 [INFO]   [OK] Saved -> FAO8332605076562_02-01-2026.pdf
+2026-06-29 11:00:17 [INFO] [StateManager] Registered: FAO8332605076562_02-01-2026.pdf
+2026-06-29 11:00:18 [INFO] [BackupWorker] Backed up: FAO8332605076562_02-01-2026.pdf
+2026-06-29 11:00:18 [INFO] [ModifierWorker-1] Modifying: FAO8332605076562_02-01-2026.pdf
+2026-06-29 11:00:19 [INFO] [ModifierWorker-1] Completed: FAO8332605076562_02-01-2026.pdf
+2026-06-29 11:00:19 [INFO] [17/9738] ----------------------------------------------
+2026-06-29 11:00:19 [INFO]   Invoice: FAO8332605076576  |  Date: 02-01-2026  |  IRN: acb49edc1f99fe5f0fec3740...7276c7600f46
+2026-06-29 11:00:20 [INFO]   Typed IRN: acb49edc1f99fe5f0fec3740...7276c7600f46
+2026-06-29 11:00:20 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:22 [INFO]   Search results visible
+2026-06-29 11:00:23 [INFO]   Download triggered via row icon
+2026-06-29 11:00:23 [INFO]   [OK] Saved -> FAO8332605076576_02-01-2026.pdf
+2026-06-29 11:00:23 [INFO] [StateManager] Registered: FAO8332605076576_02-01-2026.pdf
+2026-06-29 11:00:23 [INFO] [BackupWorker] Backed up: FAO8332605076576_02-01-2026.pdf
+2026-06-29 11:00:23 [INFO] [ModifierWorker-1] Modifying: FAO8332605076576_02-01-2026.pdf
+2026-06-29 11:00:24 [INFO] [ModifierWorker-1] Completed: FAO8332605076576_02-01-2026.pdf
+2026-06-29 11:00:25 [INFO] [18/9738] ----------------------------------------------
+2026-06-29 11:00:25 [INFO]   Invoice: FAO8332605076603  |  Date: 02-01-2026  |  IRN: 5f86acd7fc6dd2595c563236...79b384a6c4a1
+2026-06-29 11:00:26 [INFO]   Typed IRN: 5f86acd7fc6dd2595c563236...79b384a6c4a1
+2026-06-29 11:00:26 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:27 [INFO]   Search results visible
+2026-06-29 11:00:28 [INFO]   Download triggered via row icon
+2026-06-29 11:00:28 [INFO]   [OK] Saved -> FAO8332605076603_02-01-2026.pdf
+2026-06-29 11:00:28 [INFO] [StateManager] Registered: FAO8332605076603_02-01-2026.pdf
+2026-06-29 11:00:28 [INFO] [BackupWorker] Backed up: FAO8332605076603_02-01-2026.pdf
+2026-06-29 11:00:28 [INFO] [ModifierWorker-1] Modifying: FAO8332605076603_02-01-2026.pdf
+2026-06-29 11:00:29 [INFO] [ModifierWorker-1] Completed: FAO8332605076603_02-01-2026.pdf
+2026-06-29 11:00:30 [INFO] [19/9738] ----------------------------------------------
+2026-06-29 11:00:30 [INFO]   Invoice: FAO8332605076646  |  Date: 02-01-2026  |  IRN: ecec0823c4293e2290bb88f9...0eafad2634be
+2026-06-29 11:00:32 [INFO]   Typed IRN: ecec0823c4293e2290bb88f9...0eafad2634be
+2026-06-29 11:00:32 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:33 [INFO]   Search results visible
+2026-06-29 11:00:33 [INFO]   Download triggered via row icon
+2026-06-29 11:00:34 [INFO]   [OK] Saved -> FAO8332605076646_02-01-2026.pdf
+2026-06-29 11:00:34 [INFO] [StateManager] Registered: FAO8332605076646_02-01-2026.pdf
+2026-06-29 11:00:34 [INFO] [BackupWorker] Backed up: FAO8332605076646_02-01-2026.pdf
+2026-06-29 11:00:34 [INFO] [ModifierWorker-2] Modifying: FAO8332605076646_02-01-2026.pdf
+2026-06-29 11:00:35 [INFO] [ModifierWorker-2] Completed: FAO8332605076646_02-01-2026.pdf
+2026-06-29 11:00:36 [INFO] [20/9738] ----------------------------------------------
+2026-06-29 11:00:36 [INFO]   Invoice: FAO8332605076674  |  Date: 02-01-2026  |  IRN: c18364274c05672085689c7a...7405f5c8fbab
+2026-06-29 11:00:37 [INFO]   Typed IRN: c18364274c05672085689c7a...7405f5c8fbab
+2026-06-29 11:00:37 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:39 [INFO]   Search results visible
+2026-06-29 11:00:39 [INFO]   Download triggered via row icon
+2026-06-29 11:00:40 [INFO]   [OK] Saved -> FAO8332605076674_02-01-2026.pdf
+2026-06-29 11:00:40 [INFO] [StateManager] Registered: FAO8332605076674_02-01-2026.pdf
+2026-06-29 11:00:40 [INFO] [BackupWorker] Backed up: FAO8332605076674_02-01-2026.pdf
+2026-06-29 11:00:40 [INFO] [ModifierWorker-1] Modifying: FAO8332605076674_02-01-2026.pdf
+2026-06-29 11:00:41 [INFO] [ModifierWorker-1] Completed: FAO8332605076674_02-01-2026.pdf
+2026-06-29 11:00:41 [INFO] [21/9738] ----------------------------------------------
+2026-06-29 11:00:41 [INFO]   Invoice: FAO8332605076733  |  Date: 02-01-2026  |  IRN: ba1acb64995d30a0c2a58f49...6070078d42a8
+2026-06-29 11:00:42 [INFO]   Typed IRN: ba1acb64995d30a0c2a58f49...6070078d42a8
+2026-06-29 11:00:42 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:44 [INFO]   Search results visible
+2026-06-29 11:00:44 [INFO]   Download triggered via row icon
+2026-06-29 11:00:45 [INFO]   [OK] Saved -> FAO8332605076733_02-01-2026.pdf
+2026-06-29 11:00:45 [INFO] [StateManager] Registered: FAO8332605076733_02-01-2026.pdf
+2026-06-29 11:00:45 [INFO] [BackupWorker] Backed up: FAO8332605076733_02-01-2026.pdf
+2026-06-29 11:00:45 [INFO] [ModifierWorker-1] Modifying: FAO8332605076733_02-01-2026.pdf
+2026-06-29 11:00:46 [INFO] [ModifierWorker-1] Completed: FAO8332605076733_02-01-2026.pdf
+2026-06-29 11:00:47 [INFO] [22/9738] ----------------------------------------------
+2026-06-29 11:00:47 [INFO]   Invoice: FAO8332605076747  |  Date: 02-01-2026  |  IRN: ae10471df462181357ada8ec...631e271498f9
+2026-06-29 11:00:48 [INFO]   Typed IRN: ae10471df462181357ada8ec...631e271498f9
+2026-06-29 11:00:48 [INFO]   Clicked Search -- waiting for results...
+2026-06-29 11:00:50 [INFO]   Search results visible
+2026-06-29 11:00:50 [INFO]   Download triggered via row icon
+2026-06-29 11:00:51 [INFO]   [OK] Saved -> FAO8332605076747_02-01-2026.pdf
+2026-06-29 11:00:51 [INFO] [StateManager] Registered: FAO8332605076747_02-01-2026.pdf
+2026-06-29 11:00:51 [INFO] [BackupWorker] Backed up: FAO8332605076747_02-01-2026.pdf
+2026-06-29 11:00:51 [INFO] [ModifierWorker-1] Modifying: FAO8332605076747_02-01-2026.pdf
+2026-06-29 11:00:52 [INFO] [ModifierWorker-1] Completed: FAO8332605076747_02-01-2026.pdf
+2026-06-29 11:00:53 [INFO] [SYSTEM] Automation stopped by user.
+2026-06-29 11:00:53 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-29 11:00:53 [INFO] Final result: 22/22 succeeded
+2026-06-29 11:00:55 [INFO] Final result: 22/22 succeeded
+2026-06-29 11:00:55 [INFO] Waiting for pipeline workers to complete...
+2026-06-29 11:00:55 [INFO] [Pipeline] Initiating shutdown...
+2026-06-29 11:00:55 [INFO] [ModifierWorker-2] Stopped
+2026-06-29 11:00:55 [INFO] [BackupWorker] Stopped
+2026-06-29 11:00:55 [INFO] [ModifierWorker-1] Stopped
+2026-06-29 11:00:55 [INFO] [Pipeline] Final state: {<FileState.COMPLETED: 'COMPLETED'>: 17, 'total': 17}
+2026-06-29 11:00:55 [INFO] [Pipeline] Shutdown complete
+2026-06-29 11:00:55 [INFO] Pipeline stats: {<FileState.COMPLETED: 'COMPLETED'>: 17, 'total': 17}

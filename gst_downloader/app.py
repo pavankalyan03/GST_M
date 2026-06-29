@@ -612,4 +612,4 @@ if __name__ == "__main__":
 
     threading.Timer(1.5, open_browser).start()
     threading.Thread(target=heartbeat_monitor, daemon=True).start()
-    uvicorn.run("app:app", host="0.0.0.0", port=port)
+    uvicorn.run(app, host="0.0.0.0", port=port)

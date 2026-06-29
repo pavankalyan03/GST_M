@@ -15,7 +15,9 @@ def preprocess_excel(input_path: str, output_path: str, logger: logging.Logger =
             logger.error(msg)
         raise FileNotFoundError(msg)
         
-    wb_in = openpyxl.load_workbook(input_path, read_only=True, data_only=True)
+    # We cannot use read_only=True because GST offline tools often generate 
+    # broken <dimension> tags in the XML, causing openpyxl to truncate the file at row 30.
+    wb_in = openpyxl.load_workbook(input_path, data_only=True)
     if "B2B" not in wb_in.sheetnames:
         raise ValueError("The input Excel does not contain a 'B2B' sheet.")
         
@@ -62,12 +64,15 @@ def preprocess_excel(input_path: str, output_path: str, logger: logging.Logger =
         
         # Safely parse numeric values
         try:
-            rate = float(rate_val) if rate_val not in (None, "-", "") else 0.0
-            taxable = float(taxable_val) if taxable_val not in (None, "-", "") else 0.0
-        except ValueError:
+            r_v = str(rate_val).replace(",", "").replace("%", "").strip() if rate_val is not None else "0"
+            t_v = str(taxable_val).replace(",", "").replace("%", "").strip() if taxable_val is not None else "0"
+            rate = float(r_v) if r_v not in ("-", "") else 0.0
+            taxable = float(t_v) if t_v not in ("-", "") else 0.0
+        except ValueError as e:
+            if logger: logger.warning(f"Skipping row due to invalid number format: rate={rate_val}, taxable={taxable_val}")
             continue
             
-        if rate >= 18.0 and taxable >= 500.0:
+        if rate == 18.0 and taxable >= 500.0:
             ws_out.append(row)
             valid_count += 1
             

@@ -1,0 +1,33 @@
+2026-06-28 21:30:47 [INFO] Log file: C:\Users\SASI KOTHA\Desktop\GST_M\data\logs\gst_download_20260628_213047.log
+2026-06-28 21:30:47 [INFO] ==================================================
+2026-06-28 21:30:47 [INFO]   GST e-Invoice Bulk Downloader
+2026-06-28 21:30:47 [INFO] ==================================================
+2026-06-28 21:30:47 [INFO] Batch name: January_2026
+2026-06-28 21:30:47 [INFO] Reading Excel file: D:\Invoice_Book\processed_excel\January_2026.xlsx
+2026-06-28 21:30:49 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-06-28 21:30:57 [INFO] Loaded 9738 valid IRN records
+2026-06-28 21:30:57 [INFO] [Pipeline] Starting pipeline for batch 'January_2026'
+2026-06-28 21:30:57 [INFO] [Pipeline] Staging:   C:\Users\SASI KOTHA\Desktop\GST_M\data\staging\January_2026
+2026-06-28 21:30:57 [INFO] [Pipeline] Originals: D:\Invoice_Book\original\January_2026
+2026-06-28 21:30:57 [INFO] [Pipeline] Processed: D:\Invoice_Book\modified_invoices\January_2026
+2026-06-28 21:30:57 [INFO] [BackupWorker] Started
+2026-06-28 21:30:57 [INFO] [ModifierWorker-1] Started
+2026-06-28 21:30:57 [INFO] [ModifierWorker-2] Started
+2026-06-28 21:30:57 [INFO] [Pipeline] All workers started (2 modifier workers)
+2026-06-28 21:31:02 [INFO] Launching Chromium in headed mode...
+2026-06-28 21:31:05 [INFO] Browser ready
+2026-06-28 21:31:05 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-06-28 21:31:10 [INFO] Portal loaded
+2026-06-28 21:31:10 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-06-28 21:36:10 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-06-28 21:36:10 [INFO] Final result: 0/0 succeeded
+2026-06-28 21:36:11 [INFO] Final result: 0/0 succeeded
+2026-06-28 21:36:11 [INFO] Waiting for pipeline workers to complete...
+2026-06-28 21:36:11 [INFO] [Pipeline] Initiating shutdown...
+2026-06-28 21:36:11 [INFO] [ModifierWorker-2] Stopped
+2026-06-28 21:36:11 [INFO] [BackupWorker] Stopped
+2026-06-28 21:36:11 [INFO] [ModifierWorker-1] Stopped
+2026-06-28 21:36:11 [INFO] [Pipeline] Final state: {'total': 0}
+2026-06-28 21:36:11 [INFO] [Pipeline] Shutdown complete
+2026-06-28 21:36:11 [INFO] Pipeline stats: {'total': 0}

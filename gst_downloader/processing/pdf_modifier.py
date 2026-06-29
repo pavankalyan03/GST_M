@@ -16,6 +16,7 @@ import fitz  # PyMuPDF
 import yaml
 import csv
 import traceback
+import random
 from pathlib import Path
 
 # ════════════════════════════════════════════════════════════════
@@ -331,6 +332,9 @@ processed_folder: ""
 
 # Folder where the processed/cleaned Excel files will be saved
 processed_excel_folder: ""
+
+# Add subtle invisible noise to the top-right corner (helps mask automated edits)
+add_subtle_noise: false
 """
 
 
@@ -421,6 +425,57 @@ def _redact_rect(page, rect, h_padding=2, v_padding=1):
     annot = page.add_redact_annot(padded)
     annot.set_colors(fill=(1, 1, 1))  # white fill — just the line area
     annot.update()
+
+
+# ════════════════════════════════════════════════════════════════
+#  NOISE & WATERMARKING
+# ════════════════════════════════════════════════════════════════
+def _add_subtle_noise_to_top_right(page):
+    """Add small visible black noise squares (pixels) to a specific area without bloating file size."""
+    page_rect = page.rect
+
+    # Square size (80 x 80 points)
+    square_size = 80
+
+    # Margin from the page edges
+    right_margin = 55
+    top_margin = 55
+
+    # Define square at top-right
+    noise_area = fitz.Rect(
+        page_rect.width - right_margin - square_size,
+        top_margin,
+        page_rect.width - right_margin,
+        top_margin + square_size
+    )
+
+    width = int(noise_area.width)
+    height = int(noise_area.height)
+
+    # Batch all black pixels into a single Shape object
+    shape_black = page.new_shape()
+
+    # Generate sparse visible black square pixels
+    for _ in range(400):
+        x = random.randint(0, max(1, width - 1))
+        y = random.randint(0, max(1, height - 1))
+
+        px = noise_area.x0 + x
+        py = noise_area.y0 + y
+
+        pixel_rect = fitz.Rect(px, py, px + 1.5, py + 1.5)
+        shape_black.draw_rect(pixel_rect)
+
+    # Commit all black pixels as a single PDF object
+    shape_black.finish(
+        color=(0.0, 0.0, 0.0),
+        fill=(0.0, 0.0, 0.0),
+        width=0.2,
+        fill_opacity=1.0,
+        stroke_opacity=1.0,
+    )
+    shape_black.commit()
+
 
 
 # ════════════════════════════════════════════════════════════════
@@ -629,6 +684,16 @@ def modify_single_pdf(input_path: str, output_path: str, config: dict) -> dict:
                     color=FONT_COLOR,
                 )
             result["changes"].append(job["change_msg"])
+
+        # =========================================================
+        # PHASE 5: Add subtle noise (if configured)
+        # =========================================================
+        if config.get("add_subtle_noise", False):
+            try:
+                _add_subtle_noise_to_top_right(page)
+                result["changes"].append("Subtle noise added to top right corner")
+            except Exception as e:
+                result["errors"].append(f"Noise addition failed: {str(e)}")
 
         # Save modified PDF
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)

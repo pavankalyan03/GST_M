@@ -14,10 +14,10 @@
 gstin: 37DYVPK9951A1ZT
 
 # HEADER — The large business name at the top of page 1
-header_name: PAVAN ENTERPRISES
+header_name: PK ENTERPRISES
 
 # RECIPIENT — Your details in the "Party Details" section
-recipient_name: PAVAN ENTERPRISES
+recipient_name: PK ENTERPRISES
 recipient_address: |-
   Ground Floor, 1-16-261, 2nd Lane Ali Nagar, Old Guntur, 
   Guntur, Andhra Pradesh,
@@ -25,7 +25,7 @@ recipient_address: |-
   State: Andhra Pradesh
 
 # SHIP TO — Your shipping address (right column) under "Ship To"
-ship_to_name: PAVAN ENTERPRISES
+ship_to_name: PK ENTERPRISES
 ship_to_address: |-
   HIG 111, BALAJI NAGR NEAR KUKATPALLI METRO STATION
   KPHB
@@ -35,5 +35,7 @@ ship_to_address: |-
 
 # SETTINGS
 original_folder: D:\Invoice_Book\original
-processed_folder: D:\Invoice_Book\modified_invoices
+processed_folder: D:\Invoice_Book\processed
 processed_excel_folder: D:\Invoice_Book\processed_excel
+
+add_subtle_noise: true
