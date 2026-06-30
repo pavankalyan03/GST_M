@@ -11,10 +11,24 @@ FastAPI server providing:
 
 import os
 import sys
+
+# ── Intercept Subprocess Execution for PyInstaller Bundle ──
+# When frozen, sys.executable is GST_Automation.exe. The subprocess call 
+# passes ["-u", ".../main.py", "--cleaned-excel", ...]. We intercept this 
+# to run the main pipeline instead of starting a second web server.
+if getattr(sys, "frozen", False) and len(sys.argv) >= 3 and "main.py" in sys.argv[2]:
+    # Adjust sys.argv for main.py's argparse
+    script_name = sys.argv[0]
+    sys.argv = [script_name] + sys.argv[3:]
+    from gst_downloader import main as pipeline_main
+    sys.exit(pipeline_main.main())
+elif not getattr(sys, "frozen", False) and len(sys.argv) >= 2 and "main.py" in sys.argv[1]:
+    pass # handled by python.exe natively
+
 import subprocess
 import webbrowser
 from pathlib import Path
-from fastapi import FastAPI, UploadFile, File, Form
+from fastapi import FastAPI, UploadFile, File, Form, Request
 from fastapi.responses import HTMLResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,6 +44,8 @@ import psutil
 import time
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
+import asyncio
+import asyncio
 
 from gst_downloader import config
 from gst_downloader.processing.excel_preprocessor import preprocess_excel
@@ -52,8 +68,8 @@ current_batch_name = ""
 
 active_subprocess = None
 
-last_heartbeat = 0
-heartbeat_active = False
+active_sse_connections = 0
+sse_disconnect_time = 0
 
 global_pipeline_state = {
     "status": "IDLE",
@@ -92,7 +108,10 @@ def reset_global_state():
 
 # Ensure directories exist
 Path(config.UPLOADS_DIR).mkdir(exist_ok=True, parents=True)
-static_dir = Path(__file__).parent / "web" / "static"
+if hasattr(config, 'BUNDLE_DIR'):
+    static_dir = config.BUNDLE_DIR / "gst_downloader" / "web" / "static"
+else:
+    static_dir = Path(__file__).resolve().parent / "web" / "static"
 static_dir.mkdir(exist_ok=True, parents=True)
 
 # Mount static files
@@ -104,21 +123,16 @@ async def get_index():
     with open(static_dir / "index.html", "r", encoding="utf-8") as f:
         return f.read()
 
-@app.post("/api/heartbeat")
-async def heartbeat():
-    """Receives ping from frontend to keep server alive."""
-    global last_heartbeat, heartbeat_active
-    last_heartbeat = time.time()
-    heartbeat_active = True
-    return {"status": "ok"}
 
 def heartbeat_monitor():
-    """Background thread that kills the server if the browser tab is closed."""
-    global last_heartbeat, heartbeat_active, active_subprocess
+    """Background thread that kills the server if all UI tabs are closed (SSE disconnects)."""
+    global active_sse_connections, sse_disconnect_time, active_subprocess
     while True:
         time.sleep(1)
-        if heartbeat_active and (time.time() - last_heartbeat > 5):
-            print("\n[SYSTEM] Browser tab closed. Shutting down server...")
+        
+        # If there are no active UI connections and it's been >5 seconds since the last one dropped
+        if active_sse_connections == 0 and sse_disconnect_time > 0 and (time.time() - sse_disconnect_time > 5):
+            print("\n[SYSTEM] All browser tabs closed. Shutting down server...")
             if active_subprocess is not None:
                 try:
                     parent = psutil.Process(active_subprocess.pid)
@@ -134,7 +148,7 @@ def heartbeat_monitor():
 #  PIPELINE EXECUTION
 # ════════════════════════════════════════════════════════════════
 
-def run_pipeline_thread(filepath: str, start_from: str = "1", batch_name: str = "", retry_only: bool = False):
+def run_pipeline_thread(filepath: str, start_from: str = "1", batch_name: str = "", retry_only: bool = False, modify_invoices: bool = True):
     """Run the main.py pipeline as a subprocess, streaming logs to the queue."""
     global active_subprocess
     
@@ -147,6 +161,8 @@ def run_pipeline_thread(filepath: str, start_from: str = "1", batch_name: str = 
         cmd.extend(["--batch-name", batch_name])
     if retry_only:
         cmd.append("--retry-failed")
+    if not modify_invoices:
+        cmd.append("--skip-modification")
 
     process = subprocess.Popen(
         cmd,
@@ -253,8 +269,9 @@ async def upload_and_preprocess(file: UploadFile = File(...), batch_name: str = 
         extract_dir = Path(config.UPLOADS_DIR) / f"extracted_{Path(file.filename).stem}"
         extract_dir.mkdir(parents=True, exist_ok=True)
         try:
+            from fastapi.concurrency import run_in_threadpool
             with zipfile.ZipFile(temp_save_path, 'r') as zip_ref:
-                zip_ref.extractall(extract_dir)
+                await run_in_threadpool(zip_ref.extractall, extract_dir)
             
             # Find all .xlsx files (excluding hidden files/folders like __MACOSX)
             xlsx_files = [f for f in extract_dir.rglob("*.xlsx") if not f.name.startswith('.')]
@@ -299,7 +316,8 @@ async def upload_and_preprocess(file: UploadFile = File(...), batch_name: str = 
 
     # Run preprocessing
     try:
-        valid_count = preprocess_excel(str(excel_file_path), str(cleaned_excel_path))
+        from fastapi.concurrency import run_in_threadpool
+        valid_count = await run_in_threadpool(preprocess_excel, str(excel_file_path), str(cleaned_excel_path))
     except Exception as e:
         return {"status": "error", "message": f"Preprocessing failed: {e}"}
 
@@ -332,6 +350,7 @@ class StartAutomationRequest(BaseModel):
     batch_name: str
     start_from: int = 1
     retry_only: bool = False
+    modify_invoices: bool = True
 
 @app.post("/start_automation")
 async def start_automation(req: StartAutomationRequest):
@@ -346,7 +365,7 @@ async def start_automation(req: StartAutomationRequest):
     # Start process in background
     thread = threading.Thread(
         target=run_pipeline_thread,
-        args=(req.cleaned_excel_path, str(req.start_from), req.batch_name, req.retry_only),
+        args=(req.cleaned_excel_path, str(req.start_from), req.batch_name, req.retry_only, req.modify_invoices),
         daemon=True,
     )
     thread.start()
@@ -550,54 +569,67 @@ async def get_progress():
     return StreamingResponse(event_generator(), media_type="text/event-stream")
 
 
-def dashboard_stream_generator():
+async def dashboard_stream_generator(request: Request):
     """Generator for unified dashboard SSE (logs, health, state)."""
-    while True:
-        # Collect any new logs
-        new_logs = []
-        try:
-            while not log_queue.empty():
-                line = log_queue.get_nowait().replace('\n', '')
-                if line.strip():
-                    new_logs.append(line)
-        except queue.Empty:
-            pass
-
-        # Read pipeline state
-        pipeline_state = global_pipeline_state
+    global active_sse_connections, sse_disconnect_time
+    
+    active_sse_connections += 1
+    sse_disconnect_time = 0
+    
+    try:
+        while True:
+            if await request.is_disconnected():
+                break
+                
+            # Collect any new logs
+            new_logs = []
+            try:
+                while not log_queue.empty():
+                    line = log_queue.get_nowait().replace('\n', '')
+                    if line.strip():
+                        new_logs.append(line)
+            except queue.Empty:
+                pass
+    
+            # Read pipeline state
+            pipeline_state = global_pipeline_state
+                
+            # Read IPC state
+            ipc_state = {"status": "IDLE"}
+            try:
+                if (config.DATA_DIR / "ipc_state.json").exists():
+                    with open(config.DATA_DIR / "ipc_state.json", "r") as f:
+                        ipc_state = json.load(f)
+            except Exception:
+                pass
+    
+            # System health
+            health = {
+                "cpu_percent": psutil.cpu_percent(),
+                "mem_percent": psutil.virtual_memory().percent
+            }
+    
+            payload = {
+                "logs": new_logs,
+                "pipeline": pipeline_state,
+                "ipc_status": ipc_state.get("status", "IDLE"),
+                "health": health
+            }
+    
+            yield f"data: {json.dumps(payload)}\n\n"
             
-        # Read IPC state
-        ipc_state = {"status": "IDLE"}
-        try:
-            if (config.DATA_DIR / "ipc_state.json").exists():
-                with open(config.DATA_DIR / "ipc_state.json", "r") as f:
-                    ipc_state = json.load(f)
-        except Exception:
-            pass
-
-        # System health
-        health = {
-            "cpu_percent": psutil.cpu_percent(),
-            "mem_percent": psutil.virtual_memory().percent
-        }
-
-        payload = {
-            "logs": new_logs,
-            "pipeline": pipeline_state,
-            "ipc_status": ipc_state.get("status", "IDLE"),
-            "health": health
-        }
-
-        yield f"data: {json.dumps(payload)}\n\n"
-        
-        # Sleep ~1 sec before next tick
-        threading.Event().wait(1.0)
+            # Sleep ~1 sec before next tick
+            await asyncio.sleep(1.0)
+    finally:
+        active_sse_connections -= 1
+        if active_sse_connections == 0:
+            sse_disconnect_time = time.time()
 
 
 @app.get("/api/dashboard_stream")
-async def get_dashboard_stream():
+async def get_dashboard_stream(request: Request):
     """Unified SSE endpoint for dashboard updates."""
-    return StreamingResponse(dashboard_stream_generator(), media_type="text/event-stream")
+    return StreamingResponse(dashboard_stream_generator(request), media_type="text/event-stream")
 
 
 # ════════════════════════════════════════════════════════════════

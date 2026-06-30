@@ -3,9 +3,25 @@
 # ════════════════════════════════════════════════════════════════
 
 import os
+import sys
 from pathlib import Path
+import shutil
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    BUNDLE_DIR = Path(sys._MEIPASS)
+    BASE_DIR = Path(sys.executable).parent
+    
+    # Ensure user-editable config exists next to the executable
+    config_dir = BASE_DIR / "config"
+    config_dir.mkdir(exist_ok=True)
+    bundled_config = BUNDLE_DIR / "config" / "pdf_config.yaml"
+    user_config = config_dir / "pdf_config.yaml"
+    if bundled_config.exists() and not user_config.exists():
+        shutil.copy(bundled_config, user_config)
+else:
+    BUNDLE_DIR = Path(__file__).resolve().parent.parent
+    BASE_DIR = BUNDLE_DIR
+
 DATA_DIR = BASE_DIR / "data"
 
 # ── Folder Paths ──────────────────────────────────────────────
@@ -27,10 +43,10 @@ HEADER_ROW = 1           # Row that contains the column headers
 PORTAL_URL = "https://einvoice.gst.gov.in/jsonDownload"
 
 # ── Timing — human-like behaviour ────────────────────────────
-MIN_DELAY_SEC = 1        # Shortest pause between consecutive IRN searches
-MAX_DELAY_SEC = 2        # Longest  pause between consecutive IRN searches
+MIN_DELAY_SEC = 0.0      # Shortest pause between consecutive IRN searches
+MAX_DELAY_SEC = 0.1      # Longest  pause between consecutive IRN searches
 BATCH_SIZE = 50          # Take a longer break after this many downloads
-BATCH_PAUSE_SEC = 20     # Duration of the longer break (seconds)
+BATCH_PAUSE_SEC = 2      # Duration of the longer break (seconds)
 SEARCH_TIMEOUT_MS = 30_000    # Max wait for search results to appear
 DOWNLOAD_TIMEOUT_MS = 60_000  # Max wait for a file download to complete
 ELEMENT_TIMEOUT_MS = 15_000   # Max wait for a UI element to appear

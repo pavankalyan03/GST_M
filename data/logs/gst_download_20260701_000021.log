@@ -1,0 +1,29 @@
+2026-07-01 00:00:21 [INFO] Log file: C:\Users\SASI KOTHA\Desktop\GST_M\data\logs\gst_download_20260701_000021.log
+2026-07-01 00:00:21 [INFO] ==================================================
+2026-07-01 00:00:21 [INFO]   GST e-Invoice Bulk Downloader
+2026-07-01 00:00:21 [INFO] ==================================================
+2026-07-01 00:00:21 [INFO] Batch name: August_2026
+2026-07-01 00:00:21 [INFO] Reading Excel file: D:\Invoice_Book\processed_excel\August_2026.xlsx
+2026-07-01 00:00:22 [INFO] Sheet: 'B2B_Filtered' (Parsing rows...)
+2026-07-01 00:00:25 [INFO] Loaded 9738 valid IRN records
+2026-07-01 00:00:25 [INFO] [Pipeline] Starting pipeline for batch 'August_2026'
+2026-07-01 00:00:25 [INFO] [Pipeline] Staging:   C:\Users\SASI KOTHA\Desktop\GST_M\data\staging\August_2026
+2026-07-01 00:00:25 [INFO] [Pipeline] Originals: D:\Invoice_Book\original\August_2026
+2026-07-01 00:00:25 [INFO] [Pipeline] Processed: D:\Invoice_Book\processed\August_2026
+2026-07-01 00:00:25 [INFO] [BackupWorker] Started
+2026-07-01 00:00:25 [INFO] [Pipeline] All workers started (0 modifier workers)
+2026-07-01 00:00:26 [INFO] Launching Chromium in headed mode...
+2026-07-01 00:00:28 [INFO] Browser ready
+2026-07-01 00:00:28 [INFO] Navigating to https://einvoice.gst.gov.in/jsonDownload...
+2026-07-01 00:00:31 [INFO] Portal loaded
+2026-07-01 00:00:31 [INFO] [UI_PROMPT] Action Required: Please log in manually on the browser, then click Continue.
+2026-07-01 00:02:54 [INFO] 
+Interrupted by user (Ctrl+C)
+2026-07-01 00:02:54 [INFO] Final result: 0/0 succeeded
+2026-07-01 00:02:55 [INFO] Final result: 0/0 succeeded
+2026-07-01 00:02:55 [INFO] Waiting for pipeline workers to complete...
+2026-07-01 00:02:55 [INFO] [Pipeline] Initiating shutdown...
+2026-07-01 00:02:55 [INFO] [BackupWorker] Stopped
+2026-07-01 00:02:55 [INFO] [Pipeline] Final state: {'total': 0}
+2026-07-01 00:02:55 [INFO] [Pipeline] Shutdown complete
+2026-07-01 00:02:55 [INFO] Pipeline stats: {'total': 0}

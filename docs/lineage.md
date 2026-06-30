@@ -78,7 +78,7 @@ flowchart TD
 ### 4. PDF Modification (PyMuPDF)
 - Absolute coordinate overlay drawing
 - Dynamically reads configuration from `pdf_config.yaml`
-- Injects new headers, recipient data, shipping details, and text masking
+- Injects new headers, recipient data, shipping details, and text masking and also QR masking.
 - Prevents destruction of original documents by writing outputs to `data/modified_invoices/`
 
 ### 5. Parallel Processing Architecture
@@ -105,6 +105,19 @@ flowchart TD
 - Automatic failure tracking: Fails are appended to `data/processed/<batch>/failed_irns.txt`
 - "Retry Failed IRNs" button directly on UI to re-run only failed records
 - Robust cleanup routines that destroy leftover staging files upon cancellation or process faults.
+
+## 9. Fast Resume & Processing Control
+- **Fast Resume**: Implemented pre-scan logic in the downloader to read the output directory at startup, building a set of already-processed files for instant skipping (milliseconds per file). 
+- **Invoice Modification Toggle**: Added a UI toggle allowing users to entirely skip the PDF modification step if they only want original downloads.
+
+## 10. Throughput & Stability (v2.3)
+- **Turbo Mode**:
+  - Uncapped Playwright `slow_mo` speed.
+  - Replaced manual typing sleeps with instantaneous `.fill()` automation.
+  - Scaled modifier workers dynamically based on `os.cpu_count()` to maximize background throughput.
+- **UI & System Stability**:
+  - Capped terminal UI to a 1000-line rolling window, fixing massive DOM memory leak during fast execution.
+  - Replaced unreliable Javascript timer polling with rock-solid Server-Sent Events (SSE) TCP socket tracking. Backend cleanly shuts down 5 seconds after the TCP connection drops, bypassing browser "Energy Saver" throttling completely.
 
 ## Directory Structure
 - `assets/` - Static assets required for processing (e.g. `helvmn.ttf`).

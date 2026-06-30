@@ -184,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         areaCheckpoint.style.display = 'none';
         areaUpload.style.display = 'flex';
         selectedFile = null;
+        if (fileInput) fileInput.value = '';
         dropzone.querySelector('h3').innerText = 'Drag & Drop Excel or ZIP here';
     });
 
@@ -197,7 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({
                 cleaned_excel_path: currentCleanedExcelPath,
                 batch_name: currentBatchName,
-                start_from: 1
+                start_from: 1,
+                modify_invoices: document.getElementById('toggle-modify').checked
             })
         });
     });
@@ -215,7 +217,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     cleaned_excel_path: currentCleanedExcelPath,
                     batch_name: currentBatchName,
                     start_from: 1,
-                    retry_only: true
+                    retry_only: true,
+                    modify_invoices: document.getElementById('toggle-modify').checked
                 })
             });
         });
@@ -240,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
             areaUpload.style.display = 'flex';
 
             selectedFile = null;
+            if (fileInput) fileInput.value = '';
             document.getElementById('dropzone').querySelector('h3').innerText = 'Drag & Drop Excel or ZIP here';
             document.getElementById('batch-name').value = '';
 
@@ -267,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
             areaUpload.style.display = 'flex';
 
             selectedFile = null;
+            if (fileInput) fileInput.value = '';
             document.getElementById('dropzone').querySelector('h3').innerText = 'Drag & Drop Excel or ZIP here';
             document.getElementById('batch-name').value = '';
 
@@ -307,7 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cleaned_excel_path: currentCleanedExcelPath,
                         batch_name: currentBatchName,
                         start_from: 1,
-                        retry_only: true
+                        retry_only: true,
+                        modify_invoices: document.getElementById('toggle-modify').checked
                     })
                 });
             } else {
@@ -330,6 +336,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // ── 6. SSE Dashboard Stream ──
     const terminalOutput = document.getElementById('terminal-output');
     const evtSource = new EventSource("/api/dashboard_stream");
+
+    evtSource.onopen = function () {
+        const badge = document.getElementById('status-badge');
+        if (badge) {
+            badge.className = 'badge success';
+            badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> System Online';
+        }
+    };
+
+    evtSource.onerror = function () {
+        const badge = document.getElementById('status-badge');
+        if (badge) {
+            badge.className = 'badge danger';
+            badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> System Offline';
+        }
+    };
 
     let startTime = null;
     let previousProcessed = 0;
@@ -364,6 +386,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         metricTotal.innerText = total;
                     }
                 });
+                
+                // Cap terminal logs to prevent memory leak and browser crash
+                while (terminalOutput.childElementCount > 1000) {
+                    terminalOutput.removeChild(terminalOutput.firstChild);
+                }
+                
                 terminalOutput.scrollTop = terminalOutput.scrollHeight;
             }
 
@@ -478,14 +506,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Errors
                 if (p.errors) {
-                    tabErrorCount.innerText = p.errors.length;
-                    errorTableBody.innerHTML = '';
-                    p.errors.forEach((e, idx) => {
-                        const tr = document.createElement('tr');
-                        const identifier = e.irn || e.file || "-";
-                        tr.innerHTML = `<td>${idx + 1}</td><td>${e.type}</td><td>${identifier.substring(0, 15)}...</td><td class="text-danger">${e.message}</td>`;
-                        errorTableBody.appendChild(tr);
-                    });
+                    if (tabErrorCount.innerText != p.errors.length) {
+                        tabErrorCount.innerText = p.errors.length;
+                        errorTableBody.innerHTML = '';
+                        // Cap at 100 to prevent browser crash from massive DOM reflow
+                        const displayErrors = p.errors.slice(-100); 
+                        displayErrors.forEach((e, idx) => {
+                            const tr = document.createElement('tr');
+                            const identifier = e.irn || e.file || "-";
+                            // Calculate true index based on sliced offset
+                            const trueIdx = p.errors.length > 100 ? p.errors.length - 100 + idx : idx;
+                            tr.innerHTML = `<td>${trueIdx + 1}</td><td>${e.type}</td><td>${identifier.substring(0, 15)}...</td><td class="text-danger">${e.message}</td>`;
+                            errorTableBody.appendChild(tr);
+                        });
+                    }
                 }
 
                 // Control Center Status
@@ -547,28 +581,6 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error parsing SSE data", e);
         }
     };
-
-    // ── 8. Heartbeat to keep backend alive and update UI status ──
-    setInterval(() => {
-        fetch('/api/heartbeat', { method: 'POST' })
-            .then(res => {
-                const badge = document.getElementById('status-badge');
-                if (badge && res.ok) {
-                    badge.className = 'badge success';
-                    badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> System Online';
-                } else if (badge) {
-                    badge.className = 'badge danger';
-                    badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> System Offline';
-                }
-            })
-            .catch(() => {
-                const badge = document.getElementById('status-badge');
-                if (badge) {
-                    badge.className = 'badge danger';
-                    badge.innerHTML = '<i class="fa-solid fa-circle-xmark"></i> System Offline';
-                }
-            });
-    }, 2000);
 
     // Note: Error fetching polling was removed since errors are streamed via SSE.
 });

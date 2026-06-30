@@ -8,7 +8,11 @@ processed/
 processed_excel/
 uploads/
 staging/
+build/
+obfuscated_build/
+dist/
 config/requirements.txt
+setup.cmd
 
 # Python Cache
 __pycache__/

@@ -68,3 +68,21 @@ This document chronicles the major bug fixes, architectural upgrades, edge cases
 - Initialized `current_job_filename` and `current_batch_name` as module-level globals
 - Added timeout-based exit to SSE `event_generator` to prevent infinite loops
 - Fixed broken markdown in `CLIENT_INSTALL_GUIDE.md`
+
+## 9. Throughput Optimizations (Turbo Mode)
+- **The Initial Problem**: The automation was designed to simulate a slow human (taking ~4 seconds per invoice), resulting in massively slow processing times for large batches.
+- **The Fix**: 
+  - Eliminated artificial Playwright delays (`slow_mo=80`) and hardcoded human sleeps (`time.sleep()`).
+  - Replaced manual text entry simulation with Playwright's instantaneous `.fill()` command.
+  - Reduced pacing delays to near-zero and scaled PDF modifier threads dynamically based on the system's available CPU cores (`(os.cpu_count() or 4) // 2`).
+
+## 10. Fast Resume & Processing Control
+- **The Initial Problem**: Resuming a partially completed batch required the browser to painfully re-verify every single file by navigating the portal, taking hours for large datasets.
+- **The Fix**: Implemented pre-scan logic in the downloader to read the output directory at startup, building a set of already-processed files for instant skipping (milliseconds per file). 
+- Added a UI toggle allowing users to entirely skip the PDF modification step if they only want original downloads.
+
+## 11. UI DOM Crash & Heartbeat Fixes
+- **The Initial Problem**: The new "Turbo Mode" emitted dozens of logs per second to the UI. The UI terminal had no cap, leading to an Out-of-Memory DOM crash after ~10,000 logs. This crash stopped the Javascript heartbeat, causing the Python backend to forcefully kill the Playwright process. Additionally, minimizing the browser caused Chrome/Edge to throttle the Javascript heartbeat timer, triggering false-positive automation shutdowns.
+- **The Fix**: 
+  - Capped the UI terminal logs to a rolling window of 1,000 lines, completely fixing the DOM memory leak.
+  - Replaced the Javascript timer-based heartbeat with **Server-Sent Events (SSE) socket connection tracking**. The backend natively monitors the active TCP socket used for the dashboard stream. When the socket drops (i.e., the user manually closes the tab), the backend waits for a 5-second grace period (to allow for refreshes) before gracefully shutting down the server and automation. This is 100% reliable and entirely bypasses browser background throttling.

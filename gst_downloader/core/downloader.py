@@ -109,7 +109,7 @@ class GSTInvoiceDownloader:
         self.log.info("Launching Chromium in headed mode...")
         self.browser = self.pw.chromium.launch(
             headless=False,
-            slow_mo=80,      # subtle slowdown improves stability on SPAs
+            # slow_mo=80,      # Removed to unlock maximum interaction speed
         )
         self.context = self.browser.new_context(
             accept_downloads=True,
@@ -161,22 +161,48 @@ class GSTInvoiceDownloader:
         self.log.info("User confirmed login -- automation starting")
 
     def prompt_relogin(self, done: int, total: int):
-        """Ask the user to re-login after a session loss."""
+        """Ask the user to re-login after a session loss or browser crash."""
+        
+        # Check if browser completely died/closed and needs relaunch
+        browser_dead = False
+        try:
+            if not self.browser.is_connected() or self.page.is_closed():
+                browser_dead = True
+        except Exception:
+            browser_dead = True
+            
+        if browser_dead:
+            self.log.warning("Browser process died or was closed! Relaunching...")
+            try:
+                self.close() # Clean up old dead references just in case
+            except Exception:
+                pass
+            self.launch_browser()
+            self.navigate_to_portal()
+
         print()
         print("=" * 62)
-        print("   WARNING: SESSION EXPIRED -- PLEASE RE-LOGIN")
+        if browser_dead:
+            print("   WARNING: BROWSER RESTARTED -- PLEASE LOG IN")
+        else:
+            print("   WARNING: SESSION EXPIRED -- PLEASE RE-LOGIN")
         print("=" * 62)
         print()
         print(f"   Progress so far: {done} / {total} IRNs")
         print(f"   The script will resume from IRN #{done + 1}.")
         print()
         print("   In the browser:")
-        print("   1.  Re-login (handle CAPTCHA / OTP)")
+        print("   1.  Log in to the GST portal (handle CAPTCHA / OTP)")
         print("   2.  Navigate back to  Received → By IRN")
         print()
         print("   Then click Continue in the UI.")
         print("=" * 62)
-        self.log.info("[UI_PROMPT] Action Required: SESSION EXPIRED. Please log in manually, then click Continue.")
+        
+        if browser_dead:
+            self.log.info("[UI_PROMPT] Action Required: Browser restarted. Please log in manually, then click Continue.")
+        else:
+            self.log.info("[UI_PROMPT] Action Required: SESSION EXPIRED. Please log in manually, then click Continue.")
+            
         wait_for_ui_prompt()
         print()
         self.log.info("User confirmed re-login -- resuming")
@@ -237,11 +263,8 @@ class GSTInvoiceDownloader:
         try:
             # Locate and fill the IRN input
             irn_input = self._locate_irn_input()
-            irn_input.click()
-            irn_input.fill("")           # clear previous value
-            time.sleep(0.2)
+            # fill() automatically clears previous value instantly
             irn_input.fill(irn)
-            time.sleep(0.3)
             self.log.info(f"  Typed IRN: {irn[:24]}...{irn[-12:]}")
 
             # Click "Search"
@@ -261,7 +284,7 @@ class GSTInvoiceDownloader:
                 pass
 
             if result_appeared:
-                time.sleep(1)   # let Angular finish rendering the table rows
+                # Removed artificial sleep; Playwright's wait_for in download_invoice handles synchronization safely
                 self.log.info("  Search results visible")
                 return True
 
@@ -473,7 +496,6 @@ class GSTInvoiceDownloader:
             return False
 
         ok = self.download_invoice(inv, inv_date, irn)
-        time.sleep(0.5)
         return ok
 
     # ── Main loop ─────────────────────────────────────────────
@@ -483,6 +505,11 @@ class GSTInvoiceDownloader:
         Process every record from start_index onward.
         Maintains a single session; pauses for re-login on session loss.
         """
+        # Pre-scan the out_dir to build a set of already processed files for fast resume
+        processed_files = set()
+        if self.out_dir and self.out_dir.exists():
+            processed_files = {f.name for f in self.out_dir.glob("*.pdf")}
+            
         total = len(records)
         self.log.info(f"Processing {total - start_index} IRNs (starting from #{start_index + 1})")
         i = start_index
@@ -490,13 +517,32 @@ class GSTInvoiceDownloader:
         consecutive_failures = 0
         
         while i < total:
-            remaining_queue = [r["irn"] for r in records[i:]]
+            # Fix payload explosion: Only send the next 5 IRNs instead of the full remaining queue
+            remaining_queue = [r["irn"] for r in records[i:i+5]]
             StateEmitter.emit("QUEUE_UPDATE", {"queue": remaining_queue})
             
             check_pause_cancel(self.log)
             rec = records[i]
             
             irn = rec["irn"]
+            
+            # ── Fast Skip for already processed files ──
+            safe_name = sanitize_filename(rec["invoice_number"])
+            if rec.get("invoice_date"):
+                safe_name = f"{safe_name}_{rec['invoice_date']}"
+            expected_filename = f"{safe_name}.pdf"
+            
+            if self.out_dir and expected_filename in processed_files:
+                progress = f"[{i + 1}/{total}]"
+                self.log.info(f"{progress} {'-' * 46}")
+                self.log.info(f"  [SKIPPED] Already processed: {expected_filename}")
+                self.succeeded.append(rec)
+                StateEmitter.emit("DOWNLOADER_SUCCESS", {"irn": irn})
+                if self.failed_log_path:
+                    update_failed_irn_log(self.failed_log_path, 'remove', irn)
+                i += 1
+                continue
+                
             progress = f"[{i + 1}/{total}]"
             self.log.info(f"{progress} {'-' * 46}")
             

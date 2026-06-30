@@ -74,6 +74,10 @@ def parse_args():
         "--retry-failed", action="store_true",
         help="Only process IRNs listed in the batch's failed_irns.txt file",
     )
+    ap.add_argument(
+        "--skip-modification", action="store_true",
+        help="Skip the PDF modification stage and only download originals",
+    )
     return ap.parse_args()
 
 
@@ -156,7 +160,8 @@ def main():
         batch_name=batch_name,
         config_path=config_path,
         logger=logger,
-        failed_log_path=str(failed_log_path)
+        failed_log_path=str(failed_log_path),
+        skip_modification=args.skip_modification
     )
     pipeline.start()
 
@@ -170,7 +175,7 @@ def main():
             pw, logger,
             on_download_success=on_download,
             dl_dir=pipeline.staging_dir,
-            out_dir=pipeline.processed_dir,
+            out_dir=pipeline.originals_dir if args.skip_modification else pipeline.processed_dir,
             failed_log_path=str(failed_log_path)
         )
         try:

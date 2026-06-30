@@ -252,9 +252,10 @@ class BackupWorker:
     Runs continuously, checking for new work every 0.5 seconds.
     """
 
-    def __init__(self, state_manager: PipelineStateManager, logger: logging.Logger):
+    def __init__(self, state_manager: PipelineStateManager, logger: logging.Logger, skip_modification: bool = False):
         self.state = state_manager
         self.log = logger
+        self.skip_modification = skip_modification
         self._stop_event = threading.Event()
         self._thread = threading.Thread(target=self._run, name="BackupWorker", daemon=True)
 
@@ -302,8 +303,14 @@ class BackupWorker:
 
                 dst.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(str(src), str(dst))
-                self.state.transition(rec.filename, FileState.BACKED_UP)
-                self.log.info(f"[BackupWorker] Backed up: {rec.filename}")
+                if self.skip_modification:
+                    self.state.transition(rec.filename, FileState.COMPLETED)
+                    self.state.cleanup_staging(rec.filename)
+                    self.log.info(f"[BackupWorker] Finished (Mod skipped): {rec.filename}")
+                    StateEmitter.emit("MODIFIER_SUCCESS", {"filename": rec.filename})
+                else:
+                    self.state.transition(rec.filename, FileState.BACKED_UP)
+                    self.log.info(f"[BackupWorker] Backed up: {rec.filename}")
                 return
 
             except (OSError, IOError) as e:
@@ -425,13 +432,17 @@ class ProcessingPipeline:
     """
 
     def __init__(self, batch_name: str, config_path: str, logger: logging.Logger,
-                 num_modifier_workers: int = None, failed_log_path: str = None):
+                 num_modifier_workers: int = None, failed_log_path: str = None,
+                 skip_modification: bool = False):
         self.batch_name = batch_name
         self.config_path = config_path
         self.log = logger
+        self.skip_modification = skip_modification
 
         if num_modifier_workers is None:
-            num_modifier_workers = config.MAX_MODIFIER_WORKERS
+            import os
+            # Set to half of the CPU cores (max 10, min 2) to maximize throughput without hogging system
+            num_modifier_workers = min(10, max(2, (os.cpu_count() or 4) // 2))
 
         # Load modifier config
         self.modifier_config = _load_config(config_path)
@@ -457,11 +468,14 @@ class ProcessingPipeline:
         self.processed_dir = processed_dir
 
         # Create workers
-        self.backup_worker = BackupWorker(self.state_manager, logger)
-        self.modifier_workers = [
-            ModifierWorker(i + 1, self.state_manager, self.modifier_config, logger)
-            for i in range(num_modifier_workers)
-        ]
+        self.backup_worker = BackupWorker(self.state_manager, logger, skip_modification=self.skip_modification)
+        if not self.skip_modification:
+            self.modifier_workers = [
+                ModifierWorker(i + 1, self.state_manager, self.modifier_config, logger)
+                for i in range(num_modifier_workers)
+            ]
+        else:
+            self.modifier_workers = []
 
         self._state_saver_stop = threading.Event()
         self._state_saver_thread = None
