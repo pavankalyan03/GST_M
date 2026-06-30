@@ -11,7 +11,6 @@ staging/
 build/
 obfuscated_build/
 dist/
-config/requirements.txt
 setup.cmd
 
 # Python Cache
