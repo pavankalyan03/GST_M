@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,34 +10,40 @@
     <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body class="dark-theme">
     <div class="dashboard-grid">
-        
+
         <!-- Top Bar -->
         <header class="top-bar glass-panel">
             <div class="logo">
                 <i class="fa-solid fa-file-invoice"></i>
                 <h1>GST Automation</h1>
             </div>
-            
+
             <div class="health-indicators">
-                <div class="badge" id="cpu-badge"><i class="fa-solid fa-microchip"></i> CPU: <span id="cpu-val">--%</span></div>
-                <div class="badge" id="mem-badge"><i class="fa-solid fa-memory"></i> Mem: <span id="mem-val">--%</span></div>
-                <div class="badge success" id="status-badge"><i class="fa-solid fa-circle-check"></i> System Online</div>
+                <div class="badge" id="cpu-badge"><i class="fa-solid fa-microchip"></i> CPU: <span
+                        id="cpu-val">--%</span></div>
+                <div class="badge" id="mem-badge"><i class="fa-solid fa-memory"></i> Mem: <span id="mem-val">--%</span>
+                </div>
+                <div class="badge success" id="status-badge"><i class="fa-solid fa-circle-check"></i> System Online
+                </div>
             </div>
 
             <div class="top-actions">
-                <button class="icon-btn" id="history-btn" title="Job History"><i class="fa-solid fa-clock-rotate-left"></i></button>
+                <button class="icon-btn" id="history-btn" title="Job History"><i
+                        class="fa-solid fa-clock-rotate-left"></i></button>
                 <button class="icon-btn" id="notif-btn" title="Notifications"><i class="fa-solid fa-bell"></i></button>
             </div>
         </header>
 
         <!-- Hero Zone (Controls & Checkpoint) -->
         <section class="hero-zone glass-panel">
-            
+
             <div class="hero-header">
                 <h2>Control Center</h2>
-                <button class="secondary-btn" id="settings-toggle"><i class="fa-solid fa-gear"></i> Quick Settings</button>
+                <button class="secondary-btn" id="settings-toggle"><i class="fa-solid fa-gear"></i> Quick
+                    Settings</button>
             </div>
 
             <!-- Settings Accordion (Hidden by default) -->
@@ -62,11 +69,13 @@
                         </div>
                         <div class="input-group" style="grid-column: 1 / -1;">
                             <label>Recipient Address</label>
-                            <textarea id="cfg-recipient_address" rows="3" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); padding: 0.75rem; border-radius: 6px; color: #fff; font-family: var(--font); outline: none;"></textarea>
+                            <textarea id="cfg-recipient_address" rows="3"
+                                style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); padding: 0.75rem; border-radius: 6px; color: #fff; font-family: var(--font); outline: none;"></textarea>
                         </div>
                         <div class="input-group" style="grid-column: 1 / -1;">
                             <label>Ship To Address</label>
-                            <textarea id="cfg-ship_to_address" rows="3" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); padding: 0.75rem; border-radius: 6px; color: #fff; font-family: var(--font); outline: none;"></textarea>
+                            <textarea id="cfg-ship_to_address" rows="3"
+                                style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-glass); padding: 0.75rem; border-radius: 6px; color: #fff; font-family: var(--font); outline: none;"></textarea>
                         </div>
                         <!-- Folder Paths -->
                         <div class="input-group">
@@ -94,7 +103,7 @@
                     <p>or click to browse</p>
                     <input type="file" id="file-input" accept=".xlsx,.zip" hidden>
                 </div>
-                
+
                 <div class="upload-controls">
                     <div class="input-group">
                         <label>Batch Name (Optional)</label>
@@ -123,12 +132,14 @@
                     </div>
                 </div>
                 <div class="checkpoint-actions">
-                    <div class="toggle-container" style="display: flex; align-items: center; gap: 10px; justify-content: center; margin-right: 15px;">
+                    <div class="toggle-container"
+                        style="display: flex; align-items: center; gap: 10px; justify-content: center; margin-right: 15px;">
                         <label class="switch">
                             <input type="checkbox" id="toggle-modify" checked>
                             <span class="slider round"></span>
                         </label>
-                        <span id="toggle-modify-label" style="font-size: 0.9rem; color: var(--text-main);">Modify PDFs</span>
+                        <span id="toggle-modify-label" style="font-size: 0.9rem; color: var(--text-main);">Modify
+                            PDFs</span>
                     </div>
                     <a href="#" class="secondary-btn" id="btn-download-excel" target="_blank">
                         <i class="fa-solid fa-file-excel"></i> Review Processed Excel
@@ -144,7 +155,7 @@
                     </button>
                 </div>
             </div>
-            
+
             <!-- Running State Controls (Hidden initially) -->
             <div class="dynamic-area running-area" id="running-area" style="display: none;">
                 <div class="running-status">
@@ -152,11 +163,16 @@
                     <h3 id="current-state-title">Automation Running</h3>
                 </div>
                 <div class="running-actions">
-                    <button class="primary-btn glow" id="btn-new-job" style="display:none;"><i class="fa-solid fa-rotate"></i> Process Another File</button>
-                    <button class="primary-btn warning glow" id="btn-retry-failed" style="display:none;"><i class="fa-solid fa-rotate-right"></i> Retry Failed IRNs</button>
-                    <button class="primary-btn success glow" id="btn-prompt-continue" style="display:none;"><i class="fa-solid fa-check"></i> I have Logged In - Continue</button>
-                    <button class="secondary-btn warning" id="btn-pause"><i class="fa-solid fa-pause"></i> Pause</button>
-                    <button class="secondary-btn success" id="btn-resume" style="display:none;"><i class="fa-solid fa-play"></i> Resume</button>
+                    <button class="primary-btn glow" id="btn-new-job" style="display:none;"><i
+                            class="fa-solid fa-rotate"></i> Process Another File</button>
+                    <button class="primary-btn warning glow" id="btn-retry-failed" style="display:none;"><i
+                            class="fa-solid fa-rotate-right"></i> Retry Failed IRNs</button>
+                    <button class="primary-btn success glow" id="btn-prompt-continue" style="display:none;"><i
+                            class="fa-solid fa-check"></i> I have Logged In - Continue</button>
+                    <button class="secondary-btn warning" id="btn-pause"><i class="fa-solid fa-pause"></i>
+                        Pause</button>
+                    <button class="secondary-btn success" id="btn-resume" style="display:none;"><i
+                            class="fa-solid fa-play"></i> Resume</button>
                     <button class="secondary-btn danger" id="btn-stop"><i class="fa-solid fa-stop"></i> Stop</button>
                 </div>
             </div>
@@ -205,11 +221,11 @@
 
         <!-- Operations Grid (Split View) -->
         <section class="operations-grid">
-            
+
             <!-- Left: Live Pipeline -->
             <div class="panel-left glass-panel">
                 <h3>Live Pipeline Status</h3>
-                
+
                 <div class="worker-stages">
                     <div class="worker-stage" id="worker-downloader">
                         <div class="stage-icon"><i class="fa-brands fa-edge"></i></div>
@@ -238,10 +254,12 @@
             <!-- Right: Logs & Errors Tabs -->
             <div class="panel-right glass-panel">
                 <div class="tabs">
-                    <button class="tab-btn active" data-tab="terminal-tab"><i class="fa-solid fa-terminal"></i> Live Logs</button>
-                    <button class="tab-btn" data-tab="errors-tab"><i class="fa-solid fa-bug"></i> Error Dashboard <span class="badge danger" id="tab-error-count">0</span></button>
+                    <button class="tab-btn active" data-tab="terminal-tab"><i class="fa-solid fa-terminal"></i> Live
+                        Logs</button>
+                    <button class="tab-btn" data-tab="errors-tab"><i class="fa-solid fa-bug"></i> Error Dashboard <span
+                            class="badge danger" id="tab-error-count">0</span></button>
                 </div>
-                
+
                 <div class="tab-content active" id="terminal-tab">
                     <div class="terminal" id="terminal-output">
                         <!-- Logs injected here -->
@@ -261,7 +279,9 @@
                                 </tr>
                             </thead>
                             <tbody id="error-table-body">
-                                <tr><td colspan="4" class="text-center text-muted">No errors recorded yet.</td></tr>
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No errors recorded yet.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -272,6 +292,7 @@
 
     </div>
 
-    <script src="/static/script.js"></script>
+    <script src="/static/script.js?v=2.3.1"></script>
 </body>
+
 </html>
